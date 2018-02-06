@@ -1,0 +1,64 @@
+{
+  "name": "vintage/yii2-tinify",
+  "description": "Facade of Tinify API for Yii2 Framework",
+  "keywords": [
+    "yii2",
+    "component",
+    "api",
+    "tinify",
+    "tinypng",
+    "tinyjpg",
+    "compress",
+    "resize",
+    "images"
+  ],
+  "type": "yii2-extension",
+  "license": "BSD-3-Clause",
+  "support": {
+    "issues": "https://github.com/vintage/yii2-tinify/issues",
+    "source": "https://github.com/vintage/yii2-tinify"
+  },
+  "authors": [
+    {
+      "name": "Vladimir Kuprienko",
+      "email": "vldmr.kuprienko@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "~2.0.0",
+    "tinify/tinify": "~1.1"
+  },
+  "require-dev": {
+    "codeception/codeception": "~2.3",
+    "codeception/verify": "*",
+    "codeception/specify": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "vintage\\tinify\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "vintage\\tinify\\tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "2.0.x-dev"
+    }
+  },
+  "scripts": {
+    "test": [
+      "codecept build",
+      "codecept run"
+    ]
+  }
+}

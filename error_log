@@ -1,0 +1,406 @@
+
+[17-Jan-2018 10:37:21 UTC] PHP Fatal error:  Allowed memory size of 2097152 bytes exhausted (tried to allocate 32768 bytes) in /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Request.php on line 1492
+[17-Jan-2018 10:42:05 UTC] PHP Fatal error:  Allowed memory size of 2097152 bytes exhausted (tried to allocate 32768 bytes) in /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Request.php on line 1492
+[17-Jan-2018 10:44:10 UTC] PHP Fatal error:  Allowed memory size of 2097152 bytes exhausted (tried to allocate 32768 bytes) in /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Request.php on line 1492
+[17-Jan-2018 10:44:29 UTC] PHP Fatal error:  Allowed memory size of 2097152 bytes exhausted (tried to allocate 32768 bytes) in /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Request.php on line 1492
+[17-Jan-2018 10:44:41 UTC] PHP Fatal error:  Allowed memory size of 2097152 bytes exhausted (tried to allocate 32768 bytes) in /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Request.php on line 1492
+[17-Jan-2018 10:47:17 UTC] An Error occurred while handling another error:
+Error: Call to undefined function Symfony\Polyfill\Mbstring\iconv_strlen() in /home/topnepa1/public_html/oms/vendor/symfony/polyfill-mbstring/Mbstring.php:347
+Stack trace:
+#0 /home/topnepa1/public_html/oms/vendor/symfony/polyfill-mbstring/bootstrap.php(31): Symfony\Polyfill\Mbstring\Mbstring::mb_strlen('Exception (Inva...', 'UTF-8')
+#1 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(442): mb_strlen('Exception (Inva...', 'UTF-8')
+#2 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php(26): yii\web\ErrorHandler->argumentsToString(Array)
+#3 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(250): require('/home/topnepa1/...')
+#4 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(308): yii\web\ErrorHandler->renderFile('@yii/views/erro...', Array)
+#5 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(331): yii\web\ErrorHandler->renderCallStackItem(NULL, NULL, 'yii\\base\\ErrorH...', 'handleError', Array, 2)
+#6 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/views/errorHandler/exception.php(434): yii\web\ErrorHandler->renderCallStack(Object(yii\base\ErrorException))
+#7 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(250): require('/home/topnepa1/...')
+#8 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(115): yii\web\ErrorHandler->renderFile('@yii/views/erro...', Array)
+#9 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/ErrorHandler.php(111): yii\web\ErrorHandler->renderException(Object(yii\base\ErrorException))
+#10 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/ErrorHandler.php(220): yii\base\ErrorHandler->handleException(Object(yii\base\ErrorException))
+#11 [internal function]: yii\base\ErrorHandler->handleError(256, 'Exception (Inva...', '/home/topnepa1/...', 317, Array)
+#12 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/ErrorHandler.php(317): trigger_error('Exception (Inva...', 256)
+#13 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/widgets/ActiveField.php(178): yii\base\ErrorHandler::convertExceptionToError(Object(yii\base\InvalidConfigException))
+#14 /home/topnepa1/public_html/oms/backend/views/site/login.php(29): yii\widgets\ActiveField->__toString()
+#15 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(332): require('/home/topnepa1/...')
+#16 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/topnepa1/...', Array)
+#17 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile('/home/topnepa1/...', Array, Object(backend\controllers\SiteController))
+#18 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(390): yii\base\View->render('login', Array, Object(backend\controllers\SiteController))
+#19 /home/topnepa1/public_html/oms/backend/controllers/SiteController.php(117): yii\base\Controller->render('login', Array)
+#20 [internal function]: backend\controllers\SiteController->actionLogin()
+#21 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#22 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(163): yii\base\InlineAction->runWithParams(Array)
+#23 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('login', Array)
+#24 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('site/login', Array)
+#25 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#26 /home/topnepa1/public_html/oms/index.php(16): yii\base\Application->run()
+#27 {main}
+Previous exception:
+yii\base\ErrorException: Exception (Invalid Configuration) 'yii\base\InvalidConfigException' with message 'The directory does not exist: /home/topnepa1/public_html/oms/assets' 
+
+in /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/AssetManager.php:213
+
+Stack trace:
+#0 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/BaseObject.php(108): yii\web\AssetManager->init()
+#1 [internal function]: yii\base\BaseObject->__construct(Array)
+#2 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/di/Container.php(375): ReflectionClass->newInstanceArgs(Array)
+#3 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/di/Container.php(156): yii\di\Container->build('yii\\web\\AssetMa...', Array, Array)
+#4 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/BaseYii.php(349): yii\di\Container->get('yii\\web\\AssetMa...', Array, Array)
+#5 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/di/ServiceLocator.php(137): yii\BaseYii::createObject(Array)
+#6 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Module.php(724): yii\di\ServiceLocator->get('assetManager', true)
+#7 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Application.php(608): yii\base\Module->get('assetManager')
+#8 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/View.php(225): yii\base\Application->getAssetManager()
+#9 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/View.php(285): yii\web\View->getAssetManager()
+#10 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/AssetBundle.php(125): yii\web\View->registerAssetBundle('yii\\validators\\...')
+#11 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/validators/RequiredValidator.php(91): yii\web\AssetBundle::register(Object(yii\web\View))
+#12 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/widgets/ActiveField.php(763): yii\validators\RequiredValidator->clientValidateAttribute(Object(common\models\LoginForm), 'UserName', Object(yii\web\View))
+#13 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/widgets/ActiveField.php(230): yii\widgets\ActiveField->getClientOptions()
+#14 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/widgets/ActiveField.php(220): yii\widgets\ActiveField->begin()
+#15 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2-bootstrap/ActiveField.php(187): yii\widgets\ActiveField->render('<label class="c...')
+#16 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/widgets/ActiveField.php(176): yii\bootstrap\ActiveField->render()
+#17 /home/topnepa1/public_html/oms/backend/views/site/login.php(29): yii\widgets\ActiveField->__toString()
+#18 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(332): require('/home/topnepa1/...')
+#19 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/topnepa1/...', Array)
+#20 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile('/home/topnepa1/...', Array, Object(backend\controllers\SiteController))
+#21 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(390): yii\base\View->render('login', Array, Object(backend\controllers\SiteController))
+#22 /home/topnepa1/public_html/oms/backend/controllers/SiteController.php(117): yii\base\Controller->render('login', Array)
+#23 [internal function]: backend\controllers\SiteController->actionLogin()
+#24 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#25 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(163): yii\base\InlineAction->runWithParams(Array)
+#26 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('login', Array)
+#27 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('site/login', Array)
+#28 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#29 /home/topnepa1/public_html/oms/index.php(16): yii\base\Application->run()
+#30 {main} in /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/ErrorHandler.php:317
+Stack trace:
+#0 [internal function]: yii\base\ErrorHandler->handleError(256, 'Exception (Inva...', '/home/topnepa1/...', 317, Array)
+#1 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/ErrorHandler.php(317): trigger_error('Exception (Inva...', 256)
+#2 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/widgets/ActiveField.php(178): yii\base\ErrorHandler::convertExceptionToError(Object(yii\base\InvalidConfigException))
+#3 /home/topnepa1/public_html/oms/backend/views/site/login.php(29): yii\widgets\ActiveField->__toString()
+#4 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(332): require('/home/topnepa1/...')
+#5 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/topnepa1/...', Array)
+#6 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile('/home/topnepa1/...', Array, Object(backend\controllers\SiteController))
+#7 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(390): yii\base\View->render('login', Array, Object(backend\controllers\SiteController))
+#8 /home/topnepa1/public_html/oms/backend/controllers/SiteController.php(117): yii\base\Controller->render('login', Array)
+#9 [internal function]: backend\controllers\SiteController->actionLogin()
+#10 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#11 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(163): yii\base\InlineAction->runWithParams(Array)
+#12 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('login', Array)
+#13 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('site/login', Array)
+#14 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#15 /home/topnepa1/public_html/oms/index.php(16): yii\base\Application->run()
+#16 {main}
+$_SERVER = [
+    'PATH' => '/bin:/usr/bin:/usr/local/bin',
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.9,fr;q=0.8,hi;q=0.7,ne;q=0.6',
+    'HTTP_CONNECTION' => 'keep-alive',
+    'HTTP_COOKIE' => 'PHPSESSID=333197tqiqd73cutjpd38jvuv1; advanced-backend=04sutr2s8ec3fnemn9asumjg50',
+    'HTTP_HOST' => 'topnepal.com.np',
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
+    'HTTP_VIA' => 'HTTP/1.1 sophos.http.proxy:3128',
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1',
+    'HTTP_ALEXATOOLBAR_ALX_NS_PH' => 'AlexaToolbar/alx-4.0.1',
+    'DOCUMENT_ROOT' => '/home/topnepa1/public_html',
+    'REMOTE_ADDR' => '202.129.251.218',
+    'REMOTE_PORT' => '49185',
+    'SERVER_ADDR' => '209.236.113.54',
+    'SERVER_NAME' => 'topnepal.com.np',
+    'SERVER_ADMIN' => 'webmaster@topnepal.com.np',
+    'SERVER_PORT' => '80',
+    'REQUEST_URI' => '/oms/login',
+    'REDIRECT_URL' => '/oms/login',
+    'REDIRECT_STATUS' => '200',
+    'SCRIPT_FILENAME' => '/home/topnepa1/public_html/oms/index.php',
+    'QUERY_STRING' => '',
+    'SCRIPT_URI' => 'http://topnepal.com.np/oms/login',
+    'SCRIPT_URL' => '/oms/login',
+    'SCRIPT_NAME' => '/oms/index.php',
+    'SERVER_PROTOCOL' => 'HTTP/1.1',
+    'SERVER_SOFTWARE' => 'LiteSpeed',
+    'REQUEST_METHOD' => 'GET',
+    'PHP_SELF' => '/oms/index.php',
+    'REQUEST_TIME_FLOAT' => 1516186035.55659008026123046875,
+    'REQUEST_TIME' => 1516186035,
+    'argv' => [],
+    'argc' => 0,
+]
+[17-Jan-2018 10:47:17 UTC] An Error occurred while handling another error:
+Error: Call to undefined function Symfony\Polyfill\Mbstring\iconv_strlen() in /home/topnepa1/public_html/oms/vendor/symfony/polyfill-mbstring/Mbstring.php:347
+Stack trace:
+#0 /home/topnepa1/public_html/oms/vendor/symfony/polyfill-mbstring/bootstrap.php(31): Symfony\Polyfill\Mbstring\Mbstring::mb_strlen('Exception (Inva...', 'UTF-8')
+#1 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(442): mb_strlen('Exception (Inva...', 'UTF-8')
+#2 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php(26): yii\web\ErrorHandler->argumentsToString(Array)
+#3 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(250): require('/home/topnepa1/...')
+#4 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(308): yii\web\ErrorHandler->renderFile('@yii/views/erro...', Array)
+#5 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(331): yii\web\ErrorHandler->renderCallStackItem(NULL, NULL, 'yii\\base\\ErrorH...', 'handleError', Array, 2)
+#6 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/views/errorHandler/exception.php(434): yii\web\ErrorHandler->renderCallStack(Object(yii\base\ErrorException))
+#7 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(250): require('/home/topnepa1/...')
+#8 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(115): yii\web\ErrorHandler->renderFile('@yii/views/erro...', Array)
+#9 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/ErrorHandler.php(111): yii\web\ErrorHandler->renderException(Object(yii\base\ErrorException))
+#10 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/ErrorHandler.php(220): yii\base\ErrorHandler->handleException(Object(yii\base\ErrorException))
+#11 [internal function]: yii\base\ErrorHandler->handleError(256, 'Exception (Inva...', '/home/topnepa1/...', 317, Array)
+#12 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/ErrorHandler.php(317): trigger_error('Exception (Inva...', 256)
+#13 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/widgets/ActiveField.php(178): yii\base\ErrorHandler::convertExceptionToError(Object(yii\base\InvalidConfigException))
+#14 /home/topnepa1/public_html/oms/backend/views/site/login.php(29): yii\widgets\ActiveField->__toString()
+#15 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(332): require('/home/topnepa1/...')
+#16 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/topnepa1/...', Array)
+#17 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile('/home/topnepa1/...', Array, Object(backend\controllers\SiteController))
+#18 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(390): yii\base\View->render('login', Array, Object(backend\controllers\SiteController))
+#19 /home/topnepa1/public_html/oms/backend/controllers/SiteController.php(117): yii\base\Controller->render('login', Array)
+#20 [internal function]: backend\controllers\SiteController->actionLogin()
+#21 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#22 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(163): yii\base\InlineAction->runWithParams(Array)
+#23 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('login', Array)
+#24 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('site/login', Array)
+#25 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#26 /home/topnepa1/public_html/oms/index.php(16): yii\base\Application->run()
+#27 {main}
+Previous exception:
+yii\base\ErrorException: Exception (Invalid Configuration) 'yii\base\InvalidConfigException' with message 'The directory does not exist: /home/topnepa1/public_html/oms/assets' 
+
+in /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/AssetManager.php:213
+
+Stack trace:
+#0 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/BaseObject.php(108): yii\web\AssetManager->init()
+#1 [internal function]: yii\base\BaseObject->__construct(Array)
+#2 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/di/Container.php(375): ReflectionClass->newInstanceArgs(Array)
+#3 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/di/Container.php(156): yii\di\Container->build('yii\\web\\AssetMa...', Array, Array)
+#4 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/BaseYii.php(349): yii\di\Container->get('yii\\web\\AssetMa...', Array, Array)
+#5 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/di/ServiceLocator.php(137): yii\BaseYii::createObject(Array)
+#6 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Module.php(724): yii\di\ServiceLocator->get('assetManager', true)
+#7 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Application.php(608): yii\base\Module->get('assetManager')
+#8 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/View.php(225): yii\base\Application->getAssetManager()
+#9 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/View.php(285): yii\web\View->getAssetManager()
+#10 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/AssetBundle.php(125): yii\web\View->registerAssetBundle('yii\\validators\\...')
+#11 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/validators/RequiredValidator.php(91): yii\web\AssetBundle::register(Object(yii\web\View))
+#12 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/widgets/ActiveField.php(763): yii\validators\RequiredValidator->clientValidateAttribute(Object(common\models\LoginForm), 'UserName', Object(yii\web\View))
+#13 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/widgets/ActiveField.php(230): yii\widgets\ActiveField->getClientOptions()
+#14 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/widgets/ActiveField.php(220): yii\widgets\ActiveField->begin()
+#15 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2-bootstrap/ActiveField.php(187): yii\widgets\ActiveField->render('<label class="c...')
+#16 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/widgets/ActiveField.php(176): yii\bootstrap\ActiveField->render()
+#17 /home/topnepa1/public_html/oms/backend/views/site/login.php(29): yii\widgets\ActiveField->__toString()
+#18 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(332): require('/home/topnepa1/...')
+#19 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/topnepa1/...', Array)
+#20 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile('/home/topnepa1/...', Array, Object(backend\controllers\SiteController))
+#21 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(390): yii\base\View->render('login', Array, Object(backend\controllers\SiteController))
+#22 /home/topnepa1/public_html/oms/backend/controllers/SiteController.php(117): yii\base\Controller->render('login', Array)
+#23 [internal function]: backend\controllers\SiteController->actionLogin()
+#24 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#25 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(163): yii\base\InlineAction->runWithParams(Array)
+#26 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('login', Array)
+#27 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('site/login', Array)
+#28 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#29 /home/topnepa1/public_html/oms/index.php(16): yii\base\Application->run()
+#30 {main} in /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/ErrorHandler.php:317
+Stack trace:
+#0 [internal function]: yii\base\ErrorHandler->handleError(256, 'Exception (Inva...', '/home/topnepa1/...', 317, Array)
+#1 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/ErrorHandler.php(317): trigger_error('Exception (Inva...', 256)
+#2 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/widgets/ActiveField.php(178): yii\base\ErrorHandler::convertExceptionToError(Object(yii\base\InvalidConfigException))
+#3 /home/topnepa1/public_html/oms/backend/views/site/login.php(29): yii\widgets\ActiveField->__toString()
+#4 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(332): require('/home/topnepa1/...')
+#5 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/topnepa1/...', Array)
+#6 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile('/home/topnepa1/...', Array, Object(backend\controllers\SiteController))
+#7 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(390): yii\base\View->render('login', Array, Object(backend\controllers\SiteController))
+#8 /home/topnepa1/public_html/oms/backend/controllers/SiteController.php(117): yii\base\Controller->render('login', Array)
+#9 [internal function]: backend\controllers\SiteController->actionLogin()
+#10 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#11 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(163): yii\base\InlineAction->runWithParams(Array)
+#12 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('login', Array)
+#13 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('site/login', Array)
+#14 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#15 /home/topnepa1/public_html/oms/index.php(16): yii\base\Application->run()
+#16 {main}
+$_SERVER = [
+    'PATH' => '/bin:/usr/bin:/usr/local/bin',
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.9,fr;q=0.8,hi;q=0.7,ne;q=0.6',
+    'HTTP_CONNECTION' => 'keep-alive',
+    'HTTP_COOKIE' => 'PHPSESSID=333197tqiqd73cutjpd38jvuv1; advanced-backend=pip0bk1hs3m5kg5qe3rvkaor66',
+    'HTTP_HOST' => 'topnepal.com.np',
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
+    'HTTP_VIA' => 'HTTP/1.1 sophos.http.proxy:3128',
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1',
+    'HTTP_ALEXATOOLBAR_ALX_NS_PH' => 'AlexaToolbar/alx-4.0.1',
+    'DOCUMENT_ROOT' => '/home/topnepa1/public_html',
+    'REMOTE_ADDR' => '202.129.251.218',
+    'REMOTE_PORT' => '49215',
+    'SERVER_ADDR' => '209.236.113.54',
+    'SERVER_NAME' => 'topnepal.com.np',
+    'SERVER_ADMIN' => 'webmaster@topnepal.com.np',
+    'SERVER_PORT' => '80',
+    'REQUEST_URI' => '/oms/login',
+    'REDIRECT_URL' => '/oms/login',
+    'REDIRECT_STATUS' => '200',
+    'SCRIPT_FILENAME' => '/home/topnepa1/public_html/oms/index.php',
+    'QUERY_STRING' => '',
+    'SCRIPT_URI' => 'http://topnepal.com.np/oms/login',
+    'SCRIPT_URL' => '/oms/login',
+    'SCRIPT_NAME' => '/oms/index.php',
+    'SERVER_PROTOCOL' => 'HTTP/1.1',
+    'SERVER_SOFTWARE' => 'LiteSpeed',
+    'REQUEST_METHOD' => 'GET',
+    'PHP_SELF' => '/oms/index.php',
+    'REQUEST_TIME_FLOAT' => 1516186037.7849919795989990234375,
+    'REQUEST_TIME' => 1516186037,
+    'argv' => [],
+    'argc' => 0,
+]
+[17-Jan-2018 10:47:56 UTC] PHP Fatal error:  Allowed memory size of 2097152 bytes exhausted (tried to allocate 32768 bytes) in /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Request.php on line 1492
+[17-Jan-2018 10:48:31 UTC] An Error occurred while handling another error:
+Error: Call to undefined function Symfony\Polyfill\Mbstring\iconv_strlen() in /home/topnepa1/public_html/oms/vendor/symfony/polyfill-mbstring/Mbstring.php:347
+Stack trace:
+#0 /home/topnepa1/public_html/oms/vendor/symfony/polyfill-mbstring/bootstrap.php(31): Symfony\Polyfill\Mbstring\Mbstring::mb_strlen('/home/topnepa1/...', 'UTF-8')
+#1 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(442): mb_strlen('/home/topnepa1/...', 'UTF-8')
+#2 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php(26): yii\web\ErrorHandler->argumentsToString(Array)
+#3 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(332): require('/home/topnepa1/...')
+#4 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/topnepa1/...', Array)
+#5 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(255): yii\base\View->renderFile('/home/topnepa1/...', Array, Object(yii\web\ErrorHandler))
+#6 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(308): yii\web\ErrorHandler->renderFile('@yii/views/erro...', Array)
+#7 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(331): yii\web\ErrorHandler->renderCallStackItem('/home/topnepa1/...', 30, 'Symfony\\Polyfil...', 'mb_strlen', Array, 2)
+#8 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/views/errorHandler/exception.php(434): yii\web\ErrorHandler->renderCallStack(Object(Error))
+#9 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(332): require('/home/topnepa1/...')
+#10 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/topnepa1/...', Array)
+#11 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(255): yii\base\View->renderFile('/home/topnepa1/...', Array, Object(yii\web\ErrorHandler))
+#12 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(115): yii\web\ErrorHandler->renderFile('@yii/views/erro...', Array)
+#13 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/ErrorHandler.php(111): yii\web\ErrorHandler->renderException(Object(Error))
+#14 [internal function]: yii\base\ErrorHandler->handleException(Object(Error))
+#15 {main}
+Previous exception:
+Error: Call to undefined function Symfony\Polyfill\Mbstring\iconv_strlen() in /home/topnepa1/public_html/oms/vendor/symfony/polyfill-mbstring/Mbstring.php:347
+Stack trace:
+#0 /home/topnepa1/public_html/oms/vendor/symfony/polyfill-mbstring/bootstrap.php(31): Symfony\Polyfill\Mbstring\Mbstring::mb_strlen('/home/topnepa1/...', 'UTF-8')
+#1 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/AssetManager.php(358): mb_strlen('/home/topnepa1/...', 'UTF-8')
+#2 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/AssetManager.php(303): yii\web\AssetManager->resolveAsset(Object(yii\web\JqueryAsset), '/home/topnepa1/...')
+#3 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/AssetBundle.php(159): yii\web\AssetManager->getAssetUrl(Object(yii\web\JqueryAsset), 'jquery.js')
+#4 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/View.php(266): yii\web\AssetBundle->registerAssetFiles(Object(yii\web\View))
+#5 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/View.php(264): yii\web\View->registerAssetFiles('yii\\web\\JqueryA...')
+#6 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/View.php(264): yii\web\View->registerAssetFiles('yii\\web\\YiiAsse...')
+#7 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/View.php(162): yii\web\View->registerAssetFiles('yii\\validators\\...')
+#8 /home/topnepa1/public_html/oms/backend/views/layouts/main.php(118): yii\web\View->endBody()
+#9 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(332): require('/home/topnepa1/...')
+#10 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/topnepa1/...', Array)
+#11 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(405): yii\base\View->renderFile('/home/topnepa1/...', Array, Object(backend\controllers\SiteController))
+#12 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(391): yii\base\Controller->renderContent('\n<div class="si...')
+#13 /home/topnepa1/public_html/oms/backend/controllers/SiteController.php(117): yii\base\Controller->render('login', Array)
+#14 [internal function]: backend\controllers\SiteController->actionLogin()
+#15 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#16 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(163): yii\base\InlineAction->runWithParams(Array)
+#17 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('login', Array)
+#18 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('site/login', Array)
+#19 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#20 /home/topnepa1/public_html/oms/index.php(16): yii\base\Application->run()
+#21 {main}
+$_SERVER = [
+    'PATH' => '/bin:/usr/bin:/usr/local/bin',
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.9,fr;q=0.8,hi;q=0.7,ne;q=0.6',
+    'HTTP_CONNECTION' => 'keep-alive',
+    'HTTP_COOKIE' => 'advanced-backend=ba3omdun0emjoplcd9ih7co7v5',
+    'HTTP_HOST' => 'topnepal.com.np',
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
+    'HTTP_CACHE_CONTROL' => 'max-age=0',
+    'HTTP_VIA' => 'HTTP/1.1 sophos.http.proxy:3128',
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1',
+    'DOCUMENT_ROOT' => '/home/topnepa1/public_html',
+    'REMOTE_ADDR' => '202.129.251.218',
+    'REMOTE_PORT' => '49859',
+    'SERVER_ADDR' => '209.236.113.54',
+    'SERVER_NAME' => 'topnepal.com.np',
+    'SERVER_ADMIN' => 'webmaster@topnepal.com.np',
+    'SERVER_PORT' => '80',
+    'REQUEST_URI' => '/oms/login',
+    'REDIRECT_URL' => '/oms/login',
+    'REDIRECT_STATUS' => '200',
+    'SCRIPT_FILENAME' => '/home/topnepa1/public_html/oms/index.php',
+    'QUERY_STRING' => '',
+    'SCRIPT_URI' => 'http://topnepal.com.np/oms/login',
+    'SCRIPT_URL' => '/oms/login',
+    'SCRIPT_NAME' => '/oms/index.php',
+    'SERVER_PROTOCOL' => 'HTTP/1.1',
+    'SERVER_SOFTWARE' => 'LiteSpeed',
+    'REQUEST_METHOD' => 'GET',
+    'PHP_SELF' => '/oms/index.php',
+    'REQUEST_TIME_FLOAT' => 1516186107.5499570369720458984375,
+    'REQUEST_TIME' => 1516186107,
+    'argv' => [],
+    'argc' => 0,
+]
+[17-Jan-2018 10:51:01 UTC] An Error occurred while handling another error:
+Error: Call to undefined function Symfony\Polyfill\Mbstring\iconv_strlen() in /home/topnepa1/public_html/oms/vendor/symfony/polyfill-mbstring/Mbstring.php:347
+Stack trace:
+#0 /home/topnepa1/public_html/oms/vendor/symfony/polyfill-mbstring/bootstrap.php(31): Symfony\Polyfill\Mbstring\Mbstring::mb_strlen('/home/topnepa1/...', 'UTF-8')
+#1 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/AssetManager.php(358): mb_strlen('/home/topnepa1/...', 'UTF-8')
+#2 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/AssetManager.php(303): yii\web\AssetManager->resolveAsset(Object(yii\web\JqueryAsset), '/home/topnepa1/...')
+#3 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/AssetBundle.php(159): yii\web\AssetManager->getAssetUrl(Object(yii\web\JqueryAsset), 'jquery.js')
+#4 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/View.php(266): yii\web\AssetBundle->registerAssetFiles(Object(yii\web\View))
+#5 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/View.php(264): yii\web\View->registerAssetFiles('yii\\web\\JqueryA...')
+#6 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/View.php(264): yii\web\View->registerAssetFiles('yii\\web\\YiiAsse...')
+#7 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/View.php(162): yii\web\View->registerAssetFiles('backend\\assets\\...')
+#8 /home/topnepa1/public_html/oms/backend/views/layouts/main.php(118): yii\web\View->endBody()
+#9 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(332): require('/home/topnepa1/...')
+#10 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/topnepa1/...', Array)
+#11 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(405): yii\base\View->renderFile('/home/topnepa1/...', Array, Object(backend\controllers\SiteController))
+#12 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(391): yii\base\Controller->renderContent('<div class="sit...')
+#13 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorAction.php(128): yii\base\Controller->render('error', Array)
+#14 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorAction.php(107): yii\web\ErrorAction->renderHtmlResponse()
+#15 [internal function]: yii\web\ErrorAction->run()
+#16 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Action.php(94): call_user_func_array(Array, Array)
+#17 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Controller.php(163): yii\base\Action->runWithParams(Array)
+#18 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Module.php(528): yii\base\Controller->runAction('error', Array)
+#19 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/ErrorHandler.php(97): yii\base\Module->runAction('site/error')
+#20 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/ErrorHandler.php(111): yii\web\ErrorHandler->renderException(Object(yii\web\NotFoundHttpException))
+#21 [internal function]: yii\base\ErrorHandler->handleException(Object(yii\web\NotFoundHttpException))
+#22 {main}
+Previous exception:
+yii\base\InvalidRouteException: Unable to resolve the request "requirement.php". in /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Module.php:537
+Stack trace:
+#0 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Application.php(103): yii\base\Module->runAction('requirement.php', Array)
+#1 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 /home/topnepa1/public_html/oms/index.php(16): yii\base\Application->run()
+#3 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/web/Application.php:115
+Stack trace:
+#0 /home/topnepa1/public_html/oms/vendor/yiisoft/yii2/base/Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /home/topnepa1/public_html/oms/index.php(16): yii\base\Application->run()
+#2 {main}
+$_SERVER = [
+    'PATH' => '/bin:/usr/bin:/usr/local/bin',
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.9,fr;q=0.8,hi;q=0.7,ne;q=0.6',
+    'HTTP_CONNECTION' => 'keep-alive',
+    'HTTP_COOKIE' => 'PHPSESSID=333197tqiqd73cutjpd38jvuv1; advanced-backend=pip0bk1hs3m5kg5qe3rvkaor66',
+    'HTTP_HOST' => 'topnepal.com.np',
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
+    'HTTP_VIA' => 'HTTP/1.1 sophos.http.proxy:3128',
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1',
+    'HTTP_ALEXATOOLBAR_ALX_NS_PH' => 'AlexaToolbar/alx-4.0.1',
+    'DOCUMENT_ROOT' => '/home/topnepa1/public_html',
+    'REMOTE_ADDR' => '202.129.251.218',
+    'REMOTE_PORT' => '52293',
+    'SERVER_ADDR' => '209.236.113.54',
+    'SERVER_NAME' => 'topnepal.com.np',
+    'SERVER_ADMIN' => 'webmaster@topnepal.com.np',
+    'SERVER_PORT' => '80',
+    'REQUEST_URI' => '/oms/requirement.php',
+    'REDIRECT_URL' => '/oms/requirement.php',
+    'REDIRECT_STATUS' => '200',
+    'SCRIPT_FILENAME' => '/home/topnepa1/public_html/oms/index.php',
+    'QUERY_STRING' => '',
+    'SCRIPT_URI' => 'http://topnepal.com.np/oms/requirement.php',
+    'SCRIPT_URL' => '/oms/requirement.php',
+    'SCRIPT_NAME' => '/oms/index.php',
+    'SERVER_PROTOCOL' => 'HTTP/1.1',
+    'SERVER_SOFTWARE' => 'LiteSpeed',
+    'REQUEST_METHOD' => 'GET',
+    'PHP_SELF' => '/oms/index.php',
+    'REQUEST_TIME_FLOAT' => 1516186260.7225720882415771484375,
+    'REQUEST_TIME' => 1516186260,
+    'argv' => [],
+    'argc' => 0,
+]
