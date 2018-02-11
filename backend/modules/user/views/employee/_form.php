@@ -198,10 +198,10 @@
         </div>
         <div class="col-lg-12">
           <div class="col-lg-6">
-            <?= $form->field($model, 'LoginTime')->widget(TimePicker::classname(),['pluginOptions' => ['showMeridian' => false]])->label("Punchin Time");?>
+            <?= $form->field($model, 'LoginTime')->widget(TimePicker::classname(),['pluginOptions' => ['showMeridian' => false]])->label("Punchin Time")?>
           </div>
           <div class="col-lg-6">
-           <?= $form->field($model, 'LogoutTime')->widget(TimePicker::classname(),['pluginOptions' => ['showMeridian' => false]])->label("Punchout Time");?>
+           <?= $form->field($model, 'LogoutTime')->widget(TimePicker::classname(),['pluginOptions' => ['showMeridian' => false]])->label("Punchout Time")?>
           </div>
         </div>
       </div>
@@ -317,7 +317,12 @@
         </div>
       </div>
       <div class="col-lg-12">
+        <div class="col-lg-6">
         <?= $form->field($model, 'Insurance')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-lg-6">
+           <?= $form->field($model, 'BankAccountNumber')->textInput(['maxlength' => true]) ?>
+        </div>
       </div>
       <div class="col-lg-12" id="ProfileImage">
         <div class="col-lg-6">

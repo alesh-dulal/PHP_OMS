@@ -54,6 +54,7 @@ use Yii;
  * @property string $LogoutTime
  * @property int $Supervisor
  * @property string $Image
+ * @property string $BankAccountNumber
  */
 class Employee extends \yii\db\ActiveRecord
 {
@@ -71,14 +72,14 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['DepartmentID', 'DesignationID', 'RoleID', 'RoomID', 'BiometricID', 'ShiftID', 'UserID', 'MaritalStatus', 'Insurance', 'CITNumber', 'PANNumber', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted', 'Supervisor'], 'integer'],
-            [['FullName', 'Email', 'CellPhone', 'PermanantAddress', 'TemporaryAddress', 'HireDate', 'JoinDate', 'CreatedBy'], 'required'],
+            [['DepartmentID', 'DesignationID', 'RoleID', 'RoomID', 'BiometricID', 'ShiftID', 'UserID', 'MaritalStatus', 'Insurance', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted', 'Supervisor'], 'integer'],
+            [['FullName', 'Email', 'CellPhone', 'PermanantAddress', 'TemporaryAddress', 'HireDate', 'JoinDate'], 'required'],
             [['DOB', 'HireDate', 'JoinDate', 'PromotedDate', 'CreatedDate', 'UpdatedDate', 'LoginTime', 'LogoutTime'], 'safe'],
             [['Salary'], 'number'],
             [['Salutation', 'Gender'], 'string', 'max' => 10],
-            [['FullName', 'Email', 'SpouseName', 'EmergencyContact1Name', 'EmergencyContact2Name','CitizenNumber'], 'string', 'max' => 100],
+            [['FullName', 'Email', 'SpouseName', 'EmergencyContact1Name', 'EmergencyContact2Name', 'BankAccountNumber'], 'string', 'max' => 100],
             [['CellPhone', 'EmergencyContact1Cell', 'EmergencyContact2Cell'], 'string', 'max' => 15],
-            [['PermanantAddress', 'TemporaryAddress', 'EmergencyContact1Relation', 'EmergencyContact2Relation'], 'string', 'max' => 50],
+            [['PermanantAddress', 'TemporaryAddress', 'EmergencyContact1Relation', 'EmergencyContact2Relation', 'CitizenNumber', 'CITNumber', 'PANNumber'], 'string', 'max' => 50],
             [['Ethnicity', 'Religion'], 'string', 'max' => 20],
             [['CitizenFile', 'CITFile', 'PANFile', 'Image'], 'string', 'max' => 200],
         ];
@@ -137,6 +138,7 @@ class Employee extends \yii\db\ActiveRecord
             'LogoutTime' => 'Logout Time',
             'Supervisor' => 'Supervisor',
             'Image' => 'Image',
+            'BankAccountNumber' => 'Bank Account Number',
         ];
     }
 }

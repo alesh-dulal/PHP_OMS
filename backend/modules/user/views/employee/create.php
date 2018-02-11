@@ -37,8 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
     $("#employee-roomid").val("16").trigger("change");
     $("#employee-shiftid").val("11").trigger("change");
 
-    $("#employee-logintime").val("10:00 AM");
-    $("#employee-logouttime").val("05:00 PM");
+    $("#employee-logintime").val("10:00");
+    $("#employee-logouttime").val("17:00");
   });
 JS;
 

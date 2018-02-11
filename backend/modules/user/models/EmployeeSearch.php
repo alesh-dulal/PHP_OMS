@@ -19,7 +19,7 @@ class EmployeeSearch extends Employee
     {
         return [
             [['Supervisor', 'EmployeeID', 'DepartmentID', 'DesignationID', 'RoleID', 'RoomID', 'BiometricID', 'ShiftID', 'UserID', 'TemporaryAddress', 'MaritalStatus', 'CitizenNumber', 'Insurance', 'CITNumber', 'PANNumber', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted'], 'integer'],
-            [['Salutation', 'FullName', 'Gender', 'DOB', 'Email', 'CellPhone', 'PermanantAddress', 'HireDate', 'JoinDate', 'PromotedDate', 'SpouseName', 'EmergencyContact1Name', 'EmergencyContact1Relation', 'EmergencyContact1Cell', 'EmergencyContact2Name', 'EmergencyContact2Relation', 'EmergencyContact2Cell', 'Ethnicity', 'Religion', 'CitizenFile', 'CITFile','Image', 'PANFile', 'CreatedDate', 'UpdatedDate', 'Salary', 'LogoutTime', 'LoginTime'], 'safe'],
+            [['Salutation', 'FullName', 'Gender', 'DOB', 'Email', 'CellPhone', 'PermanantAddress', 'HireDate', 'JoinDate', 'PromotedDate', 'SpouseName', 'EmergencyContact1Name', 'EmergencyContact1Relation', 'EmergencyContact1Cell', 'EmergencyContact2Name', 'EmergencyContact2Relation', 'EmergencyContact2Cell', 'Ethnicity', 'Religion', 'CitizenFile', 'CITFile','Image', 'PANFile', 'CreatedDate', 'UpdatedDate', 'Salary', 'LogoutTime', 'LoginTime','BankAccountNumber'], 'safe'],
         ];
     }
 
@@ -88,6 +88,7 @@ class EmployeeSearch extends Employee
             'LoginTime' => $this->LoginTime,
             'LogoutTime' => $this->LogoutTime,
             'Image' => $this->Image,
+            'BankAccountNumber' => $this->BankAccountNumber,
         ]);
 
         $query->andFilterWhere(['like', 'Salutation', $this->Salutation])
@@ -112,7 +113,8 @@ class EmployeeSearch extends Employee
             ->andFilterWhere(['like', 'Salary', $this->Salary])
             ->andFilterWhere(['like', 'LoginTime', $this->LoginTime])
             ->andFilterWhere(['like', 'LogoutTime', $this->LogoutTime])
-            ->andFilterWhere(['like', 'Image', $this->Image]);
+            ->andFilterWhere(['like', 'Image', $this->Image])
+            ->andFilterWhere(['like', 'BankAccountNumber', $this->BankAccountNumber]);
 
         return $dataProvider;
     }
