@@ -1,13 +1,12 @@
 {
+  "extends": "tslint-config-standard",
   "rules": {
-    "no-implicit-dependencies": true,
-
-    "indent": [true, "tabs"],
-    "no-trailing-whitespace": true,
-    "no-irregular-whitespace": true,
-    "curly": true,
-    "no-console": true,
-    "no-debugger": true,
-    "no-unused-variable": true
+    "no-conditional-assignment": false,
+    "no-consecutive-blank-lines": false,
+    "no-unnecessary-type-assertion": false,
+    "space-before-function-paren": false,
+    "space-within-parens": false,
+    "strict-type-predicates": false,
+    "unified-signatures": false
   }
 }

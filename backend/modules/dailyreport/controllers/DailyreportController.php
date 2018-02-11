@@ -62,6 +62,7 @@ class DailyreportController extends \yii\web\Controller
   // echo "<pre>"; print_r($emp); die();
          $CurrentEmployeeID =Dailyreport::find()->where(['CreatedBy'=>Yii::$app->session['EmployeeID']])->andWhere(['IsPending'=>1])->one();
          $CountSubmittedReport =count(Dailyreport::find()->where(['IsVerified'=>0])->andWhere(['IsPending'=>0])->all());
+          $role = strtolower(Yii::$app->session['Role']);
          if($role == 'admin' || $role == 'hr' || $role ='superadmin'){
              $EmployeeListForReport = $connection->createCommand( "
             select E.EmployeeID,E.FullName from employee E where E.IsActive=1;

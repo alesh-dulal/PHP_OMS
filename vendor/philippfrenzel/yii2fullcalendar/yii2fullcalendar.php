@@ -84,6 +84,11 @@ class yii2fullcalendar extends elWidget
      * @var boolean
      */
     //public $stickyEvents = true;
+	
+	/**
+	* public string/integer $contentHeight
+	*/
+	public $contentHeight = NULL;
 
     /**
      * tell the calendar, if you like to render google calendar events within the view
@@ -164,7 +169,7 @@ class yii2fullcalendar extends elWidget
 
         parent::init();
     }
-
+	
     /**
      * Renders the widget.
      */
@@ -216,6 +221,11 @@ class yii2fullcalendar extends elWidget
         if($this->ajaxEvents != NULL){
             $this->clientOptions['events'] = $this->ajaxEvents;
         }
+	    
+	if(!is_null($this->contentHeight) && !isset($this->clientOptions['contentHeight']))
+        {
+            $this->clientOptions['contentHeight'] = $this->contentHeight;
+        }
 
         if(is_array($this->header) && isset($this->clientOptions['header']))
         {
@@ -241,7 +251,7 @@ class yii2fullcalendar extends elWidget
         * Loads events separately from the calendar creation. Uncomment if you need this functionality.
         *
         * lets check if we have an event for the calendar...
-            * if(count($this->events)>0)
+            * if(is_array($this->events))
             * {
             *    foreach($this->events AS $event)
             *    {
@@ -267,7 +277,7 @@ class yii2fullcalendar extends elWidget
         }");
                                                
         //add new theme information for the calendar                                       
-		$options['themeSytem'] = $this->themeSystem;
+		$options['themeSystem'] = $this->themeSystem;
                                                
         if ($this->eventRender){
             $options['eventRender'] = new JsExpression($this->eventRender);
@@ -294,13 +304,11 @@ class yii2fullcalendar extends elWidget
         if ($this->eventClick){
             $options['eventClick'] = new JsExpression($this->eventClick);
         }
-                                               
-		//checks for events and loads them into the options. Comment out if loading separately.
-		if (count($this->events)>0)
-		{
-			$options['events'] = $this->events;
-		}
-                                               
+
+        if (is_array($this->events) || is_string($this->events)){
+            $options['events'] = $this->events;
+	}
+
         $options = array_merge($options, $this->clientOptions);
         return Json::encode($options);
     }

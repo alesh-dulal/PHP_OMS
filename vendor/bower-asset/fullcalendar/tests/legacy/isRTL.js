@@ -1,28 +1,28 @@
 describe('isRTL', function() {
 
-	it('has it\'s default value computed differently based off of the locale', function() {
-		affix('#cal');
-		$('#cal').fullCalendar({
-			locale: 'ar' // Arabic is RTL
-		});
-		var isRTL = $('#cal').fullCalendar('option', 'isRTL');
-		expect(isRTL).toEqual(true);
-	});
+  it('has it\'s default value computed differently based off of the locale', function() {
+    initCalendar({
+      locale: 'ar' // Arabic is RTL
+    })
+    expect(currentCalendar.option('isRTL')).toEqual(true)
+  })
 
-	// NOTE: don't put tests related to other options in here!
-	// Put them in the test file for the individual option!
+  // NOTE: don't put tests related to other options in here!
+  // Put them in the test file for the individual option!
 
-	it('adapts to dynamic option change', function() {
-		affix('#cal');
-		$('#cal').fullCalendar({
-			isRTL: false
-		});
-		expect($('#cal')).toHaveClass('fc-ltr');
-		expect($('#cal')).not.toHaveClass('fc-rtl');
+  it('adapts to dynamic option change', function() {
+    initCalendar({
+      isRTL: false
+    })
+    var $el = $(currentCalendar.el)
 
-		$('#cal').fullCalendar('option', 'isRTL', true);
-		expect($('#cal')).toHaveClass('fc-rtl');
-		expect($('#cal')).not.toHaveClass('fc-ltr');
-	});
+    expect($el).toHaveClass('fc-ltr')
+    expect($el).not.toHaveClass('fc-rtl')
 
-});
+    currentCalendar.option('isRTL', true)
+
+    expect($el).toHaveClass('fc-rtl')
+    expect($el).not.toHaveClass('fc-ltr')
+  })
+
+})
