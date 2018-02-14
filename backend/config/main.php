@@ -65,7 +65,11 @@ return [
 
         'dashboard' => [
             'class' => 'backend\modules\dashboard\dashboard',
-        ], 
+        ],
+        
+        'payroll' => [
+            'class' => 'backend\modules\payroll\payroll',
+        ],
     ],
     'components' => [
         'request' => [

@@ -16,12 +16,13 @@ use yii\widgets\ActiveForm;
       <div id="checkInTime" class="hide text-center">
         <p><strong>Todays Punchin Time : </strong> <span class="checkin-time"></span></p>
       </div>
+
     <div class="col-lg-6" >
+
                     <div class="col-lg-12 well ">
                              <h4>Calender</h4>
                            <?= \yii2fullcalendar\yii2fullcalendar::widget(array(
                            'events'=> $events,
-
                               ));
                            ?>
                          </div>
@@ -32,13 +33,60 @@ use yii\widgets\ActiveForm;
                         <?=($OffTime['Name']);?><br>
                    <?php endforeach;?>
                  </div>
+
+                 <div class="col-lg-12 well ">
+                    <h4>Born Today</h4>
+                    <?php  foreach ($BornToday as $Born):?>
+                        <strong><?=($Born['FullName']);?></strong>
+                   <?php endforeach;?>
+                 </div>
       </div>
     
     
-            <div class="col-lg-6 content">
-                                  
-                    <?php $rol=strtolower(Yii::$app->session['Role']);
-                    if  ($rol== 'admin' ||$rol== 'HR'):?>
+            <div class="col-lg-6 content">            
+                    <?php $rol=strtolower(Yii::$app->session['Role']);?>
+                        <div class="col-lg-12 well present_today_main">
+                          <h6 align="center">Employee Today's Attendance Status</h6>
+                          <div class="presentToday">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th>Name</th>
+                                  <th>Date</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                                <?php if  ($rol== 'admin' || $rol== 'HR'){ ?>
+                              <?php foreach ($EmployeeTodayAttn as $key => $PresentToday): ?>
+                                <tbody>
+                                    <tr>
+                                      <td><?= $PresentToday['FullName']; ?></td>
+                                      <td><?= $PresentToday['Attendance']; ?></td>
+                                      <td><?= $PresentToday['Status']; ?></td>
+                                    </tr>
+                                </tbody>
+                              <?php endforeach ?>
+                            <?php }elseif($rol == 'supervisor' || $rol== 'HR'){
+                             foreach ($EmployeeTodayAttnSup as $key => $AttnSup):?>
+                                <tbody>
+                                    <tr>
+                                      <td><?= $AttnSup['FullName']; ?></td>
+                                      <td><?= $AttnSup['Attendance']; ?></td>
+                                      <td><?= $AttnSup['Status']; ?></td>
+                                    </tr>
+                                </tbody>
+                                <?php endforeach;
+                            }else{
+                              //nothing
+                            }?>
+                            </table>
+                          </div>
+                        </div>
+ <?php if  ($rol== 'admin' || $rol== 'HR'):?>
+        <div class="col-lg-12 well">
+         supervisor Leave Left to Verify
+        </div>
+
             <div class="col-lg-12 well ">
 
                             <h4> Create Post</h4>
@@ -152,6 +200,11 @@ $this->registerJs($script);
 <?php 
   $this->registerCSS("
 
+    .presentToday{
+    max-height: 300px;
+    overflow-y:scroll; 
+}
+
     .nav-tabs > li > span {
        margin-right: 2px;
        line-height: 1.42857143;
@@ -189,7 +242,6 @@ $this->registerJs($script);
     border: 1px solid #ddd;
     border-bottom-color: rgb(221, 221, 221);
     border-bottom-color: transparent;
-
     ");
  ?>     
 

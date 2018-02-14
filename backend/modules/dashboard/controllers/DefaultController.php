@@ -12,6 +12,7 @@ use yii\db\Query;
 use backend\modules\holiday\models\Holiday;
 
 use backend\modules\user\models\Employee;
+use backend\modules\attendance\models\Attendance;
 use backend\modules\dashboard\models\Poststatus;
 use backend\modules\user\controllers\UserController;
 
@@ -55,8 +56,24 @@ class DefaultController extends Controller
         $Employee = (count($SelectEmployee) == 0) ? ['' => ''] : \yii\helpers\ArrayHelper::map($SelectEmployee, 'EmployeeID', 'FullName');
         $PostStatus = Poststatus::find()->orderBy(['InsertedDate'=>SORT_DESC])->limit(5)->all();
         $Holiday= Holiday::find()->all();
+
+        $BornToday = Employee::find()->select('FullName')->where(['IsActive'=>1])->andWhere(['DOB'=>Date('Y-m-d')])->all();
         
-     
+
+
+        $query = new Query();      
+       $connection = Yii::$app->getDb();
+       $command = $connection->createCommand( "
+            select E.FullName,A.Attendance,CASE when A.Attendance is null then 'Absend' else 'Present' end Status from employee E left join (SELECT A.UserID,min(time(A.AttendanceDate))Attendance FROM  attlog A where Date(A.AttendanceDate) BETWEEN ".Date('Y-m-d')." and ".Date('Y-m-d')." group by A.UserID)A on A.UserID=E.BiometricID "
+        );
+        $EmployeeTodayAttn = $command->queryAll();
+
+// echo "<pre>"; print_r($EmployeeTodayAttn); die();
+       $cmd = $connection->createCommand( "
+            select E.FullName,A.Attendance,CASE when A.Attendance is null then 'Absend' else 'Present' end Status from employee E left join (SELECT A.UserID,min(time(A.AttendanceDate))Attendance FROM  attlog A where Date(A.AttendanceDate) BETWEEN ".Date('Y-m-d')." and ".Date('Y-m-d')." group by A.UserID)A on A.UserID=E.BiometricID WHERE E.Supervisor=".Yii::$app->session['EmployeeID']
+        );
+        $EmployeeTodayAttnSup = $cmd->queryAll();
+
         $events=[];
           foreach ($Holiday AS $holiday){
                    $Event = new \yii2fullcalendar\models\Event();
@@ -78,14 +95,16 @@ class DefaultController extends Controller
                     $Event->start = $employee['From'];
                     $Event->end = $employee['To'];
                     $events[] = $Event;
-
                     }        
         return $this->render('index',[
             'Employee' => $Employee,
             'PostStatus'=>$PostStatus,
             'model'=>$model,
             'events'=>$events,
-            'LeaveToday'=>$LeaveToday
+            'LeaveToday'=>$LeaveToday,
+            'BornToday'=>$BornToday,
+            'EmployeeTodayAttn'=>$EmployeeTodayAttn,
+            'EmployeeTodayAttnSup'=>$EmployeeTodayAttnSup
               ]
              );
       }
