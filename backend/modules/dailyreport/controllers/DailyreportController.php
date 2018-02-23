@@ -62,7 +62,21 @@ class DailyreportController extends \yii\web\Controller
   // echo "<pre>"; print_r($emp); die();
          $CurrentEmployeeID =Dailyreport::find()->where(['CreatedBy'=>Yii::$app->session['EmployeeID']])->andWhere(['IsPending'=>1])->one();
          $CountSubmittedReport =count(Dailyreport::find()->where(['IsVerified'=>0])->andWhere(['IsPending'=>0])->all());
+<<<<<<< HEAD
          
+=======
+          $role = strtolower(Yii::$app->session['Role']);
+         if($role == 'admin' || $role == 'hr' || $role ='superadmin'){
+             $EmployeeListForReport = $connection->createCommand( "
+            select E.EmployeeID,E.FullName from employee E where E.IsActive=1;
+        ");
+        }else{
+         $EmployeeListForReport = $connection->createCommand( "
+            select E.EmployeeID,E.FullName from employee E where E.EmployeeID=".Yii::$app->session['EmployeeID']." or E.Supervisor=".Yii::$app->session['EmployeeID'].";
+        ");}
+        $ResultEmployeeListForReport = $EmployeeListForReport->queryall();
+        $EmployeeList = (count($ResultEmployeeListForReport) == 0) ? ['' => ''] : \yii\helpers\ArrayHelper::map($ResultEmployeeListForReport, 'EmployeeID', 'FullName');
+>>>>>>> 8bfca32a951098eb44ddfd888e486851ad551519
                   
          return $this->render('index',[
             'model'=>$model,

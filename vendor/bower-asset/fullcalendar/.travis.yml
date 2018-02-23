@@ -10,4 +10,4 @@ env:
   - CMD=test
   - CMD=lint
 
-script: npm run $CMD
+script: npm run $CMD -- --travis
