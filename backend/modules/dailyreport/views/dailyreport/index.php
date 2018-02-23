@@ -25,7 +25,7 @@ $this->title = "Daily Report";
      <?php 
            $LoggedInEmployeeRole = Yii::$app->session['Role'];
         if(strtolower($LoggedInEmployeeRole) == "admin"||strtolower($LoggedInEmployeeRole) == "hr"||strtolower($LoggedInEmployeeRole) == "supervisor" ||strtolower($LoggedInEmployeeRole) == "superadmin"):
-            echo "<li><a data-toggle='tab' href='#verifyreport'>Verify Report<span class='badge'>".$countreport."</span></a></li>";
+            echo "<li><a data-toggle='tab' href='#verifyreport'>Verify Report<span class='badge'> ".$countreport."</span></a></li>";
                 echo '<li><a data-toggle="tab" href="#verifiedReport">Verified Report</a></li>';
                 echo '<li><a data-toggle="tab" href="#addDate">Add Date</a></li>';
              else:
@@ -117,7 +117,7 @@ $this->title = "Daily Report";
                   <?php foreach ($emp as $Emp):?>
                   <?php if($Emp['IsVerified']==0 && $Emp['IsPending']==0):?>
                     <tr>
-                        <td><?=$Emp['EmpName']?></td>
+                        <td><?=$Emp['UName']?></td>
                         <td><?=$Emp['CreatedTime']?></td>
                         <td><?=$Emp['TotalTask']?></td>
                         <td><?=$Emp['Report']?></td>
@@ -157,7 +157,7 @@ $this->title = "Daily Report";
           <div class=" row reportDate" style="margin-top: 10px">
               <div class="col-lg-6">
              <?= $form->field($Employee, 'EmployeeID')->widget(Select2::classname(), [
-					'data' => $EmployeeList,
+					'data' => Yii::$app->empList->listEmployee(),
 					'language' => 'en',
 					'options' => ['placeholder' => 'Select Employee  ...'],
 					'pluginOptions' => [

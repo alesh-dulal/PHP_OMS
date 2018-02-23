@@ -97,6 +97,8 @@ class SiteController extends Controller
             $RoleID = $Result['RoleID'];
             $MenuID = $Result['MenuID'];
             $RoleName = $Result['RoleName'];
+
+            // print_r($MenuID); die();
             
             $session = Yii::$app->session;
             $session->set('UserID',$UserID);
@@ -228,19 +230,16 @@ class SiteController extends Controller
 
                     if($Password1!= "" && $Password2 != "" && $Password1 == $Password2){
                         $RealPassword = md5($Password1);
-                        $queryS = "update user set Password = '%s' where UserID = '%d'";
+                        $queryS = "update user set Password = '%s', IsPasswordReset=0, PasswordKey='' where UserID = '%d'";
                         $queryQ = sprintf($queryS, $RealPassword, $userID);
-
                         $connection = Yii::$app->getDb();
                         $queryCheck = $connection->createCommand($queryQ);
                         $count = $queryCheck->execute();
 
-                        $model = new LoginForm();
-                         return $this->render('login', [
-                            'model' => $model,
-                        ]);
+                        Yii::$app->session->setFlash('resetPasswordSucceed', "Password successfully reset.");
+                        return $this->redirect('login');
                     }else{
-                        Yii::$app->session->setFlash('ConfirmPasswordMismatching', "Password != ConfirmPassword. ");
+                        Yii::$app->session->setFlash('ConfirmPasswordMismatching', "Password != ConfirmPassword.");
                         return $this->render('resetpassword');
                     }
             }             
@@ -262,7 +261,6 @@ class SiteController extends Controller
     }
 
     public function actionChangepassword(){
-
         if (isset($_POST["change"])){
             $UserID = Yii::$app->session['UserID'];
             $OldPassword = $_POST['oldpassword'];
@@ -300,15 +298,13 @@ class SiteController extends Controller
                   return $this->render('changepassword',[
                         'Error'=> $Error,
                     ]);
-                 }
-                 
+                 }     
             }else{
                  $Error="Incorrect old password";
                   return $this->render('changepassword',[
                     'Error'=> $Error,
                 ]);
             }
-
         } else {
             return $this->render('changepassword');
         }

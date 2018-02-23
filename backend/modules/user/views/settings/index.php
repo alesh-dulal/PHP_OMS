@@ -311,6 +311,8 @@ $(document).ready(function() {
         ele.find("div.tab-pane").removeClass("in active");
         var current = $(this).attr("data-id");
         ele.find("div#" + current).addClass("in active");
+        $('div#tabContainer').find('button').attr('data-id',0);
+        $('div#tabContainer').find('input[type=text]').val('');
     });
 
     $("div#containerDepartment").find('button.department-save').click(function() {
@@ -553,6 +555,7 @@ $(document).ready(function() {
             success: function(data) {
               showMessage("Added Successfully.");
               callMe(data);
+              $('body').find('button').attr('data-id',0);
               ClearField(type);
             },
 
@@ -593,6 +596,7 @@ function GetSingleRecord(identity,type,edit)
   {
     case "department":
     var ele=$('div#containerDepartment');
+    var vary = ele.find("edit").attr("data-id");
     ele.find('button').attr('data-id',edit.attr('data-id'));
     ele.find('input[name="Listitems[Title]"]').val(edit.parents('tr').find('td:eq(1)').text());
     break;

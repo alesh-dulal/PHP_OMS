@@ -62,24 +62,12 @@ class AttendanceController extends \yii\web\Controller
         $attendance= Attendance::find()->all();
         $connection = Yii::$app->getDb();
          $role = strtolower(Yii::$app->session['Role']);
-        if($role == 'admin' || $role == 'hr' || $role ='superadmin'){
-             $EmployeeListForReport = $connection->createCommand( "
-            select E.EmployeeID,E.FullName from employee E where E.IsActive=1;
-        ");
-        }else{
-          $EmployeeListForReport = $connection->createCommand( "
-            select E.EmployeeID,E.FullName from employee E where E.EmployeeID=".Yii::$app->session['EmployeeID']." or E.Supervisor=".Yii::$app->session['EmployeeID'].";
-        ");}
-        $ResultEmployeeListForReport = $EmployeeListForReport->queryall();
-        $EmployeeList = (count($ResultEmployeeListForReport) == 0) ? ['' => ''] : \yii\helpers\ArrayHelper::map($ResultEmployeeListForReport, 'EmployeeID', 'FullName');
-
         $date=(count($attendance) == 0) ? ['' => ''] : \yii\helpers\ArrayHelper::map($attendance, 'AttendanceID', 'AttnDate');
         return $this->render('index',[
            'Employee' => $Employee,
             'model'=>$model,
             'attendance'=>$attendance,
-            'date'=>$date,
-            'EmployeeList'=>$EmployeeList
+            'date'=>$date
         ]);
     }
 

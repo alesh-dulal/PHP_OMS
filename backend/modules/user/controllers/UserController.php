@@ -100,12 +100,8 @@ class UserController extends Controller
 
 
         if ($model->load(Yii::$app->request->post())) {
-            //echo "<pre>"; print_r($model); die();
-
             $model->CreatedBy = Yii::$app->user->id;
             $model->CreatedDate = Date('Y-m-d');
-
-            // echo "<pre>"; print_r($model); die();
              $model->save();
             return $this->redirect('index');
         } else {

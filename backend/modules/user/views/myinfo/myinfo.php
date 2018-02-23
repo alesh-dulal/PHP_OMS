@@ -38,8 +38,9 @@ $this->title = Yii::$app->session['FullName'];
                <div class="row">
                   <br>
                   <div class="col-lg-12">
-                     <div class="col-lg-6"><strong>HireDate:</strong> <?= $Result['HireDate']; ?></div>
-                     <div class="col-lg-6"><strong>Join Date:</strong> <?= $Result['JoinDate']; ?></div>
+                     <div class="col-lg-3"><strong>HireDate:</strong> <?= $Result['HireDate']; ?></div>
+                     <div class="col-lg-3"><strong>Join Date:</strong> <?= $Result['JoinDate']; ?></div><div class="col-lg-3"><strong>Login Time:</strong> <?= $Result['LoginTime']; ?></div>
+                     <div class="col-lg-3"><strong>Logout Time:</strong> <?= $Result['LogoutTime']; ?></div>
                   </div>
                </div> 
                   <hr>

@@ -56,28 +56,18 @@ class DailyreportController extends \yii\web\Controller
          $Employee=new Employee();
          $query = new Query();
          $connection = Yii::$app->getDb();
-         $emp=$query->select(['E.FullName AS EmpName','E.UserID','E.EmployeeID','D.*','U.UserName AS UName' ])  
+         $emp=$query->select(['E.FullName AS EmpName','E.UserID','E.EmployeeID','D.*','U.FullName AS UName' ])  
                         ->from('dailyreport D')
-                        ->leftJoin('employee E', 'D.VerifiedBy =E.EmployeeID')->leftJoin('user U','D.CreatedBy=U.UserID')->orderBy(['D.CreatedTime'=>SORT_DESC])->all();
+                        ->leftJoin('employee E', 'D.VerifiedBy =E.EmployeeID')->leftJoin('employee U','D.CreatedBy=U.EmployeeID')->orderBy(['D.CreatedTime'=>SORT_DESC])->all();
   // echo "<pre>"; print_r($emp); die();
          $CurrentEmployeeID =Dailyreport::find()->where(['CreatedBy'=>Yii::$app->session['EmployeeID']])->andWhere(['IsPending'=>1])->one();
          $CountSubmittedReport =count(Dailyreport::find()->where(['IsVerified'=>0])->andWhere(['IsPending'=>0])->all());
-         if($role == 'admin' || $role == 'hr' || $role ='superadmin'){
-             $EmployeeListForReport = $connection->createCommand( "
-            select E.EmployeeID,E.FullName from employee E where E.IsActive=1;
-        ");
-        }else{
-         $EmployeeListForReport = $connection->createCommand( "
-            select E.EmployeeID,E.FullName from employee E where E.EmployeeID=".Yii::$app->session['EmployeeID']." or E.Supervisor=".Yii::$app->session['EmployeeID'].";
-        ");}
-        $ResultEmployeeListForReport = $EmployeeListForReport->queryall();
-        $EmployeeList = (count($ResultEmployeeListForReport) == 0) ? ['' => ''] : \yii\helpers\ArrayHelper::map($ResultEmployeeListForReport, 'EmployeeID', 'FullName');
+         
                   
          return $this->render('index',[
             'model'=>$model,
             'emp'=>$emp, 
             'countreport'=>$CountSubmittedReport,
-            'EmployeeList'=>$EmployeeList,
              'Employee'=>$Employee,
              'CurrentEmployeeID'=>$CurrentEmployeeID,
              

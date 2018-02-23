@@ -15,6 +15,7 @@ use backend\modules\user\models\Employee;
 use backend\modules\attendance\models\Attendance;
 use backend\modules\dashboard\models\Poststatus;
 use backend\modules\user\controllers\UserController;
+use backend\modules\dailyreport\models\Dailyreport;
 
 
 /**
@@ -58,21 +59,22 @@ class DefaultController extends Controller
         $Holiday= Holiday::find()->all();
 
         $BornToday = Employee::find()->select('FullName')->where(['IsActive'=>1])->andWhere(['DOB'=>Date('Y-m-d')])->all();
-        
-
-
-        $query = new Query();      
+        //employee attendance status
+       $query = new Query();      
        $connection = Yii::$app->getDb();
+       $rol=strtolower(Yii::$app->session['Role']);
+       $whereCondition=" AND E.Supervisor=".Yii::$app->session['EmployeeID'];
        $command = $connection->createCommand( "
-            select E.FullName,A.Attendance,CASE when A.Attendance is null then 'Absend' else 'Present' end Status from employee E left join (SELECT A.UserID,min(time(A.AttendanceDate))Attendance FROM  attlog A where Date(A.AttendanceDate) BETWEEN ".Date('Y-m-d')." and ".Date('Y-m-d')." group by A.UserID)A on A.UserID=E.BiometricID "
+            select E.FullName,A.Attendance,CASE when A.Attendance is null then 'Absend' else 'Present' end Status from employee E left join (SELECT A.UserID,min(time(A.AttendanceDate))Attendance FROM  attlog A where Date(A.AttendanceDate) BETWEEN date(CURRENT_DATE()) and date(CURRENT_DATE()) group by A.UserID)A on A.UserID=E.BiometricID where IsActive = 1 ".(($rol=='supervisor')?$whereCondition:"")
         );
         $EmployeeTodayAttn = $command->queryAll();
 
-// echo "<pre>"; print_r($EmployeeTodayAttn); die();
-       $cmd = $connection->createCommand( "
-            select E.FullName,A.Attendance,CASE when A.Attendance is null then 'Absend' else 'Present' end Status from employee E left join (SELECT A.UserID,min(time(A.AttendanceDate))Attendance FROM  attlog A where Date(A.AttendanceDate) BETWEEN ".Date('Y-m-d')." and ".Date('Y-m-d')." group by A.UserID)A on A.UserID=E.BiometricID WHERE E.Supervisor=".Yii::$app->session['EmployeeID']
-        );
-        $EmployeeTodayAttnSup = $cmd->queryAll();
+
+        //end employee attendance status
+
+        //Report left to be verified
+        //only show in the case of supervisor and HR
+        $CountSubmittedReport =count(Dailyreport::find()->where(['IsVerified'=>0])->andWhere(['IsPending'=>0])->all());
 
         $events=[];
           foreach ($Holiday AS $holiday){
@@ -95,7 +97,7 @@ class DefaultController extends Controller
                     $Event->start = $employee['From'];
                     $Event->end = $employee['To'];
                     $events[] = $Event;
-                    }        
+                }        
         return $this->render('index',[
             'Employee' => $Employee,
             'PostStatus'=>$PostStatus,
@@ -104,7 +106,7 @@ class DefaultController extends Controller
             'LeaveToday'=>$LeaveToday,
             'BornToday'=>$BornToday,
             'EmployeeTodayAttn'=>$EmployeeTodayAttn,
-            'EmployeeTodayAttnSup'=>$EmployeeTodayAttnSup
+            'CountSubmittedReport'=>$CountSubmittedReport
               ]
              );
       }
@@ -133,8 +135,24 @@ class DefaultController extends Controller
     if ($PunchinTime[0]['CheckIN'] == Null) {
         return "";
     } else {
-    return $PunchinTime[0]['CheckIN'];
-    }
-    
+        return $PunchinTime[0]['CheckIN'];
+        }
      }
+
+     /*
+     * filtering an array
+     */
+    public function actionFilterbyvalue ($array, $index, $value){
+        if(is_array($array) && count($array)>0) 
+        {
+            foreach(array_keys($array) as $key){
+                $temp[$key] = $array[$key][$index];
+                
+                if ($temp[$key] == $value){
+                    $newarray[$key] = $array[$key];
+                }
+            }
+          }
+      return $newarray;
+    } 
 }

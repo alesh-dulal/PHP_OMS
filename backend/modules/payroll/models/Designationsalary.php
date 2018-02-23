@@ -33,10 +33,8 @@ class Designationsalary extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['DesignationSalaryID'], 'required'],
-            [['DesignationSalaryID', 'DesignationID', 'SalaryAmount', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted'], 'integer'],
+            [['DesignationID', 'SalaryAmount', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted'], 'integer'],
             [['CreatedDate', 'UpdatedDate'], 'safe'],
-            [['DesignationSalaryID'], 'unique'],
         ];
     }
 

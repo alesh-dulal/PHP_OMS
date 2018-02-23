@@ -17,6 +17,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Yii::$app->session->getFlash('EmailSent') ?>
   </div>
 <?php endif; ?>
+
+<?php if (Yii::$app->session->hasFlash('resetPasswordSucceed')): ?>
+  <div class="alert alert-success alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+    <?= Yii::$app->session->getFlash('resetPasswordSucceed') ?>
+  </div>
+<?php endif; ?>
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
 

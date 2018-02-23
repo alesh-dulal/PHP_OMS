@@ -15,5 +15,8 @@ return [
         'crypto' => [
             'class' => 'common\components\EncryptionHelper',
         ],
+        'empList' => [
+            'class' => 'common\components\EmployeeListHelper',
+        ],
     ],
 ];

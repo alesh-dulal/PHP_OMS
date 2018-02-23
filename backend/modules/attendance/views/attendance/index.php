@@ -22,7 +22,7 @@
         else:
             $model->EmployeeID=Yii::$app->user->id;  
             echo $form->field($model, 'EmployeeID')->widget(Select2::classname(), [
-                       'data' => $EmployeeList,
+                       'data' => Yii::$app->empList->listEmployee(),
                        'language' => 'en',
                        'options' => ['placeholder' => 'Select Employee  ...'],
                        'pluginOptions' => [

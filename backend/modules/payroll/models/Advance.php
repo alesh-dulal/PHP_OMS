@@ -10,8 +10,8 @@ use Yii;
  * @property int $AdvanceID
  * @property int $EmployeeID
  * @property int $Amount
- * @property int $Rule
  * @property int $Month
+ * @property int $Rule
  * @property string $CreatedDate
  * @property int $CreatedBy
  * @property string $UpdatedDate
@@ -35,7 +35,7 @@ class Advance extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['EmployeeID', 'Amount', 'Rule', 'Month', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted'], 'integer'],
+            [['EmployeeID', 'Amount', 'Month', 'Rule', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted'], 'integer'],
             [['CreatedDate', 'UpdatedDate'], 'safe'],
         ];
     }
@@ -49,8 +49,8 @@ class Advance extends \yii\db\ActiveRecord
             'AdvanceID' => 'Advance ID',
             'EmployeeID' => 'Employee ID',
             'Amount' => 'Amount',
-            'Rule' => 'Rule',
             'Month' => 'Month',
+            'Rule' => 'Rule',
             'CreatedDate' => 'Created Date',
             'CreatedBy' => 'Created By',
             'UpdatedDate' => 'Updated Date',

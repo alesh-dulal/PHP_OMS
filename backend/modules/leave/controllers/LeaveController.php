@@ -111,22 +111,6 @@ class LeaveController extends \yii\web\Controller
 
 		$SelectLeaveType = Listitems::find()->where(['type'=>'leavetype'])->all();
         $LeaveType = (count($SelectLeaveType) == 0) ? ['' => ''] : \yii\helpers\ArrayHelper::map($SelectLeaveType, 'ListItemID', 'Title');
-
-        $query = new Query();
-        $connection = Yii::$app->getDb();
-        $role = strtolower(Yii::$app->session['Role']);
-        if($role == 'admin' || $role == 'hr' || $role ='superadmin'){
-             $EmployeeListForLeave = $connection->createCommand( "
-            select E.EmployeeID,E.FullName from employee E where E.IsActive=1;
-        ");
-        }else{
-       $EmployeeListForLeave = $connection->createCommand( "
-            select E.EmployeeID,E.FullName from employee E where E.EmployeeID=".Yii::$app->session['EmployeeID']." or E.Supervisor=".Yii::$app->session['EmployeeID'].";
-        ");}
-        $ResultEmployeeListForLeave = $EmployeeListForLeave->queryall();
-        $EmployeeList = (count($ResultEmployeeListForLeave) == 0) ? ['' => ''] : \yii\helpers\ArrayHelper::map($ResultEmployeeListForLeave, 'EmployeeID', 'FullName');
-
-
         $query1 = new Query();
         $Result = $query1->select(['LT.Title','L.Balance', 'L.Earned'])->where(['L.EmployeeID'=>Yii::$app->session['UserID']])->from('leave L')->leftJoin('listitems LT','LT.ListItemID = L.LeaveTypeID')->all();
         $CountLeaveRequest =count(Employeeleave::find()->where(['IsApproved'=>0, 'IsRejected'=>0])->all());
@@ -138,7 +122,6 @@ class LeaveController extends \yii\web\Controller
             'LeaveType'=> $LeaveType,
             'LeaveModel'=> $LeaveModel,
             'ResultLeave'=> $ResultLeave,
-            'EmployeeList'=> $EmployeeList,
             'CountLeaveRequest'=> $CountLeaveRequest,
             'EmployeeLeaveModel'=> $EmployeeLeaveModel,
         ]);

@@ -1,135 +1,117 @@
 <?php
 
 namespace backend\modules\payroll\controllers;
-
 use Yii;
-use backend\modules\payroll\models\Advance;
-use backend\modules\payroll\models\AdvanceSearch;
-use backend\modules\user\models\Employee;
+use yii\db\Query;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use yii\web\NotFoundHttpException;
+use backend\modules\payroll\models\Advance;
+use backend\modules\user\controllers\UserController;
 
-/**
- * AdvanceController implements the CRUD actions for Advance model.
- */
-class AdvanceController extends Controller
+use Date;
+use DateTime;
+use DatePeriod;
+use DateInterval;
+
+class AdvanceController extends \yii\web\Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+	public function __construct($id, $module, $config = [])
+	 {
+	     $menus=Yii::$app->session['Menus'];
+	     $menusarray=(explode(",",$menus)); 
+	     parent::__construct($id, $module, $config);
+	     $flag= in_array( "payroll" ,$menusarray )?TRUE:FALSE;
+	    if($flag==FALSE)
+	    {
+	        $this->redirect(Yii::$app->urlManager->baseUrl.'/dashboard');
+	         return false;
+	    }
+	 }
+	public function behaviors()
+	   {
+	        return [
+	            'access' => [
+	                'class' => \yii\filters\AccessControl::className(),
+	                'only' => ['index','deductions'],
+	                'rules' => [
+	                    [
+	                        'allow' => true,
+	                        'roles' => ['@'],
+	                    ],
+	                ],
+	            ],
+	            'verbs' => [
+	                'class' => VerbFilter::className(),
+	                'actions' => [
+	                    'delete' => ['POST'],
+	                ],
+	            ],
+	        ];
+	    }
 
-    /**
-     * Lists all Advance models.
-     * @return mixed
-     */
     public function actionIndex()
     {
-        $searchModel = new AdvanceSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+    	$model = new Advance();
+        //query for showing in the grid
+        $query = new Query();
+        $advances = $query->select(['AdvanceID', 'E.EmployeeID', 'E.FullName as Name','Amount','Rule', 'Month','(CASE 
+        	when A.Rule = 0 then "Deduct Once"
+        	else "Deduct Monthly"
+            END) as Rules'])->from('advance A')->leftjoin('employee E', 'E.EmployeeID = A.EmployeeID')->all();
+        //end of query part
+        return $this->render('index',[
+        	'model' => $model,
+        	'advances' => $advances,
         ]);
     }
 
-    /**
-     * Displays a single Advance model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+    public function actionSavedata(){
+        $Role = UserController::CheckRole("payroll");
+        if($Role == true){
+            $IsNewRecord = $_POST['isNewRecord'];
+            if($IsNewRecord == 0){
+                $model = new Advance();
+                $model->CreatedDate = date('Y-m-d');
+                $model->CreatedBy =Yii::$app->session['UserID'];               
+            }else{
+                $model = Advance::findOne($IsNewRecord);
+                $model->UpdatedDate = date('Y-m-d');
+                $model->UpdatedBy =Yii::$app->session['UserID'];
+            }
 
-    /**
-     * Creates a new Advance model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Advance();
+            $name = $_POST["name"];
+            $amount = $_POST["amount"];
+            $rule = $_POST["rule"];
+            $month = $_POST["month"];
 
-        $Employee = Employee::find()->where(['IsActive'=>1])->all();
-        $EmpList = (count($Employee) == 0) ? ['' => ''] : \yii\helpers\ArrayHelper::map($Employee, 'EmployeeID', 'FullName');
-
-        if ($model->load(Yii::$app->request->post())) {
-            $model->CreatedDate = date('Y-m-d');
-            $model->CreatedBy =Yii::$app->session['UserID'];
+            $model->EmployeeID = $name;
+            $model->Amount = $amount;
+            $model->Rule = $rule;
+            $model->Month = $month;
             $model->save();
-            return $this->redirect(['index']);
+            return '{"result":true,"message":"saved successfully"}';
+        } 
+    }
+
+    public function actionDeductions(){
+        $loanMonths = $_POST["DeductionMonths"];
+        $advanceTaken = $_POST["AdvanceAmount"];
+        if(!empty($loanMonths) && !empty($advanceTaken)){
+                $start = date("Y/m/d");
+                $interval = DateInterval::createFromDateString('1 month');
+                $end = date('Y/m/d', strtotime(sprintf("+%d months", $loanMonths)));
+                $periods = new DatePeriod(new DateTime($start), $interval, new DateTime($end));
+                $array = array();
+                foreach($periods as $period){
+                    $array []= date('Y-F', strtotime($period->format('Y-m')));
+                }
+                $response = Yii::$app->response;
+                $response->format = \yii\web\Response::FORMAT_JSON;
+                $response->data = $array;
+            return $response;
         }
-
-        return $this->render('create', [
-            'model' => $model,
-            'EmpList' => $EmpList,
-        ]);
     }
 
-    /**
-     * Updates an existing Advance model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->AdvanceID]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Deletes an existing Advance model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Advance model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Advance the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Advance::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
-    }
 }

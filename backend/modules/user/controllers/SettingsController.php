@@ -4,13 +4,13 @@
 namespace backend\modules\user\controllers;
 
 use Yii;
+use yii\db\Query;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use yii\web\NotFoundHttpException;
 use backend\modules\user\models\Listitems;
 use backend\modules\user\models\ListitemsSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\db\Query;
-use yii\filters\AccessControl;
 
 class SettingsController extends \yii\web\Controller
 {
@@ -95,11 +95,7 @@ class SettingsController extends \yii\web\Controller
       }
 
     public function actionRetrivedata(){
-       
-       // $process = Yii::app()->createController('User); 
-      //print_r($process);die();
       $Role =UserController::CheckRole("settings");
-     // ($Role)?"good":"bad";die();
       if ($Role == true) {
          $PostType = $_POST['type'];
         if($PostType=="stockunit"){

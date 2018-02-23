@@ -46,6 +46,16 @@ AppAsset::register($this);
         $menuItems = [
          ['label' => 'MyInfo', 'url' => ['/user/myinfo/myinfo']],
         ['label' => 'Stock', 'url' => ['/stock/stock/index']],
+        [
+            'label' => 'Payroll',
+            'items' => [
+                 ['label' => 'Advance Salary', 'url' => '/oms/payroll/advance'],
+                 ['label' => 'Payroll Setting', 'url' => '/oms/payroll/payrollsetting'],
+                 ['label' => 'Designation Salary', 'url' => '/oms/payroll/designationsalary'],
+                 ['label' => 'Employee Payroll', 'url' => '/oms/payroll/employeepayroll'],
+                 ['label' => 'Payroll', 'url' => '#'],
+            ],
+        ],
         ['label' => 'Attendance', 'url' => ['/attendance/attendance/index']],
         ['label' => 'Employee', 'url' => ['/user/employee/index']],
         ['label' => 'Leave', 'url' => ['/leave/leave/index']],

@@ -83,7 +83,7 @@ $this->title = "Request Leave";
 		if($LoggedInEmpRole == 'supervisor' || $LoggedInEmpRole == 'admin'){
 			$EmployeeLeaveModel->EmployeeID = Yii::$app->session['UserID'];
 				echo $form->field($EmployeeLeaveModel, 'EmployeeID')->widget(Select2::classname(), [
-					'data' => $EmployeeList,
+					'data' => Yii::$app->empList->listEmployee(),
 					'language' => 'en',
 					'options' => ['placeholder' => 'Select Employee  ...'],
 					'pluginOptions' => [
