@@ -98,7 +98,6 @@ $('div.form-group').find('input[name="Advance[Month]"]').keyup(function(event){
 	var DeductionMonths = $('div.form-group').find('input[name="Advance[Month]"]').val();
 	var AdvanceAmount = $('div.form-group').find('input[name="Advance[Amount]"]').val();
     var monthlyDeduction = parseInt(AdvanceAmount)/parseInt(DeductionMonths);
-    console.log(monthlyDeduction);
 	GetDeduction(DeductionMonths, AdvanceAmount, monthlyDeduction);
 });
 

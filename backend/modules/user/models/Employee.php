@@ -69,11 +69,13 @@ class Employee extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+
     public function rules()
     {
         return [
             [['DepartmentID', 'DesignationID', 'RoleID', 'RoomID', 'BiometricID', 'ShiftID', 'UserID', 'MaritalStatus', 'Insurance', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted', 'Supervisor'], 'integer'],
-            [['FullName', 'Email', 'CellPhone', 'PermanantAddress', 'TemporaryAddress', 'HireDate', 'JoinDate'], 'required'],
+            [['FullName', 'CellPhone','Email', 'PermanantAddress', 'TemporaryAddress', 'HireDate', 'JoinDate'], 'required'],
+            ['Email', 'email'],
             [['DOB', 'HireDate', 'JoinDate', 'PromotedDate', 'CreatedDate', 'UpdatedDate', 'LoginTime', 'LogoutTime'], 'safe'],
             [['Salary'], 'number'],
             [['Salutation', 'Gender'], 'string', 'max' => 10],
@@ -88,6 +90,7 @@ class Employee extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    
     public function attributeLabels()
     {
         return [
@@ -141,4 +144,5 @@ class Employee extends \yii\db\ActiveRecord
             'BankAccountNumber' => 'Bank Account Number',
         ];
     }
+
 }

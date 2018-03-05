@@ -11,7 +11,7 @@
   $this->title = "Attendance";
 ?>
 
-<div class="row">
+<div class="row" id="searching">
   <div class="col-lg-12">
     <?php $form = ActiveForm::begin(); ?>
     <div class="col-lg-3">
@@ -62,15 +62,15 @@
                 ]);
                 ?>
     </div>
-    <div class="col-lg-3">
+    <div class="col-lg-3 button-find">
 
-      <?php echo Html::button('Find', ['data-employeeID'=>Yii::$app->session['EmployeeID'], 'class' => 'btn btn-success attendance-go']); ?>
+      <?php echo Html::button('Find', ['data-employeeID'=>Yii::$app->session['EmployeeID'], 'class' => 'btn btn-success attendance-go', 'data-id'=>'findo']); ?>
     </div>
   </div>
   <?php ActiveForm::end(); ?>
 </div>
 <br>
-<div class="row">
+<div class="row cool-data">
   <table id='attendanceDetail' class="table table-bordered">
   <thead>
     <tr>
@@ -91,13 +91,17 @@
 </div>
 <?php 
 $js = <<< JS
+
+
+
 var from=$('#w1').val();
            var to=$('#w2').val();
            var employee = $('button.attendance-go').attr('data-employeeID');
            var data = from + 'to' + to;
            loadData(employee,data);
            
-         $('button.attendance-go').click(function() {
+       $('div#searching').find('div.button-find button').click(function() {
+        $('table#attendanceDetail').find('tbody').html('');
            var from=$('#w1').val();
            var to=$('#w2').val();
            
@@ -118,11 +122,10 @@ var from=$('#w1').val();
               data: {data:data,employee:employee},
               success: function (data) {
                 $('table#attendanceDetail').find('tbody').html(data);
-              }
+              }//closing of success function
              });
            
            }
-
 JS;
 
 $this->registerJS($js);

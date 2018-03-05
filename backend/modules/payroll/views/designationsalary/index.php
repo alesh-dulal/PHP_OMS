@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 use backend\modules\user\models\Employee;
-?>
+?>      
 
 <?php 
  ?>
@@ -72,6 +72,7 @@ $js = <<< JS
     $('div.container table').on('click','span.edit', function(){
 		GetSingleRecord($(this));
     });
+
     function GetSingleRecord(edit){
     	var ele=$('div.designation-salary-form');
     	ele.find('button.designation-salary-save').attr('data-id',edit.attr('data-id'));
@@ -102,7 +103,7 @@ $js = <<< JS
             cache: false,
             success: function(data) {
                 $('div.form-group').find('button.designation-salary-save').attr('data-id',0);
-                 // location.reload();
+                location.reload();
                 showMessage("Saved Successfully.");
                 callMe(data);
             },

@@ -14,11 +14,15 @@ class EmployeeListHelper extends Component{
 	       		$rol=strtolower(Yii::$app->session['Role']);
 	       		$whereCondition=" and Supervisor=".Yii::$app->session['EmployeeID'];
 	       		$command = $connection->createCommand( "
-	       				select EmployeeID, FullName from employee where IsActive = '1'
-	            				".(($rol=='supervisor')?$whereCondition:"")
+	       				select EmployeeID, FullName FROM `employee` where EmployeeID NOT IN
+					(
+					    (SELECT MIN(EmployeeID) FROM employee)
+					)
+					 AND IsActive = '1'".(($rol=='supervisor')?$whereCondition:"")
 	        			);
 	        	$employee = $command->queryAll();
 	        	$employeeList = (count($employee) == 0) ? ['' => ''] : \yii\helpers\ArrayHelper::map($employee, 'EmployeeID', 'FullName');
+
 	        return $employeeList;
 		}
 

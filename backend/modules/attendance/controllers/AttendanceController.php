@@ -76,7 +76,7 @@ class AttendanceController extends \yii\web\Controller
         if ($Role==TRUE){
          if(isset($_POST)){
             if($_POST['data'])
-        $daterange=explode("to",$_POST['data']);
+                $daterange=explode("to",$_POST['data']);
             if($_POST['employee'])
                $employeeid=$_POST['employee'];
   
@@ -84,6 +84,8 @@ class AttendanceController extends \yii\web\Controller
     ->andWhere(['EmployeeID'=>$employeeid])->all();
    
      $htm=''; 
+     $checkInDiffTotal=0; $checkOutDiffTotal=0; $workedTimeTotal=0; $workedTimeDiffTotal=0;
+     $count = 0;
     foreach ($model as $row){
          $htm .='<tr>';
          $htm.='<td>'.$row->AttnDate.'</td>';
@@ -93,15 +95,39 @@ class AttendanceController extends \yii\web\Controller
          $htm.='<td>'.$row->CheckOutDiff.'</td>';
          $htm.='<td>'.$row->WorkedTime.'</td>';
          $htm.='<td>'.$row->WorkedTimeDiff.'</td>';
-         $htm.='<td>'.$row->Remarks.'</td>'; 
+         $htm.='<td>'.$row->Remarks.'</td>';
          $htm .='</tr>';
-    }
-    return $htm;
-    
-         }
-    }
-    
-    
+
+         $checkInDiffTotal += $this->timeToSec($row->CheckInDiff);
+         $checkOutDiffTotal += $this->timeToSec($row->CheckOutDiff);
+         $workedTimeTotal += $this->timeToSec($row->WorkedTime);
+         $workedTimeDiffTotal += $this->timeToSec($row->WorkedTimeDiff);
+         $count++;
     }
 
+            $htm.= '<tr>';
+            $htm.='<td colspan="3">Total '.($count = 0 ? "":$count ).' Days </td>';
+            $htm.='<td>'.$this->getTime($checkInDiffTotal).'</td>';
+            $htm.='<td>'.$this->getTime($checkOutDiffTotal).'</td>';
+            $htm.='<td>'.$this->getTime($workedTimeTotal).'</td>';
+            $htm.='<td>'.$this->getTime($workedTimeDiffTotal).'</td>';
+            $htm.= '</tr>';
+
+            return $htm;
+            }
+        }
+    }
+
+
+    function getTime($duration) {
+    $hours = floor($duration / 3600);
+    $minutes = floor(($duration / 60) % 60);
+    $seconds = $duration % 60;
+    return "$hours:$minutes:$seconds";
+}
+
+    function timeToSec($string){
+        list($hour, $min, $sec) = explode(':', $string);
+        return $hour*3600+$min*60+$sec;
+    }
 }

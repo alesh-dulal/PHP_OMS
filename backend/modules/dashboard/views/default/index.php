@@ -11,10 +11,7 @@ use yii\widgets\ActiveForm;
 
 <!-- find currently logged in employee role -->
   <?php $role = strtolower(Yii::$app->session['Role']);?>
-  <?php print_r($role); ?>
-
 <!-- end -->
-
   <div id="dashboard" class="index">
   <div class="row">
     <!-- show to every staff employee's todays punchin time -->
@@ -85,6 +82,14 @@ use yii\widgets\ActiveForm;
                    </span>
                  </span>
               </li>
+              <li class="dropdown">
+                  <select class="form-control">
+                    <option value="all">-- All --</option>
+                    <?php foreach ($departmentLists as $key => $departmentList) {?>
+                      <option value="<?= $departmentList['ListItemID'] ?>"><?= $departmentList['Title'] ?></option>
+                   <?php } ?>
+                  </select>
+              </li> 
            </ul>
            <div id="tabContainer" class="tab-content">
               <div id="containerActive" class="tab-pane fade in active" data-active="active">
@@ -96,19 +101,20 @@ use yii\widgets\ActiveForm;
                              <th>Time</th>
                           </tr>
                        </thead>
-                       <?php foreach ($EmployeeTodayAttn as $key => $PresentToday): ?>
                        <tbody>
+                       <?php foreach ($EmployeeTodayAttn as $key => $PresentToday): ?>
                           <tr>
-                             <td><?= $PresentToday['FullName']; ?></td>
+                             <td class= "take" dept-id ="<?= $PresentToday['DepartmentID']; ?>"><?= $PresentToday['FullName']; ?></td>
                              <td><?= $PresentToday['Attendance']; ?></td>
                           </tr>
-                       </tbody>
                        <?php endforeach?>
+                       </tbody>
                     </table>
                  </div>
               </div>
               <div id="containerPresent" class="tab-pane fade in" data-active="present">
                  <div class="presentToday">
+                          <!-- donot show the table if no one is present -->
                     <table class="table">
                        <thead>
                           <tr>
@@ -116,17 +122,18 @@ use yii\widgets\ActiveForm;
                              <th>Time</th>
                           </tr>
                        </thead>
+                         <tbody>
                        <?php foreach ($EmployeeTodayAttn as $key => $PresentToday): ?>
                        <?php if ($PresentToday['Status'] == 'Present') { ?>
-                         <tbody>
                             <tr>
-                               <td><?= $PresentToday['FullName']; ?></td>
+                               <td class= "take" dept-id ="<?= $PresentToday['DepartmentID']; ?>"><?= $PresentToday['FullName']; ?></td>
                                <td><?= $PresentToday['Attendance']; ?></td>
                             </tr>
-                         </tbody>
                        <?php } ?>
                        <?php endforeach ?>
+                         </tbody>
                     </table>
+
                  </div>
               </div>
               <div id="containerAbsent" class="tab-pane fade in" data-active="absent">
@@ -137,15 +144,15 @@ use yii\widgets\ActiveForm;
                              <th>Name</th>
                           </tr>
                        </thead>
+                           <tbody>
                        <?php foreach ($EmployeeTodayAttn as $key => $PresentToday): ?>
                          <?php if ($PresentToday['Status'] == 'Absend') {?>
-                           <tbody>
                               <tr>
-                                 <td><?= $PresentToday['FullName']; ?></td>
+                                 <td class= "take" dept-id ="<?= $PresentToday['DepartmentID']; ?>"><?= $PresentToday['FullName']; ?></td>
                               </tr>
-                           </tbody>
                          <?php } ?>
                        <?php endforeach ?>
+                           </tbody>
                     </table>
                  </div>
               </div>
@@ -216,64 +223,78 @@ use yii\widgets\ActiveForm;
 
 
 <?php
-$script=<<<JS
-
-
+$script=<<< JS
 $("ul#tabList").find("li span").click(function() {
-        var ele = $("div#tabContainer");
-        ele.find("div.tab-pane").removeClass("in active");
-        var current = $(this).attr("data-id");
-        ele.find("div#" + current).addClass("in active");
-    });
+  var ele = $("div#tabContainer");
+  ele.find("div.tab-pane").removeClass("in active");
+  var current = $(this).attr("data-id");
+  ele.find("div#" + current).addClass("in active");
+});
 
+$('div#dashboard').find('ul.status-post li').click(function() {
+  $(this).siblings().removeClass('active');
+  $(this).addClass('active');
+});
 
+$('button.post').click(function() {
+  var title = $('input#title').val();
+  var description = tinyMCE.get('poststatus-description').getContent();
+  //var employee=$('#w2').val();
+  var type = $('div#dashboard').find('ul.status-post li.active').attr("data-type");
+  loadpost(title, description, type);
+});
 
-       $('div#dashboard').find('ul.status-post li').click(function(){
-        $(this).siblings().removeClass('active');
-        $(this).addClass('active');
-   });
-      $('button.post').click(function() {
-       var title=$('input#title').val();
-       var description=tinyMCE.get('poststatus-description').getContent();
-        //var employee=$('#w2').val();
-        var type = $('div#dashboard').find('ul.status-post li.active').attr("data-type");
-        
-       loadpost(title,description,type);  
-        });
-     
-        function loadpost(title,description,type){
-            $.ajax({
-           url: 'default/savepost',
-           type: 'post',
-           data: {title:title,description:description,type:type},
-           success: function (data) {
-                      }
-          });
-        
-        }
+function loadpost(title, description, type) {
+  $.ajax({
+    url: 'default/savepost',
+    type: 'post',
+    data: {
+      title: title,
+      description: description,
+      type: type
+    },
+    success: function(data) {}
+  });
+}
+
 loadLoginTime();
-  function loadLoginTime(){
-      var e =   $('div#dashboard').find('div#checkInTime span.checkin-time');
-       e.parents('div#checkInTime').addClass('hide');
-    if(e.text().trim().length == 0){
-      $.ajax({
-           url: 'default/todaylog',
-           type: 'post',
-           success: function(data){
-                if(data.length > 0){
-                  e.parents('div#checkInTime').removeClass('hide'); 
-                  e.text(data);
-                }
-           }
-          });
 
+function loadLoginTime() {
+  var e = $('div#dashboard').find('div#checkInTime span.checkin-time');
+  e.parents('div#checkInTime').addClass('hidse');
+  if(e.text().trim().length == 0) {
+    $.ajax({
+      url: 'default/todaylog',
+      type: 'post',
+      success: function(data) {
+        if(data.length > 0) {
+          e.parents('div#checkInTime').removeClass('hide');
+          e.text(data);
+        }
       }
+    });
   }
-    
+}
+
+$('div#dashboard').find('ul#tabList > li > select').on('change', function(){
+  $('div#tabContainer').find('div.active table tbody tr').show();
+  var DeptID = $('div#dashboard').find('ul#tabList li select option:selected').val();
+    if(DeptID == "all"){
+      $('div#tabContainer').find('div.active table tbody tr').show();
+    }else{
+      $('div#tabContainer div.active table > tbody > tr').each(function(){
+      var dept = $(this).find('td.take').attr('dept-id');
+      if(dept != DeptID){
+        $(this).hide();
+      }
+  });
+
+    }
+});
+
 JS;
 $this->registerJs($script);
 ?> 
-
 <?php 
   $this->registerCSS("
 #reportToVerify{
@@ -321,6 +342,9 @@ $this->registerJs($script);
     border: 1px solid #ddd;
     border-bottom-color: rgb(221, 221, 221);
     border-bottom-color: transparent;
+  }
+  ul#tabList > li > select{
+    width:8em;
   }
     ");
  ?>     
