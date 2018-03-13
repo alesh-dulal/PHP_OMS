@@ -53,7 +53,7 @@ AppAsset::register($this);
                  ['label' => 'Payroll Setting', 'url' => '/oms/payroll/payrollsetting'],
                  ['label' => 'Designation Salary', 'url' => '/oms/payroll/designationsalary'],
                  ['label' => 'Employee Payroll', 'url' => '/oms/payroll/employeepayroll'],
-                 ['label' => 'Payroll', 'url' => '#'],
+                 ['label' => 'Payroll', 'url' => '/oms/payroll/payroll'],
             ],
         ],
         ['label' => 'Attendance', 'url' => ['/attendance/attendance/index']],

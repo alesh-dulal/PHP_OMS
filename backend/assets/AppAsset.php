@@ -18,6 +18,7 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'backend/web/js/common.js',
+        'backend/web/js/jquery.tabletojson.js',
     ];
     
     public $depends = [

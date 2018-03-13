@@ -20,6 +20,7 @@ use backend\modules\user\models\Employee;
 
     <?php 
     echo $form->field($model, 'DesignationID')->widget(Select2::classname(), [
+        'options' => ['placeholder' => '- Select Designation -'],
             'data' => Yii::$app->empList->designationList(),
             'language' => 'en',
             'pluginOptions' => [
@@ -32,9 +33,9 @@ use backend\modules\user\models\Employee;
 
 <!-- yaa baki xa -->
 
-    <div class="form-group">
+<div class="form-group form-btn" id="buttons">
+        <?= Html::button('Reset', ['class' => 'btn btn-default designation-salary-reset', 'value'=>'reset']) ?>
         <?= Html::button('Save', ['class' => 'btn btn-primary designation-salary-save', 'value'=>'save','data-id'=>'0']) ?>
-
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -113,7 +114,27 @@ $js = <<< JS
             }
         });
     }
+
+$('div#buttons').find('button.designation-salary-reset').on('click', function(){
+    $('div#buttons').find('button.designation-salary-save').attr('data-id',0);
+    resetFields();
+});
+
+function resetFields(){
+    var inputArray = document.querySelectorAll('input');
+    inputArray.forEach(function (input){
+        input.value = "";
+    });
+}
 JS;
 
 $this->registerJS($js);
 ?>
+
+<?php  
+$this->registerCSS("
+        .form-btn{
+        float:right;
+    }
+    ");
+ ?>

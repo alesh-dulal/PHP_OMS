@@ -28,10 +28,10 @@ use backend\modules\user\models\Employee;
 </label>
                 </div>
 
-                <div class="form-group">
-        <?= Html::button('Save', ['class' => 'btn btn-primary payroll-setting-save', 'value'=>'save','data-id'=>'0']) ?>
-
-                </div>
+  <div class="form-group form-btn" id="buttons">
+  <?= Html::button('Reset', ['class' => 'btn btn-default payroll-setting-reset', 'value'=>'reset']) ?>
+  <?= Html::button('Save', ['class' => 'btn btn-primary payroll-setting-save', 'value'=>'save','data-id'=>'0']) ?>
+  </div>
 
                 <?php ActiveForm::end(); ?>
 	      	<!-- payroll-setting-form end-->
@@ -100,6 +100,7 @@ function ShowHeader(){
       ele.find('button.payroll-setting-save').attr('data-id',edit.attr('data-id'));
       var selectedValue=edit.parents('tr').find('td:eq(0)').attr('data-id');
       ele.find('input[value="'+selectedValue+'"]').prop('checked', true);
+
       ele.find('input[name="Payrollsetting[Title]"]').val(edit.parents('tr').find('td:eq(1)').text());
       ele.find('input[name="Payrollsetting[Amount]"]').val(edit.parents('tr').find('td:eq(2)').text());
       ele.find('input[name="Payrollsetting[OrderNo]"]').val(edit.parents('tr').find('td:eq(3)').text());
@@ -147,11 +148,29 @@ function ShowHeader(){
     }
 
 
+$('div#buttons').find('button.payroll-setting-reset').on('click', function(){
+    $('div.payroll-settings-form').find('input:radio[value="0"]').prop('checked', true);
+    $('div#buttons').find('button.payroll-setting-save').attr('data-id',0);
+    resetFields();
+});
+
+function resetFields(){
+    var inputArray = document.querySelectorAll('input[type="text"]');
+    inputArray.forEach(function(input){
+        input.value = "";
+    });
+}
+
+
 JS;
 
 $this->registerJS($js);
-
 ?>
 
- <!-- var selectedvalue=edit.parents('tr').find('td:eq(3)').text();
-    ele.find('input[value="'+selectedGender+'"]').prop('checked', true); -->
+<?php  
+$this->registerCSS("
+        .form-btn{
+        float:right;
+    }
+    ");
+ ?>

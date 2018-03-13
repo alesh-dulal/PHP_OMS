@@ -53,40 +53,112 @@ class EmployeepayrollController extends \yii\web\Controller
         ]);
     }    
 
-    public function actionCalculations()
+	public function actionEmpsalary()
     {
-    	$Role = UserController::CheckRole("payroll");
+        $Role = UserController::CheckRole("payroll");
         if($Role == true){
-	    	$employeeID = $_POST['employeeID'];
-	    	$query = new Query();
-	    	$calc = $query->select(['DS.SalaryAmount as BasicSalary'])->from('employee E')->leftjoin('designationsalary DS', 'DS.DesignationID = E.DesignationID')->where(['E.IsActive'=>1,'EmployeeID'=>$employeeID])->one();
-	    		$response = Yii::$app->response;
-	            $response->format = \yii\web\Response::FORMAT_JSON;
-	            $response->data = $calc;
-	    	return $response;
+            try {
+	            $employeeID = $_POST['employeeID'];
+	            $query = new Query();
+	            $calc = $query->select(['Salary as BasicSalary'])->from('employee E')->where(['E.IsActive'=>1,'EmployeeID'=>$employeeID])->one();
+	            if ($calc !=NULL) {
+		            $response = Yii::$app->response;
+		            $response->format = \yii\web\Response::FORMAT_JSON;
+		            $response->data = $calc;
+		            return $response;
+	            }
+                
+            } catch (Exception $e) {
+            	return $e;    
+            }
         }
-    }
+    } 
 
     public function actionAllowancelist(){
     	$Role = UserController::CheckRole("payroll");
-        if($Role == true){
-		$query = new Query();
-		$allowances = $query->select(['IsAllowance','Title','Amount','Formula'])->from('payrollsetting')->where(['IsActive'=>1])->all();
+    	 if($Role == true){
+    	 	try {
+    	 		$query = new Query();
+		        $allowances = $query->select(['PayrollSettingID', 'IsAllowance','Title','Amount','Formula'])->from('payrollsetting')->where(['IsActive'=>1])->all();
+		        $allow=NULL;
+		        $dedu=NULL;
+		        if($allowances != NULL && sizeof($allowances) > 0){
+		        	foreach ($allowances as $allowance){
+		        		if($allowance['IsAllowance'] == 0){
+		        			$allow .='<tr data-type="'.$allowance["IsAllowance"].'"data-id='.$allowance["PayrollSettingID"] .'>';
+					         	$allow.='<td>'.$allowance['Title'].'</td>';
+					         	if ($allowance['Formula'] != NULL) {
+					         		$allow.='<td>'.$allowance['Formula'].'</td>';
+					         	}else{
+					         		$allow.='<td class="editable" contenteditable ="true">'.$allowance["Amount"].'</td>';
+					         	}
+					         	$allow.='<td hidden="true">'.$allowance['Formula'].'</td>';
+					         	$allow .='</tr>';
+					         }else{
+					         	$dedu .='<tr data-type="'.$allowance["IsAllowance"].'"data-id='.$allowance["PayrollSettingID"] .'>';
+					         	$dedu.='<td>'.$allowance['Title'].'</td>';
+					         	if ($allowance['Formula'] != NULL) {
+					         		$dedu.='<td>'.$allowance['Formula'].'</td>';
+					         	}else{
+					         		$dedu.='<td class="editable" contenteditable ="true">'.$allowance["Amount"].'</td>';
+					         	}
+					         	$dedu.='<td hidden="true">'.$allowance['Formula'].'</td>';
+					         	$dedu .='</tr>';
+					         }
+		        		}
+		        }
 
-		if($allowances != NULL && sizeof($allowances) > 0){
-			$val = NULL;
-			foreach($allowances as $allowance):
-				if (strtolower($allowance['Title']) ==  'gratuity') {
-					 echo $allowance['Formula']; 
-				}
-			endforeach;
-			// $response = Yii::$app->response;
-   //      	$response->format = \yii\web\Response::FORMAT_JSON;
-   //      	$response->data = $allowances;
-    		//return $response;
-    		return $val;
-			}
-        }
+    	 	} catch (Exception $e) {
+    	 		return $e;
+    	 	}
+    	 	Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+	        return [
+	            'allowance' => $allow ,
+	            'deduction' => $dedu
+	        ];
+    	 }
+		       	 	
+    }//function ends here
 
+    public function actionCalculate(){
+    	$Role = UserController::CheckRole("payroll");
+    	 if($Role == true){
+    	 	try {
+    	 		$EmployeeID = $_POST['employeeID'];
+    	 		$query = new Query();
+    	 		$AllowanceID = $_POST['AllowanceID'];
+    	 		if ($EmployeeID != NULL && $AllowanceID != NULL) {
+    	 			$i=0; $insert ='';
+					$loggedInUserID=Yii::$app->session['UserID'];
+
+    	 			foreach ($AllowanceID as $key => $Allowance) {
+    	 				if($i != 0)
+ 						$insert .=',';
+    	 				$insert .='(';
+		    	 				$insert .=$EmployeeID.",";
+		    	 				$insert .=$Allowance['ID'].",";
+		    	 				$insert .=$Allowance['Type'].",";
+		    	 				$insert .="'".$Allowance['Name']."',";
+		    	 				$insert .=$Allowance['Value'].",";
+		    	 				$insert .="'".Date('Y-m-d')."',";
+		    	 				$insert .=$loggedInUserID;
+    	 				$insert  .= ')';
+						$i++;
+	    	 		}
+    	 		}
+
+        $query = new Query();
+        $connection = Yii::$app->getDb();
+	       $qry= sprintf("INSERT INTO `employeepayroll` (`EmployeeID`, `AllowanceID`, `IsAllowance`, `AllowanceTitle`, `AllowanceAmount`, `CreatedDate`, `CreatedBy`) VALUES %s;",$insert);
+	       $result=$connection->createCommand($qry)/*->getRawSql()*/;
+	       $res=$result->execute();
+
+	       $return = $res == TRUE ? '{"result":true,"message":"Saved successfully"}':'{"result":false,"message":"Not Saved successfully"}';
+	       return $return;
+
+    	 	} catch (Exception $e) {
+    	 		return $e;
+    	 	}
+    	} 
     }
 }

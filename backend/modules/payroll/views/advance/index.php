@@ -17,6 +17,7 @@ use backend\modules\user\models\Employee;
 
     <?php 
     echo $form->field($model, 'EmployeeID')->widget(Select2::classname(), [
+        'options' => ['placeholder' => '- Select Name -'],
             'data' => Yii::$app->empList->listEmployee(),
             'language' => 'en',
             'pluginOptions' => [
@@ -42,7 +43,8 @@ use backend\modules\user\models\Employee;
         </ul>
     </div>
 
-    <div class="form-group">
+    <div class="form-group form-btn" id="buttons">
+        <?= Html::button('Reset', ['class' => 'btn btn-default advance-reset', 'value'=>'reset']) ?>
         <?= Html::button('Save', ['class' => 'btn btn-primary advance-save', 'value'=>'save','data-id'=>'0']) ?>
     </div>
 
@@ -175,8 +177,29 @@ $('div.form-group').find('input[name="Advance[Month]"]').keyup(function(event){
             }
         });
     }
+$('div#buttons').find('button.advance-reset').on('click', function(){
+    $('div#buttons').find('button.advance-save').attr('data-id',0);
+    resetFields();
+    $('div#decuctList').find('ul.list-group li').remove();
+     $('div.field-advance-month').hide();
+});
+
+function resetFields(){
+    var inputArray = document.querySelectorAll('input');
+    inputArray.forEach(function (input){
+        input.value = "";
+    });
+}
 
 JS;
 
 $this->registerJS($js);
 ?>
+
+<?php  
+$this->registerCSS("
+        .form-btn{
+        float:right;
+    }
+    ");
+ ?>

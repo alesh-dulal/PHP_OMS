@@ -38,7 +38,7 @@
             echo '<label>From</label>';
                 echo DatePicker::widget([
                         'name' => 'from', 
-                        'value' => date('Y-m-d', strtotime('-30 days')),
+                        'value' => date('Y-m-d', strtotime('first day of this month')),
                         'options' => ['placeholder' => 'Select from date ...'],
                         'pluginOptions' => [
                                 'format' => 'yyyy-mm-dd',
@@ -64,7 +64,7 @@
     </div>
     <div class="col-lg-3 button-find">
 
-      <?php echo Html::button('Find', ['data-employeeID'=>Yii::$app->session['EmployeeID'], 'class' => 'btn btn-success attendance-go', 'data-id'=>'findo']); ?>
+      <?php echo Html::button(' Find', ['data-employeeID'=>Yii::$app->session['EmployeeID'], 'class' => 'btn-lg btn-primary attendance-go glyphicon glyphicon-search', 'data-id'=>'findo']); ?>
     </div>
   </div>
   <?php ActiveForm::end(); ?>
@@ -131,3 +131,10 @@ JS;
 $this->registerJS($js);
 
 ?>
+<?php   
+    $this->registerCSS("
+          div.button-find > .attendance-go{
+            margin-top: 20px;
+          }
+      ");
+ ?>

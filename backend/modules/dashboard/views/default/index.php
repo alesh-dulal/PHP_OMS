@@ -276,21 +276,35 @@ function loadLoginTime() {
   }
 }
 
-$('div#dashboard').find('ul#tabList > li > select').on('change', function(){
-  $('div#tabContainer').find('div.active table tbody tr').show();
-  var DeptID = $('div#dashboard').find('ul#tabList li select option:selected').val();
-    if(DeptID == "all"){
-      $('div#tabContainer').find('div.active table tbody tr').show();
-    }else{
-      $('div#tabContainer div.active table > tbody > tr').each(function(){
-      var dept = $(this).find('td.take').attr('dept-id');
-      if(dept != DeptID){
-        $(this).hide();
+  $('div#dashboard').find('ul#tabList > li > select').on('change', function()
+  {
+    $('div#tabContainer').find('div.active table tbody tr').show();
+    var DeptID = $('div#dashboard').find('ul#tabList li select option:selected').val();
+    if(DeptID == "all")
+      {
+        $('div#tabContainer').find('div.active table tbody tr').show();
       }
+      else
+      {
+        $('div#tabContainer div.active table > tbody > tr').each(function()
+        {
+          var dept = $(this).find('td.take').attr('dept-id');
+            if(dept != DeptID)
+            {
+              $(this).hide();
+            }
+        });
+      }
+  
+   var numOfVisibleRows = $('div#tabContainer').find('div.active table tbody tr').filter(function() {
+        return $(this).css('display') !== 'none';
+      }).length;
+
+      $('ul#tabList').find('li.active span.badge').text(numOfVisibleRows);
+      
   });
 
-    }
-});
+
 
 JS;
 $this->registerJs($script);

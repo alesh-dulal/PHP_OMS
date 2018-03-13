@@ -9,13 +9,10 @@ use Yii;
  *
  * @property int $EmployeePayrollID
  * @property int $EmployeeID
- * @property int $BasicSalary
+ * @property int $AllowanceID
  * @property int $IsAllowance
  * @property string $AllowanceTitle
  * @property int $AllowanceAmount
- * @property int $AllowanceTotal
- * @property int $TotalSalary
- * @property string $Month
  * @property string $CreatedDate
  * @property int $CreatedBy
  * @property string $UpdatedDate
@@ -39,11 +36,10 @@ class Employeepayroll extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['EmployeeID', 'BasicSalary', 'IsAllowance', 'AllowanceAmount', 'AllowanceTotal', 'TotalSalary', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted'], 'integer'],
-            [['BasicSalary', 'IsAllowance', 'AllowanceTitle', 'AllowanceAmount', 'AllowanceTotal', 'TotalSalary', 'Month'], 'required'],
+            [['EmployeeID', 'AllowanceID', 'IsAllowance', 'AllowanceAmount', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted'], 'integer'],
+            [['AllowanceID', 'IsAllowance', 'AllowanceTitle', 'AllowanceAmount'], 'required'],
             [['CreatedDate', 'UpdatedDate'], 'safe'],
             [['AllowanceTitle'], 'string', 'max' => 25],
-            [['Month'], 'string', 'max' => 15],
         ];
     }
 
@@ -55,13 +51,10 @@ class Employeepayroll extends \yii\db\ActiveRecord
         return [
             'EmployeePayrollID' => 'Employee Payroll ID',
             'EmployeeID' => 'Employee ID',
-            'BasicSalary' => 'Basic Salary',
+            'AllowanceID' => 'Allowance ID',
             'IsAllowance' => 'Is Allowance',
             'AllowanceTitle' => 'Allowance Title',
             'AllowanceAmount' => 'Allowance Amount',
-            'AllowanceTotal' => 'Allowance Total',
-            'TotalSalary' => 'Total Salary',
-            'Month' => 'Month',
             'CreatedDate' => 'Created Date',
             'CreatedBy' => 'Created By',
             'UpdatedDate' => 'Updated Date',
