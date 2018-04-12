@@ -111,7 +111,7 @@ class SiteController extends Controller
             $session->set('Menus',$MenuID );
             $session->set('Role',$RoleName );
 
-            $this->SaveLog('Login', gethostname().",". $this->gethostIP());
+            $this->saveLog('Login', gethostname().",". $this->gethostIP());
             
             return $this->goBack();
         } else {

@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 use backend\modules\user\models\Employee;
- ?>
+?>
 <h2 align="center">Advance Salary</h2>
 
 <div class="container">
@@ -59,20 +59,16 @@ use backend\modules\user\models\Employee;
 			    <thead>
 			      <tr>
 			        <th>Name</th>
-			        <th>Amount</th>
-			        <th>Rule</th>
-			        <th>Month</th>
-			        <th>Action</th>
+                    <th>Amount</th>
+
 			      </tr>
 			    </thead>
 			    <tbody>
 			<?php foreach ($advances as $key => $advance):?>
 				<tr>
 					<td emp-id = "<?=$advance['EmployeeID']?>"><?= $advance['Name'] ?></td>
-					<td><?= $advance['Amount'] ?></td>
-					<td rule-id ="<?=$advance['Rule'] ?>"><?= $advance['Rules'] ?></td>
-					<td><?= $advance['Month'] ?></td>
-					<td><span class="hand edit" data-id="<?= $advance['AdvanceID'] ?>">edit</span></td>
+                    <td><?= $advance['Amount'] ?></td>
+
 				</tr>
 			<?php endforeach ?>
 			    </tbody>
@@ -116,7 +112,7 @@ $('div.form-group').find('input[name="Advance[Month]"]').keyup(function(event){
             success: function(data) {
             	var buffer = "";
                 $.each(data, function(index){
-                    buffer+="<li>"+data[index]+" "+monthlyDeduction+"</li>";
+                    buffer+="<li>"+data[index]+"-"+monthlyDeduction+"</li>";
                 });
 
                 $('div#decuctList').find('ul').html(buffer);
@@ -129,40 +125,28 @@ $('div.form-group').find('input[name="Advance[Month]"]').keyup(function(event){
         });
     }
 
-    $('div.container table').on('click','span.edit', function(){
-		GetSingleRecord($(this));
-    });
-    function GetSingleRecord(edit){
-    	var ele=$('div.advance-form');
-    	ele.find('button.advance-save').attr('data-id',edit.attr('data-id'));
-    	ele.find('select[name="Advance[EmployeeID]"] ').val(edit.parents('tr').find('td:eq(0)').attr('emp-id')).trigger('change');
-    	ele.find('input[name="Advance[Amount]"]').val(edit.parents('tr').find('td:eq(1)').text());
-    	ele.find('select[name="Advance[Rule]"] ').val(edit.parents('tr').find('td:eq(2)').attr('rule-id')).trigger('change');
-    	ele.find('input[name="Advance[Month]"]').val(edit.parents('tr').find('td:eq(3)').text());
-    }
-
     //ajax for save and update data 
 
     $('div.form-group').find('button.advance-save').on('click',function(){
         var ele = $('div.form-group');
-        var name = ele.find('select[name="Advance[EmployeeID]"]').val();
-        var amount = ele.find('input[name="Advance[Amount]"]').val();
+        var advanceArray = new Array();
         var rule = ele.find('select[name="Advance[Rule]"]').val();
-        var month = ele.find('input[name="Advance[Month]"]').val();
-        var isNewRecord = ele.find('button.advance-save').attr('data-id');
-        SaveData(isNewRecord, name, amount, rule, month);
+        $('div#decuctList').find('ul.list-group > li').each(function(){
+            var name = ele.find('select[name="Advance[EmployeeID]"]').val();
+            var amount = ele.find('input[name="Advance[Amount]"]').val();
+            var advanceOf = $(this).text();
+            advanceArray.push({"EmployeeID":name,"Amount":amount, "AdvanceOf":advanceOf});
+            });
+        SaveData(rule, advanceArray);
     });
-
-    function SaveData(isNewRecord, name, amount, rule, month, callMe) {
+    
+    function SaveData(rule, advanceArray, callMe) {
         $.ajax({
             type: "POST",
             url: "advance/savedata",
             data: {
-                "isNewRecord": isNewRecord,
-                "name": name,
-                "amount": amount,
                 "rule": rule,
-                "month": month
+                "advanceArray": advanceArray
             },
             dataType:'json',
             cache: false,
@@ -189,8 +173,8 @@ function resetFields(){
     inputArray.forEach(function (input){
         input.value = "";
     });
+    $('select').val("0").trigger('change');
 }
-
 JS;
 
 $this->registerJS($js);

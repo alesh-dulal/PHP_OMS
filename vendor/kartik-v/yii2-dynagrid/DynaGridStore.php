@@ -3,16 +3,16 @@
 /**
  * @package   yii2-dynagrid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2017
- * @version   1.4.7
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2018
+ * @version   1.4.8
  */
 
 namespace kartik\dynagrid;
 
 use kartik\base\Config;
 use Yii;
+use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
-use yii\base\Object;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
@@ -24,7 +24,7 @@ use yii\web\Cookie;
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @since 1.2.0
  */
-class DynaGridStore extends Object
+class DynaGridStore extends BaseObject
 {
     /**
      * Grid configuration storage
@@ -131,7 +131,7 @@ class DynaGridStore extends Object
      * Fetches and return the list of detail values for
      * session or cookie storage
      *
-     * @param array $config the storage configuration
+     * @param array  $config the storage configuration
      * @param string $cat the detail category
      *
      * @return array

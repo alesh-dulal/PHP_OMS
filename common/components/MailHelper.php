@@ -16,8 +16,7 @@ class MailHelper extends Component{
             ->setTo($to)
             ->setSubject($subject)
             ->setHtmlBody($body)
-            ->send();
-            
+            ->send();            
         return 'true';
     }
 	

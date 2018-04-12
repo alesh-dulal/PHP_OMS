@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "payrollsetting".
  *
  * @property int $PayrollSettingID
- * @property int $IsAllowence
+ * @property int $IsAllowance
  * @property string $Title
  * @property int $Amount
  * @property string $Formula
@@ -36,10 +36,12 @@ class Payrollsetting extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['IsAllowance'], 'required'],
             [['IsAllowance', 'Amount', 'OrderNo', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted'], 'integer'],
             [['CreatedDate', 'UpdatedDate'], 'safe'],
             [['Title'], 'string', 'max' => 45],
             [['Formula'], 'string', 'max' => 50],
+            [['OrderNo'], 'unique'],
         ];
     }
 

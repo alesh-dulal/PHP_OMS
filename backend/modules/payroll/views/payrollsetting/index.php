@@ -92,7 +92,9 @@ function ShowHeader(){
 
 
   $('div.container table').on('click','span.edit', function(){
+
     GetSingleRecord($(this));
+    ShowHeader();
   });
 
     function GetSingleRecord(edit){
@@ -152,6 +154,7 @@ $('div#buttons').find('button.payroll-setting-reset').on('click', function(){
     $('div.payroll-settings-form').find('input:radio[value="0"]').prop('checked', true);
     $('div#buttons').find('button.payroll-setting-save').attr('data-id',0);
     resetFields();
+    ShowHeader();
 });
 
 function resetFields(){

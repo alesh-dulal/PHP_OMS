@@ -30,7 +30,8 @@
         "kartik-v/yii2-date-range": "dev-master",
         "kartik-v/yii2-markdown": "dev-master",
         "borales/yii2-phone-input": "*",
-        "moonlandsoft/yii2-phpexcel": "*"
+        "moonlandsoft/yii2-phpexcel": "*",
+        "zyx/zyx-phpmailer": "^0.9.4"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

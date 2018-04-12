@@ -10,6 +10,7 @@ namespace yii\web;
 use Yii;
 use yii\base\InlineAction;
 use yii\helpers\Url;
+use backend\modules\user\models\Userlog;
 
 /**
  * Controller is the base class of web controllers.
@@ -157,7 +158,7 @@ class Controller extends \yii\base\Controller
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function beforeAction($action)
     {
@@ -261,5 +262,12 @@ class Controller extends \yii\base\Controller
     public function refresh($anchor = '')
     {
         return Yii::$app->getResponse()->redirect(Yii::$app->getRequest()->getUrl() . $anchor);
+    }
+    public function saveLog($Action,$Remarks){
+        $Userlog=new Userlog();
+        $Userlog->UserID=Yii::$app->session['UserID'];
+        $Userlog->Action=$Action;
+        $Userlog->Remarks=$Remarks;
+        $Userlog->save();
     }
 }

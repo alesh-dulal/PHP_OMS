@@ -1,8 +1,12 @@
 <?php
-/**
- * @link https://github.com/Vintage-web-production/yii2-tinify
- * @copyright Copyright (c) 2017 Vintage Web Production
- * @license BSD 3-Clause License
+
+/*
+ * This file is part of the yii2-tinify package.
+ *
+ * (c) Vladimir Kuprienko <vldmr.kuprienko@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace vintage\tinify\algorithms;
@@ -21,6 +25,7 @@ class Cover extends AbstractAlgorithm
     public function getConfig()
     {
         $config = [];
+
         if (empty($this->width)) {
             $config['width'] = $this->height;
             $config['height'] = $this->height;
@@ -31,6 +36,7 @@ class Cover extends AbstractAlgorithm
             $config['width'] = $this->width;
             $config['height'] = $this->height;
         }
+
         return $config;
     }
 }

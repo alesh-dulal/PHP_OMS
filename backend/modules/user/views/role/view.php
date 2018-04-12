@@ -23,6 +23,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        
+        <?= Html::button('Communication', ['value'=>Url::to(['role/communication']),'class' => 'btn btn-success', 'id'=>'modalButton']) ?>
+
     </p>
 
     <?= DetailView::widget([

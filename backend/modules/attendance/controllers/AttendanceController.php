@@ -77,7 +77,9 @@ class AttendanceController extends \yii\web\Controller
             if($_POST['employee'])
                 $employeeid=$_POST['employee'];
             $model = Attendance::find()->where(['between', 'AttnDate',$daterange[0],$daterange[1]])
-    ->andWhere(['EmployeeID'=>$employeeid])->distinct('AttnDate')->all();
+    ->andWhere(['EmployeeID'=>$employeeid])->distinct('AttnDate')->orderBy([
+        'AttnDate'=>SORT_DESC
+    ])->all();
             try 
             {
                 if($model != NULL  && sizeof($model) > 0){

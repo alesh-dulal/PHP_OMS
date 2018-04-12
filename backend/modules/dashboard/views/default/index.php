@@ -9,12 +9,12 @@ use dosamigos\tinymce\TinyMce;
 use yii\widgets\ActiveForm;
 ?>
 
-<!-- find currently logged in employee role -->
+<!-- ======ind currently logged in employee role===== -->
   <?php $role = strtolower(Yii::$app->session['Role']);?>
-<!-- end -->
+<!-- =====end===== -->
   <div id="dashboard" class="index">
   <div class="row">
-    <!-- show to every staff employee's todays punchin time -->
+    <!-- =====show to every staff employee's todays punchin time====== -->
      <div id="checkInTime" class="hide text-center">
         <p><strong>Todays Punchin Time : </strong> <span class="checkin-time"></span>
            <strong>|</strong>
@@ -23,9 +23,9 @@ use yii\widgets\ActiveForm;
           </strong> 
         </p>
      </div>
-  <!-- end of show to every staff employee's todays punchin time -->
+  <!-- =====end of show to every staff employee's todays punchin time===== -->
 
-  <!-- show to every staff calender, born today and off today -->
+  <!-- =====show to every staff calender, born today and off today===== -->
      <div class="col-lg-6" >
         <div class="col-lg-12 well ">
            <h4>Calender</h4>
@@ -46,21 +46,21 @@ use yii\widgets\ActiveForm;
            <?php endforeach;?>
         </div>
      </div>
-  <!-- end of show to every staff calender, born today and off today -->
+  <!-- =====end of show to every staff calender, born today and off today===== -->
 
      <div class="col-lg-6 content">
-      <!-- employees todays attendance show to HR, admin, supervisor only hide to other staffs -->
+      <!-- =====employees todays attendance show to HR, admin, supervisor only hide to other staffs===== -->
       <?php if  ($role == 'admin' || $role == 'hr' ||$role == 'supervisor'){ ?>
-        <div class="col-lg-12 well present_today_main">
+        <div class="col-lg-12 well present_today_main" id="filterEmployee">
            <ul id="tabList" class="nav nav-tabs">
-              <li class="active">
+              <li class="active test">
                  <span data-toggle="tab" class="item-tab hand" data-id="containerActive">Active
                    <span class="badge">
                    <?= count($EmployeeTodayAttn); ?>
                    </span>
                  </span>
               </li>
-              <li>
+              <li class="test">
                  <span data-toggle="tab" class="item-tab hand" data-id="containerPresent">Present
                    <span class="badge">
                      <?php $i = 0; ?>
@@ -71,7 +71,7 @@ use yii\widgets\ActiveForm;
                    </span>
                  </span>
               </li>
-              <li>
+              <li class="test">
                  <span data-toggle="tab" class="item-tab hand" data-id="containerAbsent">Absent
                    <span class="badge">
                    <?php $j = 0; ?>
@@ -92,7 +92,7 @@ use yii\widgets\ActiveForm;
               </li> 
            </ul>
            <div id="tabContainer" class="tab-content">
-              <div id="containerActive" class="tab-pane fade in active" data-active="active">
+              <div id="containerActive" class="filter tab-pane fade in active" data-active="active">
                  <div class="presentToday">
                     <table class="table">
                        <thead>
@@ -112,9 +112,9 @@ use yii\widgets\ActiveForm;
                     </table>
                  </div>
               </div>
-              <div id="containerPresent" class="tab-pane fade in" data-active="present">
+              <div id="containerPresent" class="filter tab-pane fade in" data-active="present">
                  <div class="presentToday">
-                          <!-- donot show the table if no one is present -->
+                          <!-- ======donot show the table if no one is present====== -->
                     <table class="table">
                        <thead>
                           <tr>
@@ -136,7 +136,7 @@ use yii\widgets\ActiveForm;
 
                  </div>
               </div>
-              <div id="containerAbsent" class="tab-pane fade in" data-active="absent">
+              <div id="containerAbsent" class="filter tab-pane fade in" data-active="absent">
                  <div class="presentToday">
                     <table class="table">
                        <thead>
@@ -159,8 +159,8 @@ use yii\widgets\ActiveForm;
            </div>
         </div>
         <?php } ?>
-        <!-- end of hide to other except hr admin supervisor -->
-        <!-- create post show to HR and admin only -->
+        <!-- =====end of hide to other except hr admin supervisor===== -->
+        <!-- =====create post show to HR and admin only====== -->
         <?php if($role == 'hr' ||$role == 'admin'){ ?>
         <div class="col-lg-12 well ">
            <h4> Create Post</h4>
@@ -192,8 +192,8 @@ use yii\widgets\ActiveForm;
            </div>
         </div>
         <?php } ?>
-        <!-- end of show to HR and admin only  -->
-<!-- show to every employee  -->
+<!-- =====end of show to HR and admin only=====  -->
+<!-- =====show to every employee=====  -->
         <div class="col-lg-12 well" >
            <?php foreach($PostStatus as $status):  ?> 
            <div class="panel panel-default single-post">
@@ -216,7 +216,7 @@ use yii\widgets\ActiveForm;
            </div>
            <?php endforeach; ?>
         </div>
-<!-- end of show to every employee -->
+<!-- =====end of show to every employee===== -->
      </div>
   </div>
 </div>
@@ -253,7 +253,9 @@ function loadpost(title, description, type) {
       description: description,
       type: type
     },
-    success: function(data) {}
+    success: function(data) {
+      
+    }
   });
 }
 
@@ -275,18 +277,17 @@ function loadLoginTime() {
     });
   }
 }
-
-  $('div#dashboard').find('ul#tabList > li > select').on('change', function()
+$('div#dashboard').find('ul#tabList > li > select').on('change', function()
   {
-    $('div#tabContainer').find('div.active table tbody tr').show();
+    $('div#tabContainer').find('div.filter table tbody tr').show();
     var DeptID = $('div#dashboard').find('ul#tabList li select option:selected').val();
     if(DeptID == "all")
       {
-        $('div#tabContainer').find('div.active table tbody tr').show();
+        $('div#tabContainer').find('div.filter table tbody tr').show();
       }
       else
       {
-        $('div#tabContainer div.active table > tbody > tr').each(function()
+        $('div#tabContainer div.filter table > tbody > tr').each(function()
         {
           var dept = $(this).find('td.take').attr('dept-id');
             if(dept != DeptID)
@@ -295,15 +296,22 @@ function loadLoginTime() {
             }
         });
       }
-  
-   var numOfVisibleRows = $('div#tabContainer').find('div.active table tbody tr').filter(function() {
-        return $(this).css('display') !== 'none';
-      }).length;
+      //count rows to show in the badge
+      var rowCount = [];
+      var i=0;
+      $('div#filterEmployee').find('div.filter table').each(function(){
+        var numOfVisibleRows = $(this).find('tbody tr').filter(function() {
+            return $(this).css('display') !== 'none';
+          }).length;
+         rowCount.push(numOfVisibleRows);
+      });
+      $.each(rowCount, function(){
+        $('ul#tabList').find('li.test').each(function(i){
+          $(this).find('span.badge').text(rowCount[i]);
+        });
+      });
 
-      $('ul#tabList').find('li.active span.badge').text(numOfVisibleRows);
-      
   });
-
 
 
 JS;

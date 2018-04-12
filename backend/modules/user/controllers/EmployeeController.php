@@ -462,6 +462,61 @@ class EmployeeController extends Controller
         }
     }
 }
+
+    public function actionCommunication()
+    {
+        $model = new \backend\modules\user\models\Employeecommunication();
+
+        if ($model->load(Yii::$app->request->post())) {
+                $model->EmployeeID =Yii::$app->request->get('id');
+                $model->CreatedDate=Date('Y-m-d');
+                $model->CreatedBy=Yii::$app->session['EmployeeID'];
+                $model->save();
+                return $this->redirect(['view','id'=> $model->EmployeeID]);
+        }
+        return $this->render('communication', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionGetcommunication()
+    {
+      $Role = UserController::CheckRole("employee");
+        if ($Role == true)
+        {
+            $EmployeeID = $_POST['EmployeeID'];
+
+            try {
+
+                $connection = Yii::$app->getDb();
+            $qry = sprintf("SELECT EC.CreatedDate, EC.Details,E.FullName as TalkedWith FROM employeecommunication EC LEFT JOIN employee E ON E.EmployeeID = EC.CreatedBy WHERE EC.EmployeeID = '%d'",$EmployeeID);
+            $result = $connection->createCommand($qry) /*->getRawSql()*/;
+            $res = $result->queryAll();
+            if(sizeof($res) != NULL)
+            {
+                $html = '';
+                foreach ($res as $key => $r) 
+                {
+                    $html .= '<tr>';
+                    $html .= '<td>'.$r['CreatedDate'].'</td>';
+                    $html .= '<td>'.$r['Details'].'</td>';
+                    $html .= '<td>'.$r['TalkedWith'].'</td>';
+                    $html .= '</tr>';
+                }
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return ['html' => $html];
+            }
+            else
+            {
+              Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return ['html' => '<tr><td colspan = "3" align = "center">No data available in tabl</tr>'];  
+            }
+                
+            } catch (Exception $e) {
+                return "Error Occured".$e;
+            }
+        }  
+    }
 }
 
 

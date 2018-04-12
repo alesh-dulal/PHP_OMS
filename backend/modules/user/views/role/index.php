@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::button('Create Role', ['value'=>Url::to(['role/create']),'class' => 'btn btn-success', 'id'=>'modalButton']) ?>
+        <?= Html::button('Communication', ['value'=>Url::to(['role/communication']),'class' => 'btn btn-success', 'id'=>'modalButton']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

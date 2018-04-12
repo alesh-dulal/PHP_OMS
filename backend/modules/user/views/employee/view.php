@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use backend\modules\user\controllers\UserController;
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\user\models\Employee */
@@ -23,6 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+
+        <?= Html::a('Communication', ['communication', 'id' => $model->EmployeeID], ['class'=>'comm btn btn-info', 'attr-empid' => $model->EmployeeID]) ?>
+
     </p>
 
     <?= DetailView::widget([
@@ -114,3 +118,57 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 </div>
+
+<?php 
+    $Role = UserController::CheckRole("employee");
+    if ($Role == true)
+        {
+          echo '
+    <div id="conDet" class="row">
+        <h4 align="center">Communication Minutes</h4>
+        <div class="communication-details">
+            <table class="table table-striped" id="conDetails">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Communicated With</th>
+                </tr>
+            </thead>
+            <tbody>
+            <!--=====Table Content Goes Here=====-->
+            </tbody>
+            </table>
+        </div>
+    </div>
+';}
+ ?>
+
+<?php 
+$js = <<< JS
+$(document).ready(function(){
+    var EmployeeID = $('a.comm').attr('attr-empid');
+    GetDetails(EmployeeID);
+});
+function GetDetails(EmployeeID)
+{
+    $.ajax({
+        type: "POST",
+        url: "getcommunication",
+        data: {
+            "EmployeeID":EmployeeID,
+        },
+        dataType:'json',
+        cache: false,
+        success: function(data) {
+         $('div#conDet').find('div.communication-details table#conDetails tbody').append(data['html']);  
+        },
+        error:function(data){
+            showError('Communication Data is Missing');
+        }
+    });
+}
+
+JS;
+$this->registerJS($js);
+?>

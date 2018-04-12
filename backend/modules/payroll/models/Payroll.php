@@ -8,22 +8,36 @@ use Yii;
  * This is the model class for table "payroll".
  *
  * @property int $PayrollID
- * @property string $EmployeeName
+ * @property string $FullName
+ * @property string $Year
+ * @property int $Month
  * @property int $BasicSalary
  * @property int $PF
+ * @property int $Gratuity
+ * @property int $CompensationAllowance
+ * @property int $Grade
+ * @property int $Incentive
  * @property int $Bonus
- * @property int $TotalAllowane
+ * @property int $TotalAllowance
+ * @property int $PFDeduction
+ * @property int $CITDeduction
+ * @property int $TotalDeduction
+ * @property int $Income
  * @property int $AbsentDays
  * @property int $AbsentDeduction
- * @property int $PFDeduction
+ * @property int $GrossIncome
  * @property int $SST
- * @property int $OtherTax
- * @property int $Total
- * @property int $Deduction
- * @property int $NetSalary
+ * @property int $OtherTAX
+ * @property int $NetIncome
  * @property int $AdvanceDeduction
  * @property int $PayableAmount
  * @property string $Remarks
+ * @property string $CreatedDate
+ * @property int $CreatedBy
+ * @property string $UpdatedDate
+ * @property int $UpdatedBy
+ * @property int $IsActive
+ * @property int $IsDeleted
  */
 class Payroll extends \yii\db\ActiveRecord
 {
@@ -41,36 +55,50 @@ class Payroll extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['EmployeeName', 'BasicSalary', 'PF', 'Bonus', 'TotalAllowane', 'AbsentDays', 'AbsentDeduction', 'PFDeduction', 'SST', 'OtherTax', 'Total', 'Deduction', 'NetSalary', 'AdvanceDeduction', 'PayableAmount'], 'required'],
-            [['BasicSalary', 'PF', 'Bonus', 'TotalAllowane', 'AbsentDays', 'AbsentDeduction', 'PFDeduction', 'SST', 'OtherTax', 'Total', 'Deduction', 'NetSalary', 'AdvanceDeduction', 'PayableAmount'], 'integer'],
-            [['EmployeeName', 'Remarks'], 'string', 'max' => 100],
+            [['FullName', 'Year', 'Month', 'BasicSalary', 'PF', 'Gratuity', 'CompensationAllowance', 'Grade', 'Incentive', 'Bonus', 'TotalAllowance', 'PFDeduction', 'CITDeduction', 'TotalDeduction', 'Income', 'AbsentDays', 'AbsentDeduction', 'GrossIncome', 'SST', 'OtherTAX', 'NetIncome', 'AdvanceDeduction', 'PayableAmount', 'Remarks'], 'required'],
+            [['Year', 'CreatedDate', 'UpdatedDate'], 'safe'],
+            [['Month', 'BasicSalary', 'PF', 'Gratuity', 'CompensationAllowance', 'Grade', 'Incentive', 'Bonus', 'TotalAllowance', 'PFDeduction', 'CITDeduction', 'TotalDeduction', 'Income', 'AbsentDays', 'AbsentDeduction', 'GrossIncome', 'SST', 'OtherTAX', 'NetIncome', 'AdvanceDeduction', 'PayableAmount', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted'], 'integer'],
+            [['FullName', 'Remarks'], 'string', 'max' => 200],
         ];
     }
 
     /**
      * @inheritdoc
      */
-    
     public function attributeLabels()
     {
         return [
             'PayrollID' => 'Payroll ID',
-            'EmployeeName' => 'Employee Name',
+            'FullName' => 'Full Name',
+            'Year' => 'Year',
+            'Month' => 'Month',
             'BasicSalary' => 'Basic Salary',
             'PF' => 'Pf',
+            'Gratuity' => 'Gratuity',
+            'CompensationAllowance' => 'Compensation Allowance',
+            'Grade' => 'Grade',
+            'Incentive' => 'Incentive',
             'Bonus' => 'Bonus',
-            'TotalAllowane' => 'Total Allowane',
+            'TotalAllowance' => 'Total Allowance',
+            'PFDeduction' => 'Pfdeduction',
+            'CITDeduction' => 'Citdeduction',
+            'TotalDeduction' => 'Total Deduction',
+            'Income' => 'Income',
             'AbsentDays' => 'Absent Days',
             'AbsentDeduction' => 'Absent Deduction',
-            'PFDeduction' => 'Pfdeduction',
+            'GrossIncome' => 'Gross Income',
             'SST' => 'Sst',
-            'OtherTax' => 'Other Tax',
-            'Total' => 'Total',
-            'Deduction' => 'Deduction',
-            'NetSalary' => 'Net Salary',
+            'OtherTAX' => 'Other Tax',
+            'NetIncome' => 'Net Income',
             'AdvanceDeduction' => 'Advance Deduction',
             'PayableAmount' => 'Payable Amount',
             'Remarks' => 'Remarks',
+            'CreatedDate' => 'Created Date',
+            'CreatedBy' => 'Created By',
+            'UpdatedDate' => 'Updated Date',
+            'UpdatedBy' => 'Updated By',
+            'IsActive' => 'Is Active',
+            'IsDeleted' => 'Is Deleted',
         ];
     }
 }

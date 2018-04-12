@@ -125,6 +125,7 @@ function resetFields(){
     inputArray.forEach(function (input){
         input.value = "";
     });
+    $('select').val("").trigger('change');
 }
 JS;
 

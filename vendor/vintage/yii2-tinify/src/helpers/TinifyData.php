@@ -1,8 +1,12 @@
 <?php
-/**
- * @link https://github.com/Vintage-web-production/yii2-tinify
- * @copyright Copyright (c) 2017 Vintage Web Production
- * @license BSD 3-Clause License
+
+/*
+ * This file is part of the yii2-tinify package.
+ *
+ * (c) Vladimir Kuprienko <vldmr.kuprienko@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace vintage\tinify\helpers;
@@ -10,7 +14,7 @@ namespace vintage\tinify\helpers;
 use Yii;
 
 /**
- * Data helper
+ * Data helper.
  *
  * @author Vladimir Kuprienko <vldmr.kuprienko@gmail.com>
  * @since 1.0
@@ -20,9 +24,16 @@ class TinifyData
     const PARAM_KEY_API_TOKEN = 'tinify-api-token';
 
     /**
-     * Returns API token from application params
+     * This class should not be instantiated.
+     */
+    private function __construct()
+    {
+    }
+
+    /**
+     * Returns API token from application params.
      *
-     * @return null
+     * @return null|string
      */
     public static function getApiToken()
     {
@@ -34,7 +45,7 @@ class TinifyData
     }
 
     /**
-     * Returns allowed mime types
+     * Returns allowed mime types.
      *
      * @return array
      */
@@ -44,10 +55,12 @@ class TinifyData
     }
 
     /**
-     * Check where compressing is allowed for current file.
+     * Check whether compressing is allowed for current file.
      *
      * @param string $fileName
+     *
      * @return bool
+     *
      * @since 2.0
      */
     public static function allowCompression($fileName)

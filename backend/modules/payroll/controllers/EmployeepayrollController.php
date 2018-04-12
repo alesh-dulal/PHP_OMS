@@ -133,16 +133,16 @@ class EmployeepayrollController extends \yii\web\Controller
 
     	 			foreach ($AllowanceID as $key => $Allowance) {
     	 				if($i != 0)
- 						$insert .=',';
-    	 				$insert .='(';
-		    	 				$insert .=$EmployeeID.",";
-		    	 				$insert .=$Allowance['ID'].",";
-		    	 				$insert .=$Allowance['Type'].",";
-		    	 				$insert .="'".$Allowance['Name']."',";
-		    	 				$insert .=$Allowance['Value'].",";
-		    	 				$insert .="'".Date('Y-m-d')."',";
-		    	 				$insert .=$loggedInUserID;
-    	 				$insert  .= ')';
+	 						$insert .=',';
+	    	 				$insert .='(';
+			    	 				$insert .=$EmployeeID.",";
+			    	 				$insert .=$Allowance['ID'].",";
+			    	 				$insert .=$Allowance['Type'].",";
+			    	 				$insert .="'".$Allowance['Name']."',";
+			    	 				$insert .=$Allowance['Value'].",";
+			    	 				$insert .="'".Date('Y-m-d')."',";
+			    	 				$insert .=$loggedInUserID;
+	    	 				$insert  .= ')';
 						$i++;
 	    	 		}
     	 		}

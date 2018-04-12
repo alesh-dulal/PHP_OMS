@@ -1,8 +1,12 @@
 <?php
-/**
- * @link https://github.com/Vintage-web-production/yii2-tinify
- * @copyright Copyright (c) 2017 Vintage Web Production
- * @license BSD 3-Clause License
+
+/*
+ * This file is part of the yii2-tinify package.
+ *
+ * (c) Vladimir Kuprienko <vldmr.kuprienko@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace vintage\tinify\components;
@@ -10,12 +14,12 @@ namespace vintage\tinify\components;
 use Yii;
 use yii\base\Object;
 use yii\base\InvalidConfigException;
-use Tinify\Source;
-use Tinify\AccountException;
 use vintage\tinify\algorithms\Cover;
 use vintage\tinify\algorithms\Fit;
 use vintage\tinify\algorithms\Scale;
 use vintage\tinify\helpers\TinifyData;
+use Tinify\Source;
+use Tinify\AccountException;
 
 /**
  * Component for image resizing.
@@ -45,73 +49,88 @@ class TinifyResize extends Object
 
     /**
      * @inheritdoc
+     *
      * @param string $fileName
+     *
      * @throws InvalidConfigException
      */
     public function __construct($fileName, $config = [])
     {
         $this->fileName = Yii::getAlias($fileName);
+
         if (!TinifyData::allowCompression($this->fileName)) {
-            throw new InvalidConfigException('You can resize only "jpg" and "png" images');
+            throw new InvalidConfigException(
+                'You can resize images with next mime types: '
+                . implode(', ', TinifyData::getAllowedMimeTypes())
+            );
         }
+
+        \Tinify\setKey(TinifyData::getApiToken());
 
         parent::__construct($config);
     }
 
     /**
-     * Sets algorithm 'scale'.
+     * Scale algorithm.
      *
      * @return self
      */
     public function scale()
     {
         $this->algorithm = Scale::className();
+
         return $this;
     }
 
     /**
-     * Sets algorithm 'fit'.
+     * Fit algorithm.
      *
      * @return self
      */
     public function fit()
     {
         $this->algorithm = Fit::className();
+
         return $this;
     }
 
     /**
-     * Sets algorithm 'cover'.
+     * Cover algorithm.
      *
      * @return self
      */
     public function cover()
     {
         $this->algorithm = Cover::className();
+
         return $this;
     }
 
     /**
-     * Sets width.
+     * Set width.
      *
      * @param int $value
+     *
      * @return self
      */
     public function width($value)
     {
         $this->width = $value;
+
         return $this;
     }
 
     /**
-     * Sets height.
+     * Set height.
      *
      * @param int $value
+     *
      * @return self
      */
     public function height($value)
     {
         $this->height = $value;
+
         return $this;
     }
 
@@ -119,15 +138,18 @@ class TinifyResize extends Object
      * Resize image.
      *
      * @return bool
+     *
      * @throws InvalidConfigException
      * @throws AccountException
      */
     public function process()
     {
-        if ($this->width == null && $this->height == null) {
-            throw new InvalidConfigException('You should to set "width" or "height" ');
+        if (null === $this->width && null === $this->height) {
+            throw new InvalidConfigException('You must to set "width" or "height" ');
         }
-        if ($this->algorithm == null) {
+
+        // if algorithm not is empty set scale as default algorithm
+        if (null === $this->algorithm) {
             $this->scale();
         }
 
@@ -141,16 +163,18 @@ class TinifyResize extends Object
         } catch (AccountException $ex) {
             throw $ex;
         } catch (\Exception $ex) {
-            Yii::trace($ex->getMessage(), 'tinify');
+            Yii::$app->getErrorHandler()->logException($ex);
         }
 
-        return (bool)$result;
+        return (bool) $result;
     }
 
     /**
      * Creates algorithm instance.
      *
      * @return \vintage\tinify\algorithms\TinifyAlgorithmInterface
+     *
+     * @throws InvalidConfigException
      */
     protected function buildAlgorithmInstance()
     {

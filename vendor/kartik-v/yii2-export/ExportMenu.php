@@ -4,7 +4,7 @@
  * @package   yii2-export
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2018
- * @version   1.2.8
+ * @version   1.2.9
  */
 
 namespace kartik\export;
@@ -2001,10 +2001,10 @@ class ExportMenu extends GridView
      */
     protected function cleanup($file, $config)
     {
-        if ($this->raiseEvent('onGenerateFile', [$config['extension'], $this]) !== false) {
+        if ($this->raiseEvent('onGenerateFile', [$config['extension'], $this]) === false) {
             return;
         }
-        if ($this->deleteAfterSave) {
+        if ($this->stream || $this->deleteAfterSave) {
             @unlink($file);
         }
         $this->destroyPhpSpreadsheet();

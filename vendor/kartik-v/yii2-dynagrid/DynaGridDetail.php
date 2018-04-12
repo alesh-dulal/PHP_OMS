@@ -3,8 +3,8 @@
 /**
  * @package   yii2-dynagrid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2017
- * @version   1.4.7
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2018
+ * @version   1.4.8
  */
 
 namespace kartik\dynagrid;
@@ -111,8 +111,8 @@ class DynaGridDetail extends Widget
     {
         if (empty($this->model) || !$this->model instanceof DynaGridSettings) {
             throw new InvalidConfigException(
-                "You must enter a valid 'model' for DynaGridDetail extending from '" . DynaGridSettings::classname(
-                ) . "'"
+                "You must enter a valid 'model' for DynaGridDetail extending from '" .
+                DynaGridSettings::classname() . "'"
             );
         }
         parent::init();
@@ -188,7 +188,7 @@ class DynaGridDetail extends Widget
         } else {
             $action = '/' . $this->moduleId . '/settings/get-config';
         }
-        $action = (array) $action;
+        $action = (array)$action;
         $options = Json::encode(
             [
                 'submitMessage' => Html::tag('div', $this->submitMessage, $this->messageOptions),
@@ -205,7 +205,7 @@ class DynaGridDetail extends Widget
         $js = "jQuery('{$id}').dynagridDetail({$options});\njQuery('#{$dynagrid}').after(jQuery('{$id}'));";
         // pjax related reset
         if ($this->isPjax) {
-            $js .= "jQuery('#{$this->pjaxId}').on('pjax:complete', function() {\n
+            $js .= "jQuery('#{$this->pjaxId}').on('pjax:end', function() {\n
                 jQuery('{$id}').dynagridDetail({$options});\n
             });";
         }

@@ -1,8 +1,12 @@
 <?php
-/**
- * @link https://github.com/Vintage-web-production/yii2-tinify
- * @copyright Copyright (c) 2017 Vintage Web Production
- * @license BSD 3-Clause License
+
+/*
+ * This file is part of the yii2-tinify package.
+ *
+ * (c) Vladimir Kuprienko <vldmr.kuprienko@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace vintage\tinify\algorithms;
@@ -24,9 +28,10 @@ class Fit extends AbstractAlgorithm
     {
         if (empty($this->width) && empty($this->height)) {
             throw new InvalidConfigException(
-                'For "' . self::className() . '" algorithm you should to set a "width" and "height"'
+                'For "' . self::className() . '" algorithm you must set a "width" and "height"'
             );
         }
+
         return [
             'width' => $this->width,
             'height' => $this->height,

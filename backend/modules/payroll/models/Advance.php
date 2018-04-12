@@ -12,6 +12,8 @@ use Yii;
  * @property int $Amount
  * @property int $Month
  * @property int $Rule
+ * @property string $Year
+ * @property int $IsPaid
  * @property string $CreatedDate
  * @property int $CreatedBy
  * @property string $UpdatedDate
@@ -35,8 +37,11 @@ class Advance extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['EmployeeID', 'Amount', 'Month', 'Rule', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted'], 'integer'],
-            [['CreatedDate', 'UpdatedDate'], 'safe'],
+            [['EmployeeID', 'Amount', 'Month', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted'], 'integer'],
+            [['Year'], 'required'],
+            [['Year', 'CreatedDate', 'UpdatedDate'], 'safe'],
+            [['Rule'], 'string', 'max' => 1],
+            [['IsPaid'], 'string', 'max' => 4],
         ];
     }
 
@@ -51,6 +56,8 @@ class Advance extends \yii\db\ActiveRecord
             'Amount' => 'Amount',
             'Month' => 'Month',
             'Rule' => 'Rule',
+            'Year' => 'Year',
+            'IsPaid' => 'Is Paid',
             'CreatedDate' => 'Created Date',
             'CreatedBy' => 'Created By',
             'UpdatedDate' => 'Updated Date',

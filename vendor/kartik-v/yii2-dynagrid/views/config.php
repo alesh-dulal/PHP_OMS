@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2017
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2018
  * @package yii2-dynagrid
- * @version 1.4.7
+ * @version 1.4.8
  */
 
 use kartik\base\Config;
@@ -61,9 +61,12 @@ Modal::begin(
     ]
 );
 ?>
-<?php $form = ActiveForm::begin(['options' => ['data-pjax' => false]]); ?>
+
     <div class="dynagrid-config-form">
-        <?php if ($col != 0) : ?>
+
+        <?php $form = ActiveForm::begin(['options' => ['data-pjax' => false]]); ?>
+
+        <?php if ($col > 0) : ?>
             <div class="row">
                 <?php if ($allowPageSetting) : ?>
                     <div class="col-sm-<?= $col ?>">
@@ -95,8 +98,6 @@ Modal::begin(
                             ]
                         )->hint(Yii::t('kvdynagrid', 'Select theme to style grid')); ?>
                     </div>
-                <?php else : ?>
-                    <?= Html::activeHiddenInput($model, 'theme', ['id' => "theme-{$dynagridId}"]) ?>
                 <?php endif; ?>
                 <?php if ($allowFilterSetting) : ?>
                     <div class="col-sm-<?= $col ?>">
@@ -128,7 +129,6 @@ Modal::begin(
                         )->hint(Yii::t('kvdynagrid', 'Set default grid sort criteria')) ?>
                     </div>
                 <?php endif; ?>
-                <?= Html::hiddenInput('deleteFlag', 0) ?>
             </div>
         <?php endif; ?>
         <div class="dynagrid-column-label">
@@ -145,9 +145,13 @@ Modal::begin(
                 <?= Sortable::widget($options2); ?>
             </div>
         </div>
-
+        <?= $allowThemeSetting ? '' : Html::activeHiddenInput($model, 'theme', ['id' => "theme-{$dynagridId}"]) ?>
+        <?= Html::hiddenInput('deleteFlag', 0) ?>
         <?= Html::hiddenInput($model->id, 1) ?>
         <?= Html::hiddenInput('visibleKeys') ?>
+
         <?php ActiveForm::end(); ?>
-    </div>
+
+    </div> <!-- .dynagrid-config-form -->
+
 <?php Modal::end(); ?>

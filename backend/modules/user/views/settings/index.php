@@ -60,6 +60,10 @@
             <span data-toggle="tab" class="item-tab hand" data-id="containerStockCategory">Stock Category
             </span>
          </li>
+         <li>
+            <span data-toggle="tab" class="item-tab hand" data-id="containerPayroll">Payroll
+            </span>
+         </li>
       </ul>
 
       <div id="tabContainer" class="tab-content">
@@ -245,6 +249,28 @@
                 <table class="table table-bordered "><thead><th>S.N</th><th>Name</th><th>Action</th></thead><tbody></tbody></table>
               </div>
             </div> 
+         </div>         
+
+         <div id="containerPayroll" class="tab-pane fade" data-active="payroll">
+            <h3>Payroll</h3>
+            <div class="col-lg-12">
+              <div class="col-lg-4">
+                
+               <div class="well">
+                  <?php $form = ActiveForm::begin(); ?>
+                  <?= $form->field($model, 'Title')->textInput(['maxlength' => true, 'style'=>'width:300px', 'id'=>'Year'])->label("Year") ?>
+
+                  <?= $form->field($model, 'Value')->textInput(['maxlength' => true, 'style'=>'width:300px', 'id'=>'month'])->label("Month") ?>
+
+                  <?= Html::button('Save', ['class' => 'btn btn-primary payroll-save', 'value'=>'save','data-id'=>'0']) ?>
+               </div>
+               <?php ActiveForm::end(); ?>
+            
+              </div>
+              <div class="col-lg-8 data-payroll">
+                <table class="table table-bordered "><thead><th>S.N</th><th>Year</th><th>Month</th></thead><tbody></tbody></table>
+              </div>
+            </div> 
          </div>
 
 
@@ -416,6 +442,20 @@ $(document).ready(function() {
 
           }
         });
+    });  
+
+    $("div#containerPayroll").find('button.payroll-save').click(function() 
+    {
+        var identity = $('.stockcategory-save').attr('data-id');
+        var title =  $("div#containerPayroll").find('input[name="Listitems[Title]"]').val();
+        var value =  $("div#containerPayroll").find('input[name="Listitems[Value]"]').val();
+        SaveRecord("payroll", title, identity, value, "options", function(res){
+          if(res.result != undefined && res.result === true){
+            GetPayroll();
+          }else{
+
+          }
+        });
     });
   
     GetDepartment();
@@ -425,6 +465,7 @@ $(document).ready(function() {
     GetShift();
     GetStockunit();
     GetStockCategory();
+    GetPayroll();
 
     function GetDepartment()
     {
@@ -435,6 +476,7 @@ $(document).ready(function() {
             tr+='<tr><td>'+(i+1)+'</td>';
             tr+='<td>'+dat[i].Title+'</td>';
             tr+='<td><span class="hand edit" data-id="'+dat[i].ListItemID+'">edit</span></td>';
+  
           }
           $('div#containerDepartment').find('table tbody').html(tr);
       })
@@ -533,6 +575,20 @@ $(document).ready(function() {
             tr+='<td><span class="hand edit" data-id="'+dat[i].ListItemID+'">edit</span></td>';
           }
           $('div#containerStockCategory').find('table tbody').html(tr);
+      })
+    }    
+
+    function GetPayroll()
+    {
+      GetRecord('payroll',function(dat){
+        tr='';
+          for(i=0;i<dat.length;i++)
+          {
+            tr+='<tr><td>'+(i+1)+'</td>';
+            tr+='<td>'+dat[i].Title+'</td>';
+            tr+='<td>'+dat[i].Value+'</td>';
+          }
+          $('div#containerPayroll').find('table tbody').html(tr);
       })
     }
 
@@ -635,9 +691,7 @@ function GetSingleRecord(identity,type,edit)
     var ele=$('div#containerStockUnit');
     ele.find('button').attr('data-id',edit.attr('data-id'));
     ele.find('input[name="Listitems[Title]"]').val(edit.parents('tr').find('td:eq(1)').text());
-
     ele.find('select[name="Listitems[ParentID]"] ').val(edit.parents('tr').find('td:eq(2)').attr('data-parentID')).trigger('change');
-
     ele.find('input[name="Listitems[Value]"]').val(edit.parents('tr').find('td:eq(3)').text());
     break;
 
@@ -646,7 +700,6 @@ function GetSingleRecord(identity,type,edit)
     ele.find('button').attr('data-id',edit.attr('data-id'));
     ele.find('input[name="Listitems[Title]"]').val(edit.parents('tr').find('td:eq(1)').text());
     break;
-
   }
 }
 

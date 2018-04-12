@@ -125,6 +125,10 @@ use backend\modules\user\models\Employee;
 	            <label for="employeepayroll-totalsalary">Total Salary: Rs.</label>
 	            <span id="employeepayroll-totalsalary">0.00</span>
 	         </div>
+	         <div class="form-group other-tax">
+	            <label for="employeepayroll-otherTax">Other Tax: </label>
+	            <input type="text" id="employeepayroll-otherTax">
+	         </div>
 	         <div class="form-group">
 	            <?= Html::button('Save', ['class' => 'btn btn-primary employee-payroll-save', 'value'=>'save','data-id'=>'0']) ?>
 	         </div>
