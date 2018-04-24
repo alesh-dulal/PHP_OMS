@@ -124,23 +124,30 @@ $this->params['breadcrumbs'][] = $this->title;
     if ($Role == true)
         {
           echo '
-    <div id="conDet" class="row">
-        <h4 align="center">Communication Minutes</h4>
-        <div class="communication-details">
-            <table class="table table-striped" id="conDetails">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Communicated With</th>
-                </tr>
-            </thead>
-            <tbody>
-            <!--=====Table Content Goes Here=====-->
-            </tbody>
-            </table>
-        </div>
-    </div>
+                <div id="conDet" class="row">
+                    <h4 align="center">Communication Minutes'.
+
+
+                Html::a('See All', ['allcommunication', 'id' => $model->EmployeeID], ['class'=>'comm-all btn btn-primary btn-xs', 'attr-empid' => $model->EmployeeID])
+
+                .'</h4>
+                    <div class="communication-details">
+                        <table class="table table-striped" id="conDetails">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Communicated With</th>
+                                <th>Tags</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <!--=====Table Content Goes Here=====-->
+                        </tbody>
+                        </table>
+                        
+                    </div>
+                </div>
 ';}
  ?>
 

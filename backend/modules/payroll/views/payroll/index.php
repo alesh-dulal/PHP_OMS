@@ -8,7 +8,7 @@ use kartik\select2\Select2;
 use backend\modules\user\models\Employee;
 ?>
 
-<div class="container" id="containerPayroll">
+<div class="container-fluid" id="containerPayroll">
 	<div class="header">
 		<h2>Payroll</h2>
 		<h5 >Salary is processed till <span id="monthName">ThisMonth </span>-<span id="yearName">ThisYear</span></h5>
@@ -32,8 +32,11 @@ use backend\modules\user\models\Employee;
 	<div class="row row-payroll-table">
 		<table class="table table-bordered" id="payrollTable">
 			<thead>
+				<th><input name="headercheck" id="checkAll" type="checkbox"></th>
 				<th>Employee Name</th>
 				<th style="display: none;">Bank Account Number</th>
+				<th style="display: none;">EmployeeID</th>
+				<th style="display: none;">Email</th>
 				<th>Basic Salary</th>
 				<?php 
 					foreach ($Rows as $key => $Row)
@@ -79,9 +82,66 @@ use backend\modules\user\models\Employee;
 		<button id="processNow">Process Now</button>
 	</div>
 </div>
+
+<!-- start of modal -->
+<div id="payrollProcessModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Pay Salary</h4>
+      </div>
+      <div class="modal-body">
+      	<h4 align="center">List of Processed Payroll</h4>
+        	<table id="payTable">
+        		<thead>
+        			<th><input type="checkbox" name="headerpay" id="checkAllPay"></th>
+        			<th>Employee Name</th>
+        			<th>Payable Amount</th>
+        		</thead>
+        		<tbody>
+        			
+        		</tbody>
+        	</table>
+        <label for=""></label>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="payPayroll">Pay</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- end of modal -->
+
+
 <?php 
 $js = <<< JS
 $(document).ready(function(){
+	var table = $('div#containerPayroll').find('table#payrollTable');
+	table.find('input[name="headercheck"]').on('change', function(){
+		var boxes = table.find('input.payroll-check');
+		boxes.each(function(){
+			if (table.find('input[name="headercheck"]').is(':checked')) {
+				boxes.prop('checked',true);
+			}else{
+				boxes.prop('checked',false);
+			}
+		});
+	});
+
+	var tablePay = $('div#payrollProcessModal').find('div.modal-body table#payTable');
+	tablePay.find('input[name="headerpay"]').on('change', function(){
+		var box = tablePay.find('input.payroll-pay');
+		box.each(function(){
+			if (tablePay.find('input[name="headerpay"]').is(':checked')) {
+				box.prop('checked',true);
+			}else{
+				box.prop('checked',false);
+			}
+		});
+	});
+
 	var year = new Date().getFullYear();
 	var endRange = new Date().getFullYear()+5;
 	var startRange = new Date().getFullYear()-5;
@@ -102,6 +162,7 @@ $(document).ready(function(){
 		}
 	}
 	CalculatePayroll();
+
 });
 
 var head = $('div#pickYearMonth');
@@ -132,6 +193,7 @@ function CalculatePayroll(){
 
 				$('div#containerPayroll').find('div.row-payroll-table table tbody').append(data.oldhtml["tableBody"]);
 				showMessage(data["message"]);
+				
 	    	}
 	    	else
 	    	{
@@ -193,27 +255,31 @@ $('div#pickYearMonth').find('button#clear').on('click', function(){
 
 
 
-$('div#containerPayroll').find('div.pull-right button#isPaidNow').click(function(){
+$('div#containerPayroll').find('div.emailPortion  button#processNow').click(function(){
+
 	var month = $('div#pickYearMonth').find('select#monthPicker').val();
 	var year = $('div#pickYearMonth').find('select#yearPicker').val();
 
-	var array = [];
-    var headers = [];
-    $('#payrollTable th').each(function(index, item) {
-        headers[index] = $(item).html();
-    });
-    $('#payrollTable tr').has('td').each(function() {
-        var arrayItem = {};
-        $('td', $(this)).each(function(index, item) {
-            arrayItem[headers[index]] = $(item).html();
-        });
-        array.push(arrayItem);
-    });
-	SavePayroll(array, month, year);
+	var message = $('div#containerPayroll').find('div.emailPortion textarea#emailNote').val();
+	message = message || " ";
+
+	var headers = $("#payrollTable thead th").filter(function() {return !$(this).find('#checkAll').length;
+	}).map(function() {return $(this).text().trim();}).get();
+
+	var arr = $('#payrollTable .payroll-check:checked').map(function() {
+	var obj = {};
+	$(this).parent().siblings().each(function(i) {
+		obj[headers[i]] = $(this).text().trim();
+	})
+		return obj;
+	}).get();
+
+
+	SavePayroll(arr, month, year, message);
 
 });
 
-function SavePayroll(array, month , year)
+function SavePayroll(array, month , year, message)
 {
 	$.ajax({
         type: "POST",
@@ -221,12 +287,15 @@ function SavePayroll(array, month , year)
         data: {
         	"array":array,
         	"month":month,
-        	"year":year
+        	"year":year,
+        	"message":message
         },
+        dataType:'json',
         dataType:'json',
         cache: false,
         success: function(data) {
 	    	showMessage(data["message"]);
+	    	location.reload();
         },
         error:function(data){
             showError(data.message);
@@ -252,7 +321,7 @@ function search(input) {
   var tr = table.find('tr');
   for (var i = 0; i < tr.length; i++)
   {
-    var td = tr[i].getElementsByTagName('td')[0];
+    var td = tr[i].getElementsByTagName('td')[1];
     if (td) 
     {
       if (td.innerHTML.toUpperCase().indexOf(filter) > -1)
@@ -267,11 +336,108 @@ function search(input) {
   }
 }
 
+// for modal of salary pay which are processed previously
+$('div#actions').find('button#isPaidNow').on('click', function(){
+	$('div#payrollProcessModal').find('div.modal-body table#payTable tbody tr').remove();
+	$('div#payrollProcessModal').modal();
+	var obj = [];
+	obj = EmployeeProcessedPayroll();
+	console.log(obj);
+
+	if(obj.length == 0){
+		$('div#payrollProcessModal').find('div.modal-body table#payTable tbody').append('<tr><td colspan="3" align="center">No Salary Processed</td></tr>');
+	}else{
+		$.each(obj, function (index, value) {
+		var val = [];
+		val = value;
+	  	$('div#payrollProcessModal').find('div.modal-body table#payTable tbody').append('<tr><td><input attr-empid ='+value['EmployeeID']+' class="payroll-pay" type ="checkbox"></td><td>'+value['Employee Name']+'</td><td>'+value['Payable Amount']+'</td></tr>');
+	});
+	}
+ });
+function EmployeeProcessedPayroll(){
+	var array = [];
+    var headers = [];
+    $('#payrollTable th').each(function(index, item) {if(index == 0){return true;}else{headers[index] = $(item).html();}});
+
+    $('#payrollTable tr.processed').each(function() {
+        var arrayItem = {};
+        $('td', $(this)).each(function(index, item) {if(index == 0){return true;}else{arrayItem[headers[index]] = $(item).html();}});
+        array.push(arrayItem);
+    });
+    return array;
+}
+
+
+$('div#payrollProcessModal').find('div.modal-footer button#payPayroll').on('click', function(){
+
+			var arr = $('div#payrollProcessModal').find('div.modal-body table#payTable .payroll-pay:checked').map(function() {
+			var obj = {};
+			$(this).each(function(i) {
+				obj["EmployeeID"] = $(this).attr('attr-empid');
+			})
+				return obj;
+			}).get();
+
+	PayPayroll(arr);
+
+});
+
+
+function PayPayroll(array){
+	$.ajax({
+        type: "POST",
+        url: "payroll/paypayroll",
+        data: {
+        	"array":array,
+        },
+        dataType:'json',
+        cache: false,
+        success: function(data) {
+	    	showMessage(data["message"]);
+	    	location.reload()
+        },
+        error:function(data){
+            showError(data.message);
+        }
+    });
+}
+
+$('div#containerPayroll').find('table#payrollTable').on( 'click','button.unprocess-salary', function(){
+	var EmployeeID = $('div#containerPayroll').find('table#payrollTable button.unprocess-salary').closest('tr').attr('attr-empid');
+	var Month = $(this).attr('attr-month');
+	var Year = $(this).attr('attr-year');
+	Unprocess(EmployeeID, Month, Year);
+});
+
+function Unprocess(ID, Month, Year){
+	$.ajax({
+        type: "POST",
+        url: "payroll/unprocess",
+        data: {
+        	"EmployeeID":ID,
+        	"Month":Month,
+        	"Year":Year
+        },
+        dataType:'json',
+        cache: false,
+        success: function(data) {
+	    	showMessage(data["message"]);
+	    	location.reload()
+        },
+        error:function(data){
+            showError(data.message);
+        }
+    });
+}
+
 JS;
 $this->registerJS($js);
 ?>
 <?php
 	$this->registerCss("
+		body{
+			padding-left:10px;
+		}
 	.header{
 		text-align:Center;
 	}
@@ -308,6 +474,15 @@ th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
+}
+
+#payrollTable{
+	font-size: 10px;
+}
+
+
+#containerPayroll{
+	padding: 70px 15px 20px;
 }
 
 ");
