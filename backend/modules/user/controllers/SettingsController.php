@@ -1,6 +1,4 @@
 <?php
-
-
 namespace backend\modules\user\controllers;
 
 use Yii;
@@ -11,6 +9,7 @@ use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use backend\modules\user\models\Listitems;
 use backend\modules\user\models\ListitemsSearch;
+use backend\modules\user\models\Salarycalculationamendment;
 
 class SettingsController extends \yii\web\Controller
 {
@@ -54,14 +53,21 @@ class SettingsController extends \yii\web\Controller
   
     public function actionIndex()
     {
-    	 $model = new Listitems();
+       $model = new Listitems();
 
          $StockUnit = Listitems::find()->where(['IsActive'=>1, 'Type'=> "stockunit", 'ParentID'=>0])->all();
          $StockUnitParent = (count($StockUnit) == 0) ? ['' => ''] : \yii\helpers\ArrayHelper::map($StockUnit, 'ListItemID', 'Title');
 
         return $this->render('index',[
              'model' => $model,
-        	 'StockUnitParent' => $StockUnitParent,
+           'StockUnitParent' => $StockUnitParent,
+        ]);
+    }
+    public function actionSalaryamendment()
+    {
+    	   $model = new Salarycalculationamendment();
+        return $this->render('salarycalculation',[
+            'model' => $model,
         ]);
     }
 
@@ -111,4 +117,107 @@ class SettingsController extends \yii\web\Controller
         return $Result;
       } 
     }
+
+
+
+  public function actionSaveamendmentdata(){
+    $Role =UserController::CheckRole("settings");
+    if ($Role == true) {
+      try {
+      $Name = $_POST["Name"];
+      $WorkHourPerDay = $_POST["WorkHourPerDay"];
+      $PaidLeavePerMonth = $_POST["PaidLeavePerMonth"];
+      $AllowedOTHours = $_POST["AllowedOTHours"];
+      $OthoursSalaryCalculation = $_POST["OthoursSalaryCalculation"];
+      $LessWorkHourSalaryCalculation = $_POST["LessWorkHourSalaryCalculation"];
+
+      if ($Name!=NULL && $WorkHourPerDay != NULL && $PaidLeavePerMonth != NULL && $AllowedOTHours != NULL && $OthoursSalaryCalculation != NULL && $LessWorkHourSalaryCalculation != NULL) {
+        $model = new Salarycalculationamendment();
+
+        $model->AmendmentName = $Name;
+        $model->TotalWorkingHourPerDay = $WorkHourPerDay;
+        $model->MaximumPaidLeaveDays = $PaidLeavePerMonth;
+        $model->MaximumOTHoursPerDay = $AllowedOTHours;
+        $model->SalaryCalcPercentOfOTHours = $OthoursSalaryCalculation;
+        $model->SalaryDeductionOfLessHours = $LessWorkHourSalaryCalculation;
+
+        $model->CreatedBy = Yii::$app->session['UserID'];
+        $model->CreatedDate = Date('Y-m-d H:i:s');
+        //echo "<pre>"; print_r($model); die();
+        $return = ($model->save() == TRUE)?'{"result":true,"message":"saved successfully"}':'{"result":false,"message":"Not Saved"}';
+
+        return $return;
+
+      }     
+
+      } catch (Exception $e) {  
+
+        return "Caught Exception:".$e;
+
+      } 
+    }
+  }
+
+   public function actionGetamendments()
+    {
+    $Role = UserController::CheckRole("settings");
+    if ($Role == true)
+      {
+      try
+        {
+        $Amendment = Salarycalculationamendment::find()->all();
+        $html = "";
+        if (sizeof($Amendment) < 1) {
+         $html .= "<tr><td align='center' colspan='7'>No Data Available</td></td>";
+        } else {        
+        foreach($Amendment as $key => $Amd)
+          {
+          $active = '<td><span class="hand edit" data-id=' . $Amd["SalaryAmendmentID"] . '>Deactivate</span></td>';
+          $inactive = '<td>Deactivated</td>';
+            $html.= "<tr>";
+            $html.= "<td>" . $Amd['AmendmentName'] . "</td>";
+            $html.= "<td>" . $Amd['TotalWorkingHourPerDay'] . "</td>";
+            $html.= "<td>" . $Amd['MaximumPaidLeaveDays'] . "</td>";
+            $html.= "<td>" . $Amd['MaximumOTHoursPerDay'] . "</td>";
+            $html.= "<td>" . $Amd['SalaryCalcPercentOfOTHours'] . "</td>";
+            $html.= "<td>" . $Amd['SalaryDeductionOfLessHours'] . "</td>";
+            $html.= $Amd['IsActive'] == 1?$active:$inactive;
+            $html.= "</tr>"; 
+          }
+        }
+          Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+          return ['html' => $html];
+        }
+
+      catch(Exception $e)
+        {
+          return $e;
+        }
+      }
+    }
+ 
+   public function actionDeactivateamendment(){
+      $Role = UserController::CheckRole("settings");
+    if ($Role == true)
+      {
+      try
+        {
+          $ID = $_POST['ID'];
+          if($ID != NULL)
+          {
+            $query = new Query();
+            $connection = Yii::$app->getDb();
+            $qry = sprintf("UPDATE `salarycalculationamendment` SET `IsActive` = '0' WHERE `salarycalculationamendment`.`SalaryAmendmentID` = %d;", $ID);
+            $result = $connection->createCommand($qry)/* ->getRawSql()*/;
+            $res = $result->execute();
+            $return = $res == true ? '{"result":true,"message":"Deactivated Successfully"}' : '{"result":false,"message":"Deactivation Failed"}';
+            return $return;
+          }
+        }
+        catch(Exception $e)
+        {
+
+        }
+      }
+   }
 }

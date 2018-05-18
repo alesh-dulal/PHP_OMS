@@ -15,7 +15,11 @@ $this->title = 'Communication';
         <div class="col-lg-12">
             <?= $form->field($model, 'Details')->textarea()->label('Description'); ?>
             <div class="col-lg-3">
-                <?= $form->field($model, 'Type')->radioList(array('direct'=>'Direct','indirect'=>'Indirect')); ?>
+                <?php $model->Type = 'Direct'; ?>
+                <?= $form->field($model, 'Type')->radioList([
+                                'Direct' => 'Direct',
+                                'Indirect' => 'Indirect',
+                            ]); ?>
             </div>
             <div class="col-lg-9">
                 <?= $form->field($model, 'Tags') -> label('Tags(Enter with Comma Separated)') ?>

@@ -144,3 +144,38 @@ top: 72px;
 left: 75%;
 width: 24%;
 }
+
+
+.modal-loading {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: transparent
+                url('../../uploads/FhHRx.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+body.loading .modal-loading {
+    overflow: hidden;
+    display: block; 
+}
+
+
+
+.rejoin {
+    background-image: url('../../uploads/deal.png'); /* 16px x 16px */
+    background-repeat: no-repeat;  
+    background-size: cover; 
+    border: none;           
+    cursor: pointer;       
+    height: 24px;          
+    width: 24px; 
+    display: inline-block;         
+    /*padding-left: 16px;     */
+    vertical-align: middle; 
+}

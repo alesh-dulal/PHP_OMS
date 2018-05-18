@@ -73,7 +73,10 @@ $js = <<< JS
     $('div.container table').on('click','span.edit', function(){
 		GetSingleRecord($(this));
     });
-
+$(document).on({
+    ajaxStart: function() { nowLoading(); $("body").addClass("loading");    },
+     ajaxStop: function() { $("body").removeClass("loading"); }    
+});
     function GetSingleRecord(edit){
     	var ele=$('div.designation-salary-form');
     	ele.find('button.designation-salary-save').attr('data-id',edit.attr('data-id'));

@@ -98,7 +98,6 @@ class SiteController extends Controller
             $MenuID = $Result['MenuID'];
             $RoleName = $Result['RoleName'];
 
-            // print_r($MenuID); die();
             
             $session = Yii::$app->session;
             $session->set('UserID',$UserID);

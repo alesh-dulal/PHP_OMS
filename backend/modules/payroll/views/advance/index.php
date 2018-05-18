@@ -28,10 +28,10 @@ use backend\modules\user\models\Employee;
     <?= $form->field($model, 'Amount')->textInput() ?>
     <div class="form-group">
         <label for="advance-rule">Rule</label>
-     <select class="form-control" id="advance-rule" name="Advance[Rule]">
+     <div class="select"><select class="custom-control" id="advance-rule" name="Advance[Rule]">
       <option value="0">Deduct Once</option>
       <option value="1">Deduct Monthly</option>
-    </select> 
+    </select><div class="select_arrow"></div></div>
     </div>
     
 
@@ -64,13 +64,15 @@ use backend\modules\user\models\Employee;
 			      </tr>
 			    </thead>
 			    <tbody>
-			<?php foreach ($advances as $key => $advance):?>
+                    <?php if(sizeof($advances) == 0){?><tr><td colspan="2" align="center">No Data Available</td></tr>
+                    <?php }else{
+                    foreach ($advances as $key => $advance):?>
 				<tr>
 					<td emp-id = "<?=$advance['EmployeeID']?>"><?= $advance['Name'] ?></td>
                     <td><?= $advance['Amount'] ?></td>
 
 				</tr>
-			<?php endforeach ?>
+			<?php  endforeach; }?>
 			    </tbody>
 			  </table>
 		</div>
@@ -79,6 +81,11 @@ use backend\modules\user\models\Employee;
 
 <?php 
 $js = <<< JS
+
+$(document).on({
+    ajaxStart: function() { nowLoading(); $("body").addClass("loading");    },
+     ajaxStop: function() { $("body").removeClass("loading"); }    
+});
 	$(document).ready(function(){
         $('div.field-advance-month').hide();
     	$('div#decuctList').hide();
@@ -185,5 +192,73 @@ $this->registerCSS("
         .form-btn{
         float:right;
     }
+
+    // select::-ms-expand { display: block; }
+
+
+    .select {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.select select.custom-control {
+  font-family: 'Arial';
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+  padding: 6px 12px;
+  outline: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  color: #555;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.select select.custom-control::-ms-expand {
+  display: none;
+}
+
+.select select.custom-control:hover,
+.select select:focus {
+  color: #555;
+  background: #fff;
+}
+
+.select select.custom-control:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.select_arrow {
+  position: absolute;
+  top: 11px;
+  right: 12px;
+  pointer-events: none;
+  border-style: solid;
+  border-width: 8px 5px 0px 5px;
+  border-color: #555 transparent transparent transparent;
+}
+
+.select select.custom-control:hover~.select_arrow,
+.select select.custom-control:focus~.select_arrow {
+  border-top-color: #555;
+}
+
+.select select.custom-control:disabled~.select_arrow {
+  border-top-color: #555;
+}
+
+
+
     ");
  ?>

@@ -1,7 +1,7 @@
 function nowLoading(){
-
-
+	$('body').append('<div class="modal-loading"></div>');
 }
+
 
 function showMessage(msg){
 $('body').append(

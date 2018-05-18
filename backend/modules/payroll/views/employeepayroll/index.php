@@ -6,7 +6,6 @@ use backend\modules\user\models\Employee;
 ?>
 
 	<div class="container" id="containerPayroll">
-
 	<div class="row">
 	   <div class="col-lg-12">
 	      <div class="col-lg-6 well create-employee-payroll">
@@ -80,9 +79,8 @@ use backend\modules\user\models\Employee;
 	         </div>
 
 	         <div class="add-all">
-	         	<button id="btnAddAll" class="btn btn-primary glyphicon glyphicon-plus" type="button">Add All</button>
-	         </div>
-
+	         	<button id="btnAddAll" class="butt btn btn-primary glyphicon glyphicon-plus" type="button">Add All</button>
+	         </div><br><br><br>
 	         <!-- start of div unassigned -->
 	         <div class="row unassigned">
 	         	<div class="col-lg-12">
@@ -130,20 +128,77 @@ use backend\modules\user\models\Employee;
 	            <input type="text" id="employeepayroll-otherTax">
 	         </div>
 	         <div class="form-group">
-	            <?= Html::button('Save', ['class' => 'btn btn-primary employee-payroll-save', 'value'=>'save','data-id'=>'0']) ?>
+	            <?= Html::button('Save', ['class' => 'btn btn-primary butt employee-payroll-save', 'value'=>'save','data-id'=>'0']) ?>
 	         </div>
 	         <?php ActiveForm::end(); ?>
 	      </div>
+	      <div class="col-lg-4 well deny" id="Pdeny">
+			<h2>Payroll Deny List</h2>
+			<ul class="list-group">
+			</ul>
+			<button title="Undeny These" id="unDeny" style="display: none;" class="butt-deny un-deny btn btn-default">Undeny</button>
+			<button title="Deny More Payroll" id="denyMore" class="butt-deny deny-more btn btn-danger">Deny More</button>
+	      </div>
 	   </div>
 	</div>
-</div>
 
-
+<!-- start of modal -->
+<div id="payrollDenyModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Deny Payroll</h4>
+      </div>
+      <div class="modal-body">
+        	<table class="" id="denyTable">
+        		<thead>
+        			<tr>
+        			    <td><input type="checkbox" title="Check All" name="headerdeny"  id="checkDenyAll"></td>
+        			    <td>Employee Name</td>
+        			</tr>
+        		</thead>
+        		<tbody>
+        			
+        		</tbody>
+        	</table>
+      </div>
+      <div class="modal-footer">
+      	<div class="form-group">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>	
+	      	<button type="button" class="btn btn-danger" id="denyPayroll">Deny</button>
+      	</div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- end of modal -->
 <?php 
 $js = <<< JS
+
+$(document).on({
+    ajaxStart: function() { nowLoading(); $("body").addClass("loading");    },
+     ajaxStop: function() { $("body").removeClass("loading"); }    
+});
+
 $('document').ready(function() {
 	CheckBasicSalary();
 	AllowanceList()
+	/*deny check all*/
+	var tablePay = $('div#payrollDenyModal').find('div.modal-body table#denyTable');
+	tablePay.find('input[name="headerdeny"]').on('change', function(){
+		var box = tablePay.find('input.deny-this');
+		box.each(function(){
+			if (tablePay.find('input[name="headerdeny"]').is(':checked')) {
+				box.prop('checked',true);
+			}else{
+				box.prop('checked',false);
+			}
+		});
+	});
+	/*end of deny check all*/
+
+	payrollDeniaedlist();
 });
 function AllowanceList(){
 	$.ajax({
@@ -282,7 +337,6 @@ $('div#containerPayroll').find('div.form-group button.employee-payroll-save').on
 	 	val4 = val4 || 0;
 	 	AllowanceID.push({"Type":val1, "ID":val2, "Name":val3, "Value":val4});
 	 })
-	 console.log(AllowanceID);
 	 SaveCalc(employeeID, AllowanceID);
 });
 
@@ -360,7 +414,7 @@ function totalSalary(){
 	var basicSalary = parseFloat($('div#containerPayroll').find('div.basic-salary span').text());
 	var totalAllow = parseFloat(ele.find('div.totalAllowance span.total-allowance-value').text());
 	var totalDeduc = parseFloat(ele.find('div.totalDeduction span.total-deduction-value').text());
-	totalSalary = eval((basicSalary + totalAllow) - totalDeduc);
+	totalSalary = Math.round(eval((basicSalary + totalAllow) - totalDeduc));
 	ele.find('span#employeepayroll-totalsalary').text(totalSalary);
 }
 
@@ -368,6 +422,133 @@ function totalSalary(){
  	CalculateTotal();
  	totalSalary();
 });
+
+
+$('div#containerPayroll').find('div.deny button.deny-more').on('click', function(){
+	getAllowedEmployeeForPayrollDenial();
+	$('div#payrollDenyModal').modal();
+
+});
+
+$('div#containerPayroll').find('div.deny ul').on('click','input.undeny-this', function(){
+		 var getClass = $(this).attr('class');
+		 var flag = 0;
+		 var button = $('div#containerPayroll').find('div.deny').find('button#unDeny');
+
+		$('input[class="' + getClass + '"]').each(function(){
+			if($(this).is(':checked'))
+				flag = 1;
+		});
+
+		if(flag) {
+			button.css("display","block");
+		} else {
+			button.css("display","none");
+		}
+	});
+
+$('div#containerPayroll').find('div.deny').find('button#unDeny').on('click', function(){
+	var arr = $('div#containerPayroll').find('div.deny ul li input[name="undenythis"]:checked').map(function() {
+			var obj = {};
+				$(this).each(function(i) {
+					obj["EmployeeID"] = $(this).attr("attr-empid");
+				})
+				return obj;
+			}).get();
+	/*call a function to un-deny these employee's payroll*/
+	undenialEmployeePayroll(arr);
+});
+
+$('div#payrollDenyModal').find('div.modal-footer button#denyPayroll').on('click', function(){
+			var arr = $('div#payrollDenyModal').find('div.modal-body table#denyTable .deny-this:checked').map(function() {
+			var obj = {};
+				$(this).each(function(i) {
+					obj["EmployeeID"] = $(this).attr("attr-id");
+				})
+				return obj;
+			}).get();
+
+	console.log(arr);
+	/*call a function to deny these employee's payroll*/
+	denialEmployeePayroll(arr);
+});
+
+
+function getAllowedEmployeeForPayrollDenial()
+{
+	$.ajax({
+	  type: "POST",
+	  url: "employeepayroll/employeelistfordeny",
+	  data: {
+	  },
+	  dataType: 'json',
+	  cache: false,
+	  success: function(data) {
+	  		$('div#payrollDenyModal').find('div.modal-body table tbody').append(data.message);
+	  },
+	  error: function() {
+	   	showError(data.message);
+	  }
+ });
+}
+
+function denialEmployeePayroll(arr)
+{
+	$.ajax({
+	  type: "POST",
+	  url: "employeepayroll/denypayroll",
+	  data: {
+	   "array": arr,
+	  },
+	  dataType: 'json',
+	  cache: false,
+	  success: function(data) {
+		   showMessage(data.message);
+		   location.reload();
+	  },
+	  error: function() {
+	   	showError(data.message);
+	  }
+ });
+}
+
+function payrollDeniaedlist()
+{
+	$.ajax({
+	  type: "POST",
+	  url: "employeepayroll/deniedlist",
+	  data: {
+	  },
+	  dataType: 'json',
+	  cache: false,
+	  success: function(data) {
+		   $('div#Pdeny').find('ul.list-group').append(data.message);
+	  },
+	  error: function() {
+	   	showError(data.message);
+	  }
+ });
+}
+
+function undenialEmployeePayroll(arr)
+{
+	$.ajax({
+	  type: "POST",
+	  url: "employeepayroll/undenialpayroll",
+	  data: {
+	   "array": arr,
+	  },
+	  dataType: 'json',
+	  cache: false,
+	  success: function(data) {
+		   showMessage(data.message);
+		   location.reload();
+	  },
+	  error: function() {
+	   	showError(data.message);
+	  }
+ });
+}
 
 JS;
 
@@ -382,8 +563,12 @@ $this->registerJS($js);
     	line-height:150%;
     	font-size:1.5em;
 	}
-	.btn{
+.butt{
 		float:right;
+	}
+	.butt-deny{
+		float:right;
+		margin-right:5px;
 	}
 	.icon-button {
 		appearance: none;
@@ -393,5 +578,47 @@ $this->registerJS($js);
 		border: 0;
 		background: transparent;
 	}
+
+	.deny{
+		margin-left: 20px;
+	}
+	.list-group-item{
+		margin-top:3px;
+		padding:4px;
+	}
+	#denyTable thead tr td{
+		padding: 1px;
+  		font-size: 15px;
+	}
+	#denyTable tbody tr td{
+		padding: 1px;
+  		font-size: 13px;
+	}
+
+
+	#denyTable tbody {
+		display:block;
+		height:250px;
+		overflow:auto;
+	}
+
+	#denyTable thead,#denyTable tbody tr {
+		display:table;
+		width:100%;
+		table-layout:fixed;
+	}
+
+	#denyTable thead {
+		background:#e6e6e6;
+		width: calc( 100% - 1em )
+	}
+
+
+	#denyTable tr td:first-child {
+    	width: 20px;
+	}
+
+	
+
 	");
 ?>

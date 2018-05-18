@@ -21,12 +21,14 @@ use Yii;
  * @property string $DOB
  * @property string $Email
  * @property double $Salary
+ * @property string $BankAccountNumber
  * @property string $CellPhone
  * @property string $PermanantAddress
  * @property string $TemporaryAddress
  * @property string $HireDate
  * @property string $JoinDate
- * @property string $PromotedDate
+ * @property string $ReviewDate
+ * @property string $NextReviewDate
  * @property int $MaritalStatus
  * @property string $SpouseName
  * @property string $EmergencyContact1Name
@@ -49,12 +51,12 @@ use Yii;
  * @property string $UpdatedDate
  * @property int $UpdatedBy
  * @property int $IsActive
+ * @property int $IsTerminated
  * @property int $IsDeleted
  * @property string $LoginTime
  * @property string $LogoutTime
  * @property int $Supervisor
  * @property string $Image
- * @property string $BankAccountNumber
  */
 class Employee extends \yii\db\ActiveRecord
 {
@@ -69,28 +71,28 @@ class Employee extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-
     public function rules()
     {
         return [
-            [['DepartmentID', 'DesignationID', 'RoleID', 'RoomID', 'BiometricID', 'ShiftID', 'UserID', 'MaritalStatus', 'Insurance', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted', 'Supervisor'], 'integer'],
-            [['FullName', 'CellPhone','Email', 'PermanantAddress', 'TemporaryAddress', 'HireDate', 'JoinDate'], 'required'],
-            ['Email', 'email'],
-            [['DOB', 'HireDate', 'JoinDate', 'PromotedDate', 'CreatedDate', 'UpdatedDate', 'LoginTime', 'LogoutTime'], 'safe'],
+            [['DepartmentID', 'DesignationID', 'RoleID', 'RoomID', 'BiometricID', 'ShiftID', 'UserID', 'Insurance', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted', 'Supervisor'], 'integer'],
+            [['FullName', 'Email', 'CellPhone', 'PermanantAddress', 'TemporaryAddress', 'HireDate', 'JoinDate'], 'required'],
+            [['DOB', 'HireDate', 'JoinDate', 'ReviewDate','NextReviewDate', 'CreatedDate', 'UpdatedDate', 'LoginTime', 'LogoutTime'], 'safe'],
             [['Salary'], 'number'],
             [['Salutation', 'Gender'], 'string', 'max' => 10],
-            [['FullName', 'Email', 'SpouseName', 'EmergencyContact1Name', 'EmergencyContact2Name', 'BankAccountNumber'], 'string', 'max' => 100],
+            [['FullName', 'Email', 'BankAccountNumber', 'SpouseName', 'EmergencyContact1Name', 'EmergencyContact2Name'], 'string', 'max' => 100],
             [['CellPhone', 'EmergencyContact1Cell', 'EmergencyContact2Cell'], 'string', 'max' => 15],
             [['PermanantAddress', 'TemporaryAddress', 'EmergencyContact1Relation', 'EmergencyContact2Relation', 'CitizenNumber', 'CITNumber', 'PANNumber'], 'string', 'max' => 50],
+            [['MaritalStatus', 'IsTerminated'], 'string', 'max' => 4],
             [['Ethnicity', 'Religion'], 'string', 'max' => 20],
             [['CitizenFile', 'CITFile', 'PANFile', 'Image'], 'string', 'max' => 200],
+            [['Email'], 'unique'],
+            [['UserID'], 'unique'],
         ];
     }
 
     /**
      * @inheritdoc
      */
-    
     public function attributeLabels()
     {
         return [
@@ -108,12 +110,14 @@ class Employee extends \yii\db\ActiveRecord
             'DOB' => 'Dob',
             'Email' => 'Email',
             'Salary' => 'Salary',
+            'BankAccountNumber' => 'Bank Account Number',
             'CellPhone' => 'Cell Phone',
             'PermanantAddress' => 'Permanant Address',
             'TemporaryAddress' => 'Temporary Address',
             'HireDate' => 'Hire Date',
             'JoinDate' => 'Join Date',
-            'PromotedDate' => 'Promoted Date',
+            'ReviewDate' => 'Review Date',
+            'NextReviewDate' => 'Next Review Date',
             'MaritalStatus' => 'Marital Status',
             'SpouseName' => 'Spouse Name',
             'EmergencyContact1Name' => 'Emergency Contact1 Name',
@@ -136,13 +140,12 @@ class Employee extends \yii\db\ActiveRecord
             'UpdatedDate' => 'Updated Date',
             'UpdatedBy' => 'Updated By',
             'IsActive' => 'Is Active',
+            'IsTerminated' => 'Is Terminated',
             'IsDeleted' => 'Is Deleted',
             'LoginTime' => 'Login Time',
             'LogoutTime' => 'Logout Time',
             'Supervisor' => 'Supervisor',
             'Image' => 'Image',
-            'BankAccountNumber' => 'Bank Account Number',
         ];
     }
-
 }

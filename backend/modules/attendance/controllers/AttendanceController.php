@@ -85,7 +85,7 @@ class AttendanceController extends \yii\web\Controller
                 if($model != NULL  && sizeof($model) > 0){
                     foreach ($model as $row){
                         $htm .='<tr>';
-                        $htm.='<td>'.$row->AttnDate.'</td>';
+                        $htm.='<td>'.$row->AttnDate ."<br/>".date("l",strtotime($row->AttnDate)).'</td>';
                         $htm.='<td>'.$row->CheckIn.'</td>';
                         $htm.='<td>'.$row->CheckOut.'</td>';
                         $htm.='<td>'.$row->CheckInDiff.'</td>';
@@ -128,7 +128,7 @@ class AttendanceController extends \yii\web\Controller
         }
 
         function timeToSec($string){
-            list($hour, $min, $sec) = explode(':', $string);
+          list($hour, $min, $sec) =array_pad(explode(':', $string, 3), -3, NULL);
          return $hour*3600+$min*60+$sec;
         }
 }

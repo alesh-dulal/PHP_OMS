@@ -37,21 +37,29 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="employee-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <div class="row">
-            <div class="col-lg-12">
-                <div class="col-lg-6">
+<?php if (Yii::$app->session['Role']== 'admin' || Yii::$app->session['Role']== 'Supervisor') { ?>
         <?= Html::a('Create Employee', ['create'], ['class' => 'btn btn-success']) ?>
-                    
-                </div>
-                <!-- <div class="col-lg-6 excelimport">
-                    <input type="file" name="ExcelFile" id="ExcelFile"/>
-                    <button id="upload" name="uploadfile" class="btn btn-primary" value="Upload">Export</button>
-                </div> -->
-            </div>
-    </div>
-    
+         <?php if (Yii::$app->session['Role']== 'admin' || Yii::$app->session['Role']== 'Supervisor') { ?>
+   <?= Html::a('Terminated Employees', ['terminatedemp'], ['class'=>'comm btn btn-info']) ?>
+ <?php } ?>
+
+ 
+   <span class="dropdown">
+  <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Virtual Employee
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><?= Html::a('Create Virtual Employee', ['virtualemployee/create']) ?></li>
+    <li role="separator" class="divider"></li>
+    <li><?= Html::a('List Virtual Employee', ['virtualemployee/index']) ?></li>
+  </ul>
+</span>           
+    <!-- <div class="col-lg-6 excelimport">
+        <input type="file" name="ExcelFile" id="ExcelFile"/>
+        <button id="upload" name="uploadfile" class="btn btn-primary" value="Upload">Export</button>
+    </div> -->
+    <?php } ?>
      <?php
      $gridColumns = [
                            
@@ -101,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Supervisor Name',
                  'value'     => function($data){
 
-                  // return \backend\modules\user\models\Employee::findOne($data->Supervisor)->FullName;
+                  return \backend\modules\user\models\Employee::findOne($data->Supervisor)->FullName;
                 }
             ],
 
@@ -180,8 +188,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'Supervisor',
                 'label' => 'Supervisor Name',
                  'value'     => function($data){
-
-                  // return \backend\modules\user\models\Employee::findOne($data->Supervisor)->FullName;
+                  return \backend\modules\user\models\Employee::findOne($data->Supervisor)->FullName;
                 }
             ],
 
@@ -244,6 +251,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
  <?php 
 $js = <<< JS
+$(document).on({
+    ajaxStart: function() { nowLoading(); $("body").addClass("loading");    },
+     ajaxStop: function() { $("body").removeClass("loading"); }    
+});
 
 $("div.excelimport").find('button[name="uploadfile"]').on("click", function(){
     var file_data = $("#ExcelFile").prop("files")[0];   
@@ -268,7 +279,6 @@ $('div#w4').find('table button[name="emailSender"]').on('click',function(){
 
     $.ajax({
               type: "POST",
-              url: "../../site/resetpwd",
               data:{
                 "employeeid": employeeid,
                 "employeeemail": employeeemail

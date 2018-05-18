@@ -51,9 +51,12 @@ AppAsset::register($this);
             'items' => [
                  ['label' => 'Advance Salary', 'url' => '/oms/payroll/advance'],
                  ['label' => 'Payroll Setting', 'url' => '/oms/payroll/payrollsetting'],
+                 ['label' => 'Payroll Attendance', 'url' => '/oms/payroll/payrollattendance'],
                  ['label' => 'Designation Salary', 'url' => '/oms/payroll/designationsalary'],
                  ['label' => 'Employee Payroll', 'url' => '/oms/payroll/employeepayroll'],
                  ['label' => 'Payroll', 'url' => '/oms/payroll/payroll'],
+                 ['label' => 'Article Based', 'url' => '/oms/payroll/virtualpayroll'],
+                 ['label' => 'Pay & Terminate', 'url' => '/oms/payroll/payandterminate'],
             ],
         ],
         ['label' => 'Attendance', 'url' => ['/attendance/attendance/index']],

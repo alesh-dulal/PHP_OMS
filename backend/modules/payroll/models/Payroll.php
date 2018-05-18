@@ -8,30 +8,33 @@ use Yii;
  * This is the model class for table "payroll".
  *
  * @property int $PayrollID
+ * @property int $EmployeeID
  * @property string $FullName
  * @property string $Year
  * @property int $Month
- * @property int $BasicSalary
- * @property int $PF
- * @property int $Gratuity
- * @property int $CompensationAllowance
- * @property int $Grade
- * @property int $Incentive
- * @property int $Bonus
- * @property int $TotalAllowance
- * @property int $PFDeduction
- * @property int $CITDeduction
- * @property int $TotalDeduction
- * @property int $Income
+ * @property double $BasicSalary
+ * @property double $PF
+ * @property double $Gratuity
+ * @property double $Allowance
+ * @property double $Grade
+ * @property double $Incentive
+ * @property double $Bonus
+ * @property double $TotalAllowance
+ * @property double $PFDeduction
+ * @property double $CITDeduction
+ * @property double $TotalDeduction
+ * @property double $Income
  * @property int $AbsentDays
- * @property int $AbsentDeduction
- * @property int $GrossIncome
- * @property int $SST
- * @property int $OtherTAX
- * @property int $NetIncome
- * @property int $AdvanceDeduction
- * @property int $PayableAmount
+ * @property double $AbsentDeduction
+ * @property double $GrossIncome
+ * @property double $SST
+ * @property double $OtherTAX
+ * @property double $NetIncome
+ * @property double $AdvanceDeduction
+ * @property double $PayableAmount
  * @property string $Remarks
+ * @property int $IsProcessed
+ * @property int $IsPaid
  * @property string $CreatedDate
  * @property int $CreatedBy
  * @property string $UpdatedDate
@@ -55,10 +58,12 @@ class Payroll extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['FullName', 'Year', 'Month', 'BasicSalary', 'PF', 'Gratuity', 'CompensationAllowance', 'Grade', 'Incentive', 'Bonus', 'TotalAllowance', 'PFDeduction', 'CITDeduction', 'TotalDeduction', 'Income', 'AbsentDays', 'AbsentDeduction', 'GrossIncome', 'SST', 'OtherTAX', 'NetIncome', 'AdvanceDeduction', 'PayableAmount', 'Remarks'], 'required'],
+            [['EmployeeID', 'FullName', 'Year', 'Month', 'BasicSalary', 'PF', 'Gratuity', 'Grade', 'Incentive', 'Bonus', 'TotalAllowance', 'PFDeduction', 'CITDeduction', 'TotalDeduction', 'Income', 'AbsentDays', 'AbsentDeduction', 'GrossIncome', 'SST', 'OtherTAX', 'NetIncome', 'AdvanceDeduction', 'PayableAmount', 'Remarks'], 'required'],
+            [['EmployeeID', 'Month', 'AbsentDays', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted'], 'integer'],
             [['Year', 'CreatedDate', 'UpdatedDate'], 'safe'],
-            [['Month', 'BasicSalary', 'PF', 'Gratuity', 'CompensationAllowance', 'Grade', 'Incentive', 'Bonus', 'TotalAllowance', 'PFDeduction', 'CITDeduction', 'TotalDeduction', 'Income', 'AbsentDays', 'AbsentDeduction', 'GrossIncome', 'SST', 'OtherTAX', 'NetIncome', 'AdvanceDeduction', 'PayableAmount', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted'], 'integer'],
+            [['BasicSalary', 'PF', 'Gratuity', 'Allowance', 'Grade', 'Incentive', 'Bonus', 'TotalAllowance', 'PFDeduction', 'CITDeduction', 'TotalDeduction', 'Income', 'AbsentDeduction', 'GrossIncome', 'SST', 'OtherTAX', 'NetIncome', 'AdvanceDeduction', 'PayableAmount'], 'number'],
             [['FullName', 'Remarks'], 'string', 'max' => 200],
+            [['IsProcessed', 'IsPaid'], 'string', 'max' => 1],
         ];
     }
 
@@ -69,13 +74,14 @@ class Payroll extends \yii\db\ActiveRecord
     {
         return [
             'PayrollID' => 'Payroll ID',
+            'EmployeeID' => 'Employee ID',
             'FullName' => 'Full Name',
             'Year' => 'Year',
             'Month' => 'Month',
             'BasicSalary' => 'Basic Salary',
             'PF' => 'Pf',
             'Gratuity' => 'Gratuity',
-            'CompensationAllowance' => 'Compensation Allowance',
+            'Allowance' => 'Allowance',
             'Grade' => 'Grade',
             'Incentive' => 'Incentive',
             'Bonus' => 'Bonus',
@@ -93,6 +99,8 @@ class Payroll extends \yii\db\ActiveRecord
             'AdvanceDeduction' => 'Advance Deduction',
             'PayableAmount' => 'Payable Amount',
             'Remarks' => 'Remarks',
+            'IsProcessed' => 'Is Processed',
+            'IsPaid' => 'Is Paid',
             'CreatedDate' => 'Created Date',
             'CreatedBy' => 'Created By',
             'UpdatedDate' => 'Updated Date',

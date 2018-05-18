@@ -51,9 +51,12 @@ AppAsset::register($this);
             'items' => [
                  ['label' => 'Advance Salary', 'url' => '/oms/payroll/advance'],
                  ['label' => 'Payroll Setting', 'url' => '/oms/payroll/payrollsetting'],
+                 ['label' => 'Payroll Attendance', 'url' => '/oms/payroll/payrollattendance'],
                  ['label' => 'Designation Salary', 'url' => '/oms/payroll/designationsalary'],
                  ['label' => 'Employee Payroll', 'url' => '/oms/payroll/employeepayroll'],
                  ['label' => 'Payroll', 'url' => '/oms/payroll/payroll'],
+                 ['label' => 'Article Based', 'url' => '/oms/payroll/virtualpayroll'],
+                 ['label' => 'Pay & Terminate', 'url' => '/oms/payroll/payandterminate'],
             ],
         ],
         ['label' => 'Attendance', 'url' => ['/attendance/attendance/index']],
@@ -108,11 +111,17 @@ AppAsset::register($this);
     NavBar::end();
     ?>
 
-            <?= $content ?>
+    <div class="container-fluid">
+        <?= Breadcrumbs::widget([
+            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+        ]) ?>
+        <?= Alert::widget() ?>
+        <?= $content ?>
+    </div>
 </div>
 
 <footer class="footer">
-    <div class="container">
+    <div class="container-fluid">
         <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>

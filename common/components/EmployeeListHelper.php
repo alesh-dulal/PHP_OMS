@@ -18,7 +18,7 @@ class EmployeeListHelper extends Component{
 					(
 					    (SELECT MIN(EmployeeID) FROM employee)
 					)
-					 AND IsActive = '1'".(($rol=='supervisor')?$whereCondition:"")
+					 AND IsActive = '1' AND IsTerminated = '0'".(($rol=='supervisor')?$whereCondition:"")
 	        			);
 	        	$employee = $command->queryAll();
 	        	$employeeList = (count($employee) == 0) ? ['' => ''] : \yii\helpers\ArrayHelper::map($employee, 'EmployeeID', 'FullName');

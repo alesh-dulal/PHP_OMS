@@ -24,7 +24,7 @@ use yii\db\Query;
 use yii\filters\AccessControl;
 
 use backend\modules\user\models\Excel;
-
+use yii\data\Pagination;
 /**
  * EmployeeController implements the CRUD actions for Employee model.
  */
@@ -66,6 +66,7 @@ class EmployeeController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+
                 ],
             ],
         ];
@@ -107,7 +108,7 @@ class EmployeeController extends Controller
     {
         $model = new Employee();
         $RandomNumber = mt_rand();
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->CreatedBy = Yii::$app->user->id;
             $model->CreatedDate = Date('Y-m-d H:i:s');
             $EmployeeName = $model->FullName;
@@ -164,8 +165,8 @@ class EmployeeController extends Controller
                  $model->UserID = $UserModel->UserId;
                // echo "<pre>"; print_r($model); die();
                  $model->save();
-             }
-            return $this->redirect('index');
+                 }
+                return $this->redirect('index');
         } else {
 
             $SelectDepartment = Listitems::find()->where(['type'=>'department'])->all();
@@ -187,8 +188,8 @@ class EmployeeController extends Controller
         $query = new Query();
        $connection = Yii::$app->getDb();
        $command = $connection->createCommand( "
-        select E.EmployeeID, E.FullName from employee E LEFT JOIN role R on E.RoleID = R.RoleID where R.Name != 'employee';
-        ");
+        select E.EmployeeID, E.FullName from employee E LEFT JOIN role R on E.RoleID = R.RoleID where R.Name != 'employee'
+        ;");
        $SelectSupervisor = $command->queryall();
         $Supervisor = (count($SelectSupervisor) == 0) ? ['' => ''] : \yii\helpers\ArrayHelper::map($SelectSupervisor, 'EmployeeID', 'FullName');
 
@@ -463,6 +464,30 @@ class EmployeeController extends Controller
     }
 }
 
+    public function actionAllcommunication($id)
+    {
+        $model = new \backend\modules\user\models\Employeecommunication();
+
+            $qry = \backend\modules\user\models\Employeecommunication::find(['CreatedDate as Date'])->where(['EmployeeID' => $id])->orderBy(['CreatedDate'=>SORT_DESC]);
+
+        $pagination = new Pagination([
+                'defaultPageSize' => 10,
+                'totalCount' => $qry->count(),
+            ]);
+
+        $query = new Query();
+        $query = $query->select(['EC.CreatedDate', 'EC.Tags', 'EC.Details','E.FullName as TalkedWith'])->where(['EC.EmployeeID'=>$id])->from('employeecommunication EC')->leftJoin('employee E','E.EmployeeID = EC.CreatedBy')->orderBy(['CreatedDate'=>SORT_DESC])->offset($pagination->offset)->limit($pagination->limit);
+
+        $command = $query->createCommand();
+        $data = $command->queryAll();
+// echo "<pre>"; print_r($data); die();
+            return $this->render('allcommunication', [
+                'model' => $model,
+                'data' => $data,
+                'pagination' => $pagination
+            ]);
+    }
+
     public function actionCommunication()
     {
         $model = new \backend\modules\user\models\Employeecommunication();
@@ -479,20 +504,21 @@ class EmployeeController extends Controller
         ]);
     }
 
-    public function actionGetcommunication()
+     public function actionGetcommunication()
     {
       $Role = UserController::CheckRole("employee");
         if ($Role == true)
         {
             $EmployeeID = $_POST['EmployeeID'];
-
             try {
+               
+                $query = new Query();
+                $query = $query->select(['EC.CreatedDate', 'EC.Tags', 'EC.Details','E.FullName as TalkedWith'])->where(['EC.EmployeeID'=>$EmployeeID])->from('employeecommunication EC')->leftJoin('employee E','E.EmployeeID = EC.CreatedBy')->orderBy(['CreatedDate'=>SORT_DESC])->limit(5);
 
-                $connection = Yii::$app->getDb();
-            $qry = sprintf("SELECT EC.CreatedDate, EC.Details,E.FullName as TalkedWith FROM employeecommunication EC LEFT JOIN employee E ON E.EmployeeID = EC.CreatedBy WHERE EC.EmployeeID = '%d'",$EmployeeID);
-            $result = $connection->createCommand($qry) /*->getRawSql()*/;
-            $res = $result->queryAll();
-            if(sizeof($res) != NULL)
+                $command = $query->createCommand();
+                $res = $command->queryAll();
+
+        if(sizeof($res) != NULL)
             {
                 $html = '';
                 foreach ($res as $key => $r) 
@@ -501,6 +527,7 @@ class EmployeeController extends Controller
                     $html .= '<td>'.$r['CreatedDate'].'</td>';
                     $html .= '<td>'.$r['Details'].'</td>';
                     $html .= '<td>'.$r['TalkedWith'].'</td>';
+                    $html .= '<td>'.$r['Tags'].'</td>';
                     $html .= '</tr>';
                 }
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -508,14 +535,35 @@ class EmployeeController extends Controller
             }
             else
             {
-              Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ['html' => '<tr><td colspan = "3" align = "center">No data available in tabl</tr>'];  
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return ['html' => '<tr><td colspan = "3" align = "center">No data available in table</tr>'];  
             }
-                
+            
             } catch (Exception $e) {
                 return "Error Occured".$e;
             }
         }  
+    }
+
+    public function actionTerminatedemp(){
+        $searchModel = new EmployeeSearch();
+        $dataProvider = $searchModel->searchterminated(Yii::$app->request->queryParams);
+
+        return $this->render('terminatedemp', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionRejoin($id){
+        $model = Employee::findOne($id);
+        $model->IsTerminated = '0';
+        $model->IsActive = 1;
+        echo "Done";
+        if($model->save(false)){   
+        return $this->redirect(['terminatedemp']);
+        }        
+        
     }
 }
 

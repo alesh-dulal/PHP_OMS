@@ -22,8 +22,7 @@
           <?php 
             $listData=['Select Salutation'=>'Select Salutation', 'Mr.'=>'Mr.', 'Ms.'=>'Ms.', 'Mrs.'=>'Mrs.'];
                         $options=
-                            [
-            
+                            [            
                             'Select Salutation' => ['disabled'=>true],
                             'Mr.' => ['label'=>'Mr.'],
                             'Ms.' => ['label' => 'Ms.'],
@@ -164,6 +163,52 @@
         </div>
       </div>
       <div class="col-lg-12">
+                <?php 
+if (!$model->isNewRecord) {?>
+  <div class="col-lg-3">
+          <?= $form->field($model, 'HireDate')->label('Hire Date')->widget(DatePicker::classname(), [
+            'options' => ['placeholder' => 'yyyy-mm-dd', 'value' => date('Y-m-d'),],
+             'pluginOptions' => [
+                 'format' => 'yyyy-mm-dd',
+                 
+                'todayHighlight' => true,
+                 'autoclose'=>true,
+            ]
+            ]);  ?> 
+        </div>
+        <div class="col-lg-3">
+          <?= $form->field($model, 'JoinDate')->label('Join Date')->widget(DatePicker::classname(), [
+                 
+            'options' => ['placeholder' => 'yyyy-mm-dd','value' => date('Y-m-d'),  ],
+             'pluginOptions' => [
+                 'format' => 'yyyy-mm-dd',
+                'todayHighlight' => true,
+                 'autoclose'=>true,
+            ]
+            ]);  ?>   
+        </div>
+        <div class="col-lg-3">
+          <?= $form->field($model, 'ReviewDate')->label('Review Date')->widget(DatePicker::classname(), [
+            'options' => ['placeholder' => 'yyyy-mm-dd',],
+             'pluginOptions' => [
+                 'format' => 'yyyy-mm-dd',
+                'todayHighlight' => true,
+                 'autoclose'=>true,
+            ]
+            ]);?>  
+        </div>
+<div class="col-md-3">
+<?= $form->field($model, 'NextReviewDate')->label('Next Review Date')->widget(DatePicker::classname(), [
+            'options' => ['placeholder' => 'yyyy-mm-dd',],
+             'pluginOptions' => [
+                 'format' => 'yyyy-mm-dd',
+                'todayHighlight' => true,
+                 'autoclose'=>true,
+            ]
+            ]);?>  
+</div>
+<?php }else{?>
+
         <div class="col-lg-4">
           <?= $form->field($model, 'HireDate')->label('Hire Date')->widget(DatePicker::classname(), [
             'options' => ['placeholder' => 'yyyy-mm-dd', 'value' => date('Y-m-d'),],
@@ -187,7 +232,7 @@
             ]);  ?>   
         </div>
         <div class="col-lg-4">
-          <?= $form->field($model, 'PromotedDate')->label('Promoted Date')->widget(DatePicker::classname(), [
+          <?= $form->field($model, 'ReviewDate')->label('Review Date')->widget(DatePicker::classname(), [
             'options' => ['placeholder' => 'yyyy-mm-dd',],
              'pluginOptions' => [
                  'format' => 'yyyy-mm-dd',
@@ -196,6 +241,7 @@
             ]
             ]);?>  
         </div>
+<?php } ?>
         <div class="col-lg-12">
           <div class="col-lg-6">
             <?= $form->field($model, 'LoginTime')->widget(TimePicker::classname(),['pluginOptions' => ['showMeridian' => false]])->label("Punchin Time")?>
@@ -212,10 +258,10 @@
     <div class="panel-body">
       <div class="col-lg-12">
         <div class="col-lg-6">
-          <?= $form->field($model, 'PermanantAddress')->textarea() ?>
+          <?= $form->field($model, 'PermanantAddress')->textarea()->label("Permanent Address * ") ?>
         </div>
         <div class="col-lg-6">
-          <?= $form->field($model, 'TemporaryAddress')->textarea() ?>
+          <?= $form->field($model, 'TemporaryAddress')->textarea()->label("Temporary Address * ") ?>
         </div>
       </div>
     </div>
@@ -225,13 +271,13 @@
     <div class="panel-body">
       <div class="col-lg-12">
         <div class="col-lg-4">
-          <?= $form->field($model, 'EmergencyContact1Name')->textInput(['maxlength' => true])->label("Emergency Contact Name") ?>
+          <?= $form->field($model, 'EmergencyContact1Name')->textInput(['maxlength' => true])->label("Emergency Contact Name *") ?>
         </div>
         <div class="col-lg-4">
-          <?= $form->field($model, 'EmergencyContact1Relation')->textInput(['maxlength' => true])->label("Emergency Contact Relation") ?>
+          <?= $form->field($model, 'EmergencyContact1Relation')->textInput(['maxlength' => true])->label("Emergency Contact Relation *") ?>
         </div>
         <div class="col-lg-4">
-          <?= $form->field($model, 'EmergencyContact1Cell')->textInput(['maxlength' => true])->label("Emergency Contact Number") ?>
+          <?= $form->field($model, 'EmergencyContact1Cell')->textInput(['maxlength' => true])->label("Emergency Contact Number *") ?>
         </div>
       </div>
       <div class="col-lg-12">

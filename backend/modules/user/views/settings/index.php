@@ -27,6 +27,10 @@
  <?php if (Yii::$app->session['Role']== 'admin' || Yii::$app->session['Role']== 'Supervisor') { ?>
     <?= Html::a('Email Settings',['/mail/emailtemplate/index'], ['class' => 'btn btn-primary']) ?>
  <?php } ?>
+ <?php if (Yii::$app->session['Role']== 'admin' || Yii::$app->session['Role']== 'Supervisor') { ?>
+   <?= Html::a('Payroll Setting', ['salaryamendment'], ['class'=>'comm btn btn-info']) ?>
+ <?php } ?>
+
 
 <div class="Settings">
    <div class="container">
@@ -61,7 +65,7 @@
             </span>
          </li>
          <li>
-            <span data-toggle="tab" class="item-tab hand" data-id="containerPayroll">Payroll
+            <span data-toggle="tab" class="item-tab hand" data-id="containerPayroll">Payroll Tracker
             </span>
          </li>
       </ul>
@@ -252,7 +256,7 @@
          </div>         
 
          <div id="containerPayroll" class="tab-pane fade" data-active="payroll">
-            <h3>Payroll</h3>
+            <h3>Payroll Tracker</h3>
             <div class="col-lg-12">
               <div class="col-lg-4">
                 
@@ -449,7 +453,7 @@ $(document).ready(function() {
         var identity = $('.stockcategory-save').attr('data-id');
         var title =  $("div#containerPayroll").find('input[name="Listitems[Title]"]').val();
         var value =  $("div#containerPayroll").find('input[name="Listitems[Value]"]').val();
-        SaveRecord("payroll", title, identity, value, "options", function(res){
+        SaveRecord("payrolltrack", title, identity, value, "options", function(res){
           if(res.result != undefined && res.result === true){
             GetPayroll();
           }else{

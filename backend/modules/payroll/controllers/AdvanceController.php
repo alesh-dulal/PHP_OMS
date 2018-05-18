@@ -101,9 +101,9 @@ class AdvanceController extends \yii\web\Controller
                     $name = $AArray['EmployeeID'];
                     $TotalAmount = $AArray['Amount'];
                     $Message = explode("-", $AArray["AdvanceOf"]);
-                        $Year = $Message[0];
-                        $Month = date('m', strtotime($Message[1]));
-                        $amount = $Message[2];
+                    $Year = $Message[0];
+                    $Month = date('m', strtotime($Message[1]));
+                    $amount = $Message[2];
 
                     $model->CreatedDate = date('Y-m-d');
                     $model->Year = $Year;
@@ -112,7 +112,7 @@ class AdvanceController extends \yii\web\Controller
                     $model->Amount = $amount;
                     $model->Month = $Month;
                     $model->Rule = $rule;
-                    $model->save();
+                $model->save();
                 }
                 return '{"result":true,"message":"saved successfully"}';
             }
