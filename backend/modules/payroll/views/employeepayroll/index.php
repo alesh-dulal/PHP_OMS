@@ -468,7 +468,6 @@ $('div#payrollDenyModal').find('div.modal-footer button#denyPayroll').on('click'
 				return obj;
 			}).get();
 
-	console.log(arr);
 	/*call a function to deny these employee's payroll*/
 	denialEmployeePayroll(arr);
 });

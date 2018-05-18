@@ -96,7 +96,6 @@ class PayrollController extends \yii\web\Controller
                     $EmployeePayroll = $connection->createCommand("
 				    SELECT `EmployeeID`, `IsAllowance`, `AllowanceTitle`, `AllowanceAmount` FROM `employeepayroll` WHERE IsActive = 1");
                     global $listEmpAllowances;
-
                     $listEmpAllowances = $EmployeePayroll->queryAll();
                     $Allowances = $connection->createCommand("SELECT PayrollSettingID, IsAllowance, Title as AllowanceTitle  FROM `payrollsetting` WHERE `IsActive` = 1 ");
                     global $listAllowances;
