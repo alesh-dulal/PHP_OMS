@@ -7,9 +7,30 @@ use kartik\select2\Select2;
 use backend\modules\user\models\Employee;
 use dosamigos\tinymce\TinyMce;
 use yii\widgets\ActiveForm;
+use yii\helpers\Html;
 ?>
+<?php if (Yii::$app->session->hasFlash('LoginSuccess')): ?>
+  <div class="alert alert-success alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+    <?= Yii::$app->session->getFlash('LoginSuccess') ?>
+  </div>
+<?php endif; ?>
 
-<!-- ======ind currently logged in employee role===== -->
+<?php if (Yii::$app->session->hasFlash('ReportSubmitSuccess')): ?>
+  <div class="alert alert-success alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+    <?= Yii::$app->session->getFlash('ReportSubmitSuccess') ?>
+  </div>
+<?php endif; ?>
+
+<?php if (Yii::$app->session->hasFlash('ForgotReportSubmission')): ?>
+  <div class="alert alert-danger alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+    <?= Yii::$app->session->getFlash('ForgotReportSubmission') ?>
+  </div>
+<?php endif; ?>
+
+<!-- ======find currently logged in employee role===== -->
   <?php $role = strtolower(Yii::$app->session['Role']);?>
 <!-- =====end===== -->
   <div id="dashboard" class="index">

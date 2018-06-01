@@ -243,11 +243,16 @@ if (!$model->isNewRecord) {?>
         </div>
 <?php } ?>
         <div class="col-lg-12">
-          <div class="col-lg-6">
+          <div class="col-lg-4">
             <?= $form->field($model, 'LoginTime')->widget(TimePicker::classname(),['pluginOptions' => ['showMeridian' => false]])->label("Punchin Time")?>
           </div>
-          <div class="col-lg-6">
+          <div class="col-lg-4">
            <?= $form->field($model, 'LogoutTime')->widget(TimePicker::classname(),['pluginOptions' => ['showMeridian' => false]])->label("Punchout Time")?>
+          </div>
+          <div class="col-lg-4">
+            <?php 
+            echo $form->field($model, 'DailyTargetTask')->textInput()->label("Target Task");
+            ?>
           </div>
         </div>
       </div>
@@ -308,7 +313,7 @@ if (!$model->isNewRecord) {?>
             <div class="col-lg-6" style="padding-left: 140px;">
               <!-- image here on update -->
               <?php 
-            if (!$model->isNewRecord) {?>
+            if (!$model->isNewRecord && $model->CitizenFile != NULL) {?>
         <p><img id="blah" src= <?php echo Yii::$app->urlManager->baseUrl."/uploads/citizenship/". $model->CitizenFile;?> height="150" width="150" /></p>
            <?php } else {?>
                     <p><img id="blah" src="https://dummyimage.com/150X150/000000/fff.jpg&text=citizenfile" height="150" width="150" /></p>
@@ -330,7 +335,7 @@ if (!$model->isNewRecord) {?>
             <div class="col-lg-6" style="padding-left: 140px;">
               <!-- image here on update -->
               <?php 
-            if (!$model->isNewRecord) {?>
+            if (!$model->isNewRecord && $model->CITFile != NULL) {?>
         <p><img id="blah" src= <?php echo Yii::$app->urlManager->baseUrl."/uploads/CIT/". $model->CITFile;?> height="150" width="150" /></p>
            <?php } else {?>
                   <p><img id="blah" src="https://dummyimage.com/150X150/000000/fff.jpg&text=citfile" height="150" width="150" /></p>
@@ -352,7 +357,7 @@ if (!$model->isNewRecord) {?>
             <div class="col-lg-6" style="padding-left: 140px;">
               <!-- image here on update -->
               <?php 
-            if (!$model->isNewRecord) {?>
+            if (!$model->isNewRecord && $model->PANFile != NULL) {?>
         <p><img id="blah" src= <?php echo Yii::$app->urlManager->baseUrl."/uploads/PAN/". $model->PANFile;?> height="150" width="150" /></p>
            <?php } else {?>
                     <p><img id="blah" src="https://dummyimage.com/150X150/000000/fff.jpg&text=panfile" height="150" width="150" /></p>
@@ -377,10 +382,10 @@ if (!$model->isNewRecord) {?>
         <div class="col-lg-6">
         <!-- image here on update -->
           <?php 
-            if (!$model->isNewRecord) {?>
+            if (!$model->isNewRecord && $model->Image != NULL) {?>
         <p><img id="blah" src= <?php echo Yii::$app->urlManager->baseUrl."/uploads/profile/". $model->Image;?> height="150" width="150" /></p>
            <?php } else {?>
-                    <p><img id="blah" src="https://dummyimage.com/150X150/000000/fff.jpg&text=Profile+Image" height="150" width="150" /></p>
+                    <p><img id="blah" src=<?php echo ($model->Gender == "Male")?Yii::$app->urlManager->baseUrl."/uploads/default-male.jpg":Yii::$app->urlManager->baseUrl."/uploads/default-female.jpg" ?> height="150" width="150" /></p>
         <?php    }
            ?>
         </div>

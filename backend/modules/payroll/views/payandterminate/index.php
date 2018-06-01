@@ -285,7 +285,6 @@ function CalculatePayableAmount() {
   var NetIncome = parseInt(ele.find('div.form-group input[name="Payroll[NetIncome]"]').val());
   var Advance = parseInt(ele.find('div.form-group input[name="Payroll[AdvanceDeduction]"]').val());
   var PayableIncome = eval("NetIncome-Advance");
-  console.log(PayableIncome);
   ele.find('div.form-group input[name="Payroll[PayableAmount]"]').val(PayableIncome);
 }
 

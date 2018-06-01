@@ -22,7 +22,7 @@ $this->registerJsFile("@web/backend/web/js/select2.min.js",['depends' => [\yii\w
       <div class="col-md-12">
          <div class="col-md-4 well">
             <div class="form-group">
-               <label for="employeeName">Employee Name</label>
+               <label>Employee Name</label>
                <select class="employeeID form-control select-single"  name="employeeid" >
                   <option value="0" disabled="true" selected="true">--Select Employee--</option>
                   <?= $html ?>

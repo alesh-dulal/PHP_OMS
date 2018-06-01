@@ -7,18 +7,33 @@ use Yii;
 /**
  * This is the model class for table "dailyreport".
  *
- * @property integer $DailyReportID
- * @property integer $TotalTask
+ * @property int $DailyReportID
+ * @property int $UserID
+ * @property string $Day
+ * @property int $LoginTime
+ * @property string $LoginIP
+ * @property int $ExitTime
+ * @property string $ExitIP
  * @property string $Report
- * @property string $VerifyUserID
- * @property integer $VerifiedBy
- * @property integer $IsVerified
- * @property integer $SysTotalTask
+ * @property string $ReportDate
+ * @property int $TotalTask
+ * @property string $LoginLate
+ * @property string $ExitFast
+ * @property int $StayTime
+ * @property int $IsSubmitted
+ * @property int $IsPending
+ * @property int $IsAccepted
+ * @property int $VerifiedBy
  * @property string $VerifiedDate
- * @property integer $CreatedBy
- * @property string $CreatedTime
- * @property integer $UpdatedBy
- * @property string $UpdatedTime
+ * @property string $HostName
+ * @property string $HostIP
+ * @property int $SystemGeneratedTask
+ * @property int $IsActive
+ * @property int $IsDeleted
+ * @property int $CreatedBy
+ * @property string $CreatedDate
+ * @property int $UpdatedBy
+ * @property string $UpdatedDate
  * @property string $Remarks
  */
 class Dailyreport extends \yii\db\ActiveRecord
@@ -37,11 +52,14 @@ class Dailyreport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['TotalTask','CreatedBy'], 'required'],
-            [['TotalTask','IsVerified', 'SysTotalTask', 'CreatedBy', 'UpdatedBy'], 'integer'],
-            [['Report', 'Remarks'], 'string'],
-            [['VerifiedDate', 'CreatedTime', 'UpdatedTime','VerifiedBy','VerifyUserID','Report'], 'safe'],
-           
+            [['UserID', 'Day', 'LoginTime', 'LoginIP', 'HostName', 'HostIP', 'CreatedBy'], 'required'],
+            [['UserID', 'LoginTime', 'ExitTime', 'TotalTask', 'StayTime', 'VerifiedBy', 'SystemGeneratedTask', 'CreatedBy', 'UpdatedBy'], 'integer'],
+            [['Day', 'ReportDate', 'VerifiedDate', 'CreatedDate', 'UpdatedDate'], 'safe'],
+            [['Report', 'LoginLate', 'ExitFast', 'Remarks'], 'string'],
+            [['LoginIP', 'ExitIP'], 'string', 'max' => 50],
+            [['IsSubmitted', 'IsPending', 'IsAccepted', 'IsDeleted'], 'string', 'max' => 1],
+            [['HostName', 'HostIP'], 'string', 'max' => 100],
+            [['IsActive'], 'string', 'max' => 4],
         ];
     }
 
@@ -52,17 +70,32 @@ class Dailyreport extends \yii\db\ActiveRecord
     {
         return [
             'DailyReportID' => 'Daily Report ID',
-            'TotalTask' => 'Total Task',
+            'UserID' => 'User ID',
+            'Day' => 'Day',
+            'LoginTime' => 'Login Time',
+            'LoginIP' => 'Login Ip',
+            'ExitTime' => 'Exit Time',
+            'ExitIP' => 'Exit Ip',
             'Report' => 'Report',
-            'VerifyUserID' => 'Verify User ID',
+            'ReportDate' => 'Report Date',
+            'TotalTask' => 'Total Task',
+            'LoginLate' => 'Login Late',
+            'ExitFast' => 'Exit Fast',
+            'StayTime' => 'Stay Time',
+            'IsSubmitted' => 'Is Submitted',
+            'IsPending' => 'Is Pending',
+            'IsAccepted' => 'Is Accepted',
             'VerifiedBy' => 'Verified By',
-            'IsVerified' => 'Is Verified',
-            'SysTotalTask' => 'Sys Total Task',
             'VerifiedDate' => 'Verified Date',
+            'HostName' => 'Host Name',
+            'HostIP' => 'Host Ip',
+            'SystemGeneratedTask' => 'System Generated Task',
+            'IsActive' => 'Is Active',
+            'IsDeleted' => 'Is Deleted',
             'CreatedBy' => 'Created By',
-            'CreatedTime' => 'Created Time',
+            'CreatedDate' => 'Created Date',
             'UpdatedBy' => 'Updated By',
-            'UpdatedTime' => 'Updated Time',
+            'UpdatedDate' => 'Updated Date',
             'Remarks' => 'Remarks',
         ];
     }

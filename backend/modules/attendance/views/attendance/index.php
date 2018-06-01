@@ -104,9 +104,7 @@ var from=$('#w1').val();
         $('table#attendanceDetail').find('tbody').html('');
            var from=$('#w1').val();
            var to=$('#w2').val();
-           
            var data = from + 'to' + to;
-   
            loadData($(this).attr('data-employeeID'),data);
          });
            

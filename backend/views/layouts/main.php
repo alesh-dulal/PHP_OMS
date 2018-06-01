@@ -29,7 +29,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'Top Nepal',
+        'brandLabel' => Yii::$app->name,
         'brandUrl' => ['/dashboard/default'],
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -45,6 +45,7 @@ AppAsset::register($this);
     } else if  (strtolower(Yii::$app->session['Role'])== 'admin' || strtolower(Yii::$app->session['Role'])== 'superadmin'){
         $menuItems = [
          ['label' => 'MyInfo', 'url' => ['/user/myinfo/myinfo']],
+         ['label' => 'Report', 'url' => ['/dailyreport/dailyreport/report']],
         ['label' => 'Stock', 'url' => ['/stock/stock/index']],
         [
             'label' => 'Payroll',
@@ -63,11 +64,15 @@ AppAsset::register($this);
         ['label' => 'Employee', 'url' => ['/user/employee/index']],
         ['label' => 'Leave', 'url' => ['/leave/leave/index']],
         ['label' => 'Settings', 'url' => ['/user/settings']],
-        ['label' => 'DailyReport', 'url' => ['/dailyreport/dailyreport/index']],
-        ['label' => 'Logout (' . Yii::$app->session['FullName'] .')',
-          'url' => ['/site/logout'],
-          'linkOptions' => ['data-method' => 'post']
-        ],
+        ['label' => 'Daily Report', 'url' => ['/dailyreport/dailyreport/index']],
+        ['label' => Yii::$app->session['FullName'],
+               'items' => [
+                 ['label' => 'Change Password', 'url' => '/oms/site/changepassword'],
+                 '<li class="divider"></li>',
+                 ['label' => 'Logout', 'url' => '/oms/site/logout', 'linkOptions' => ['data-method' => 'post']],
+                  
+            ],     
+            ],
     ];
       
     }//closing of elseif
@@ -79,10 +84,14 @@ AppAsset::register($this);
         ['label' => 'Employee', 'url' => ['/user/employee/index']],
         ['label' => 'Leave', 'url' => ['/leave/leave/index']],
         ['label' => 'DailyReport', 'url' => ['/dailyreport/dailyreport/index']],
-        ['label' => 'Logout (' . Yii::$app->session['FullName'] .')',
-          'url' => ['/site/logout'],
-          'linkOptions' => ['data-method' => 'post']
-        ],
+        ['label' => Yii::$app->session['FullName'],
+               'items' => [
+                 ['label' => 'Change Password', 'url' => '/oms/site/changepassword'],
+                 '<li class="divider"></li>',
+                 ['label' => 'Logout', 'url' => '/oms/site/logout', 'linkOptions' => ['data-method' => 'post']],
+                  
+            ],     
+            ],
     ];
       
     }

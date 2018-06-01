@@ -18,7 +18,7 @@ class EmployeeSearch extends Employee
     public function rules()
     {
         return [
-            [['Supervisor', 'EmployeeID', 'DepartmentID', 'DesignationID', 'RoleID', 'RoomID', 'BiometricID', 'ShiftID', 'UserID', 'TemporaryAddress', 'MaritalStatus', 'CitizenNumber', 'Insurance', 'CITNumber', 'PANNumber', 'CreatedBy', 'UpdatedBy', 'IsTerminated', 'IsActive', 'IsDeleted'], 'integer'],
+            [['Supervisor', 'EmployeeID', 'DailyTargetTask', 'DepartmentID', 'DesignationID', 'RoleID', 'RoomID', 'BiometricID', 'ShiftID', 'UserID', 'TemporaryAddress', 'MaritalStatus', 'CitizenNumber', 'Insurance', 'CITNumber', 'PANNumber', 'CreatedBy', 'UpdatedBy', 'IsTerminated', 'IsActive', 'IsDeleted'], 'integer'],
             [['Salutation', 'FullName', 'Gender', 'DOB', 'Email', 'CellPhone', 'PermanantAddress', 'HireDate', 'JoinDate', 'ReviewDate','NextReviewDate', 'SpouseName', 'EmergencyContact1Name', 'EmergencyContact1Relation', 'EmergencyContact1Cell', 'EmergencyContact2Name', 'EmergencyContact2Relation', 'EmergencyContact2Cell', 'Ethnicity', 'Religion', 'CitizenFile', 'CITFile','Image', 'PANFile', 'CreatedDate', 'UpdatedDate', 'Salary', 'LogoutTime', 'LoginTime','BankAccountNumber'], 'safe'],
         ];
     }
@@ -60,6 +60,7 @@ class EmployeeSearch extends Employee
         // grid filtering conditions
         $query ->andFilterWhere([
             'EmployeeID' => $this->EmployeeID,
+            'DailyTargetTask' => $this->DailyTargetTask,
             'DepartmentID' => $this->DepartmentID,
             'DesignationID' => $this->DesignationID,
             'RoleID' => $this->RoleID,
@@ -116,7 +117,8 @@ class EmployeeSearch extends Employee
             ->andFilterWhere(['like', 'LoginTime', $this->LoginTime])
             ->andFilterWhere(['like', 'LogoutTime', $this->LogoutTime])
             ->andFilterWhere(['like', 'Image', $this->Image])
-            ->andFilterWhere(['like', 'BankAccountNumber', $this->BankAccountNumber]);
+            ->andFilterWhere(['like', 'BankAccountNumber', $this->BankAccountNumber])
+            ->andFilterWhere(['like', 'DailyTargetTask', $this->DailyTargetTask]);
 
         return $dataProvider;
     }
@@ -177,6 +179,7 @@ class EmployeeSearch extends Employee
             'LogoutTime' => $this->LogoutTime,
             'Image' => $this->Image,
             'BankAccountNumber' => $this->BankAccountNumber,
+            'DailyTargetTask' => $this->DailyTargetTask,
         ]);
 
         $queryT->andFilterWhere(['like', 'Salutation', $this->Salutation])
@@ -202,7 +205,8 @@ class EmployeeSearch extends Employee
             ->andFilterWhere(['like', 'LoginTime', $this->LoginTime])
             ->andFilterWhere(['like', 'LogoutTime', $this->LogoutTime])
             ->andFilterWhere(['like', 'Image', $this->Image])
-            ->andFilterWhere(['like', 'BankAccountNumber', $this->BankAccountNumber]);
+            ->andFilterWhere(['like', 'BankAccountNumber', $this->BankAccountNumber])
+            ->andFilterWhere(['like', 'DailyTargetTask', $this->DailyTargetTask]);
 
         return $dataProviderT;
     }

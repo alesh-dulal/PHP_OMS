@@ -163,7 +163,6 @@ class EmployeeController extends Controller
              
              if ($UserModel->save()) {
                  $model->UserID = $UserModel->UserId;
-               // echo "<pre>"; print_r($model); die();
                  $model->save();
                  }
                 return $this->redirect('index');
@@ -335,9 +334,9 @@ class EmployeeController extends Controller
 
             $model->UpdatedBy = Yii::$app->user->id;
             $model->UpdatedDate = Date('Y-m-d H:i:s');
-            $model->save();
-            
-            return $this->redirect('index');
+            if($model->save(false)){
+                return $this->redirect('index');
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,

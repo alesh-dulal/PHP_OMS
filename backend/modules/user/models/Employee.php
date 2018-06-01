@@ -13,6 +13,7 @@ use Yii;
  * @property int $RoleID
  * @property int $RoomID
  * @property int $BiometricID
+ * @property int $DailyTargetTask
  * @property int $ShiftID
  * @property int $UserID
  * @property string $Salutation
@@ -74,9 +75,9 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['DepartmentID', 'DesignationID', 'RoleID', 'RoomID', 'BiometricID', 'ShiftID', 'UserID', 'Insurance', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted', 'Supervisor'], 'integer'],
+            [['DepartmentID', 'DailyTargetTask', 'DesignationID', 'RoleID', 'RoomID', 'BiometricID', 'ShiftID', 'UserID', 'Insurance', 'CreatedBy', 'UpdatedBy', 'IsActive', 'IsDeleted', 'Supervisor'], 'integer'],
             [['FullName', 'Email', 'CellPhone', 'PermanantAddress', 'TemporaryAddress', 'HireDate', 'JoinDate'], 'required'],
-            [['DOB', 'HireDate', 'JoinDate', 'ReviewDate','NextReviewDate', 'CreatedDate', 'UpdatedDate', 'LoginTime', 'LogoutTime'], 'safe'],
+            [['DOB', 'HireDate', 'JoinDate', 'DailyTargetTask', 'ReviewDate','NextReviewDate', 'CreatedDate', 'UpdatedDate', 'LoginTime', 'LogoutTime'], 'safe'],
             [['Salary'], 'number'],
             [['Salutation', 'Gender'], 'string', 'max' => 10],
             [['FullName', 'Email', 'BankAccountNumber', 'SpouseName', 'EmergencyContact1Name', 'EmergencyContact2Name'], 'string', 'max' => 100],
@@ -146,6 +147,7 @@ class Employee extends \yii\db\ActiveRecord
             'LogoutTime' => 'Logout Time',
             'Supervisor' => 'Supervisor',
             'Image' => 'Image',
+            'DailyTargetTask' => 'Daily Target Task',
         ];
     }
 }

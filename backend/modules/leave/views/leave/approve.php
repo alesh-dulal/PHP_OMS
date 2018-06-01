@@ -76,10 +76,10 @@
             <thead>
                <tr>
                   <th>Employee Name</th>
-                  <th>Leavetype</th>
+                  <th>Leave Type</th>
+                  <th>Date Range</th>
+                  <th>No of Days</th>
                   <th>Reason</th>
-                  <th>DateRange</th>
-                  <th>No Of Days</th>
                </tr>
             </thead>
             <tbody>
@@ -103,10 +103,10 @@
             <thead>
                <tr>
                   <th>Employee Name</th>
-                  <th>Leavetype</th>
+                  <th>Leave Type</th>
+                  <th>Date Range</th>
+                  <th>No of Days</th>
                   <th>Leave Reason</th>
-                  <th>DateRange</th>
-                  <th>No Of Days</th>
                   <th>Reject Reason</th>
                </tr>
             </thead>

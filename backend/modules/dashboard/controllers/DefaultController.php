@@ -8,7 +8,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii;
 use yii\db\Query;
-
+use yii\helpers\Html;
 use backend\modules\holiday\models\Holiday;
 
 use backend\modules\user\models\Employee;
@@ -72,7 +72,7 @@ class DefaultController extends Controller
         //end employee attendance status
         //Report left to be verified
         //only show in the case of supervisor and HR
-        $CountSubmittedReport =count(Dailyreport::find()->where(['IsVerified'=>0])->andWhere(['IsPending'=>0])->all());
+        $CountSubmittedReport =count(Dailyreport::find()->Where(['IsPending'=>0])->all());
 
         $events=[];
           foreach ($Holiday AS $holiday){
@@ -103,7 +103,18 @@ class DefaultController extends Controller
                     $Event->start = $employee['From'];
                     $Event->end = $employee['To'];
                     $events[] = $Event;
-                }        
+                }
+
+        $ID = Yii::$app->session['UserID'];
+        $checkForUnsubmitted = $this->checkForUnsubmittedReport($ID);
+        $json = json_decode($checkForUnsubmitted, true);
+        // print_r($json); die(); 
+        if($json['results'] == true){
+        $URL = '/dailyreport/dailyreport/reportsubmit?day='.$json['date'];
+            Yii::$app->session->setFlash('ForgotReportSubmission', "<Strong>You Have Not Submitted Report Of ".date('F j, Y',strtotime($json['date']))."</strong>.".Html::a('<span>SubmitNow</span>',[$URL],['class'=>'btn btn-danger btn-xs pull-right']).".");
+        }
+
+
         return $this->render('index',[
             'Employee' => $Employee,
             'PostStatus'=>$PostStatus,
@@ -114,8 +125,7 @@ class DefaultController extends Controller
             'BornToday'=>$BornToday,
             'EmployeeTodayAttn'=>$EmployeeTodayAttn,
             'CountSubmittedReport'=>$CountSubmittedReport
-              ]
-             );
+        ]);
       }
       public function actionSavepost(){
 
@@ -143,6 +153,20 @@ class DefaultController extends Controller
         return "";
     } else {
         return $PunchinTime[0]['CheckIN'];
+        }
+     }
+
+
+     public function checkForUnsubmittedReport($id){
+        $query = new Query();
+        $connection = Yii::$app->getDb();
+        $qry = sprintf("SELECT * FROM `dailyreport` WHERE `UserID` = '%d' AND `IsSubmitted`='0' AND `Day` < CURDATE()",$id);
+        $result = $connection->createCommand($qry) /*->getRawSql()*/;
+        $res = $result->queryOne();
+        if(!empty($res)){
+            return '{"results":true,"date":"'.$res['Day'].'"}';
+        }else{
+            return '{"results":false}';
         }
      }
 }

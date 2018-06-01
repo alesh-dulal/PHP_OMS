@@ -107,7 +107,7 @@ class VirtualpayrollController extends \yii\web\Controller
             $OtherTax = $_POST['OtherTax'];
             $Advance = $_POST['Advance'];
             $Remarks = $_POST['Remarks'];
-            if ($EmployeeID != NULL && $Month != NULL && $Year != NULL && $Income != NULL && $Bonus != NULL && $OtherTax != NULL && $Advance != NULL && $Remarks != NULL ) {
+            if ($EmployeeID != NULL && $Month != NULL && $Year != NULL && $Income != NULL && $Bonus != NULL && $OtherTax != NULL && $Advance != NULL) {
                 $GrossIncome = $Income + $Bonus;
                 $SST = (1/100)*$GrossIncome;
                 $NetIncome = $GrossIncome - $OtherTax - $SST;

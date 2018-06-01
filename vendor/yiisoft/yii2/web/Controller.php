@@ -11,6 +11,7 @@ use Yii;
 use yii\base\InlineAction;
 use yii\helpers\Url;
 use backend\modules\user\models\Userlog;
+use backend\modules\dailyreport\models\Dailyreport;
 
 /**
  * Controller is the base class of web controllers.
@@ -259,10 +260,12 @@ class Controller extends \yii\base\Controller
      * Defaults to empty. Make sure the anchor starts with '#' if you want to specify it.
      * @return Response the response object itself
      */
+
     public function refresh($anchor = '')
     {
         return Yii::$app->getResponse()->redirect(Yii::$app->getRequest()->getUrl() . $anchor);
     }
+
     public function saveLog($Action,$Remarks){
         $Userlog=new Userlog();
         $Userlog->UserID=Yii::$app->session['UserID'];
@@ -270,4 +273,24 @@ class Controller extends \yii\base\Controller
         $Userlog->Remarks=$Remarks;
         $Userlog->save();
     }
+
+    public function saveDailyAttendance($ip,$name, $hostip){
+        $Report = new DailyReport();
+        $Report->UserID=Yii::$app->session['UserID'];
+        $Report->Day=Date('Y-m-d');        
+        $Report->LoginTime=$this->timeToSec(Date("H:i:s"));        
+        $Report->LoginIP=$ip;
+        $Report->HostName=$name;
+        $Report->HostIP=$hostip;
+        $Report->CreatedBy=Yii::$app->session['UserID'];
+        $Report->CreatedDate=Date('Y-m-d H:i:s');
+        $save = $Report->save();
+        $return = ($save == TRUE)?TRUE:FALSE;
+        return $return;
+    }
+
+    function timeToSec($string){
+          list($hour, $min, $sec) =array_pad(explode(':', $string, 3), -3, NULL);
+         return $hour*3600+$min*60+$sec;
+        }
 }

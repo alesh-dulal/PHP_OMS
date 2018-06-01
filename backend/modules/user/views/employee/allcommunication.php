@@ -13,7 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="all-communication-view">
-	<?php /*echo "<pre>"; print_r($res);*/ ?>
 <table class="all-comm table table-bordered">
 	<thead>
 		<tr>
@@ -39,9 +38,3 @@ $this->params['breadcrumbs'][] = $this->title;
 </table>
 <?= LinkPager::widget(['pagination' => $pagination]) ?>
 </div>
- <?php 
-$js = <<< JS
-
-JS;
-$this->registerJS($js);
-?>

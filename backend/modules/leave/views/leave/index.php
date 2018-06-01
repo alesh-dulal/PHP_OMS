@@ -37,7 +37,7 @@ $this->title = "Request Leave";
     <?= Html::a('Requested Leave '. Html::tag('span', $CountLeaveRequest, ['class' => 'badge']),['/leave/leave/approve'], ['class' => 'btn btn-primary']) ?>
  <?php } ?>
 
-<br>
+<br/><br/>
 
 <div class="container">
    <div class="row">
@@ -58,7 +58,10 @@ $this->title = "Request Leave";
             	<div class="col-lg-12">
             		<div class="col-lg-3 well">
             				<!-- foreach leave type -->
-            				<?php foreach ($Result as $key => $Res) {
+            				<?php 
+                    $Val1 = 0; $Val2 = 0;
+                    // echo "<pre>"; print_r($Result); die();
+                    foreach ($Result as $key => $Res) {
 	                        $Val1 = $Res['Earned'];
 	                        $Val2 = $Res['Balance'];
 	                        $Blc = $Val1-$Val2;

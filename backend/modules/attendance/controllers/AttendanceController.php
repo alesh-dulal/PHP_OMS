@@ -120,12 +120,12 @@ class AttendanceController extends \yii\web\Controller
     }
 
 
-        function getTime($duration) {
-            $hours = floor($duration / 3600);
-            $minutes = floor(($duration / 60) % 60);
-            $seconds = $duration % 60;
-        return "$hours:$minutes:$seconds";
-        }
+    function getTime($duration) {
+        $hours = floor($duration / 3600);
+        $minutes = floor(($duration / 60) % 60);
+        $seconds = $duration % 60;
+    return "$hours:$minutes:$seconds";
+    }
 
         function timeToSec($string){
           list($hour, $min, $sec) =array_pad(explode(':', $string, 3), -3, NULL);

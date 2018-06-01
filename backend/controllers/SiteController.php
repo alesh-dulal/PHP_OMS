@@ -97,7 +97,6 @@ class SiteController extends Controller
             $RoleID = $Result['RoleID'];
             $MenuID = $Result['MenuID'];
             $RoleName = $Result['RoleName'];
-
             
             $session = Yii::$app->session;
             $session->set('UserID',$UserID);
@@ -111,6 +110,13 @@ class SiteController extends Controller
             $session->set('Role',$RoleName );
 
             $this->saveLog('Login', gethostname().",". $this->gethostIP());
+            $flag = $this->FindIfLoginTodayExist(Yii::$app->session['UserID']);
+            if($flag == FALSE){
+                $saveAttn = $this->saveDailyAttendance($this->gethostIP(),gethostname(), $this->get_client_ip());
+                if ($saveAttn == TRUE) {
+                    Yii::$app->session->setFlash('LoginSuccess', "You Are LoggedIn Successfully. ");
+                }
+            }
             
             return $this->goBack();
         } else {
@@ -259,6 +265,26 @@ class SiteController extends Controller
         return $ip;
     }
 
+
+public function get_client_ip() {
+            $ipaddress = '';
+            if (isset($_SERVER['HTTP_CLIENT_IP']))
+                $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+            else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+                $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            else if(isset($_SERVER['HTTP_X_FORWARDED']))
+                $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+            else if(isset($_SERVER['HTTP_FORWARDED_FOR']))
+                $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+            else if(isset($_SERVER['HTTP_FORWARDED']))
+                $ipaddress = $_SERVER['HTTP_FORWARDED'];
+            else if(isset($_SERVER['REMOTE_ADDR']))
+                $ipaddress = $_SERVER['REMOTE_ADDR'];
+            else
+                $ipaddress = 'UNKNOWN';
+            return $ipaddress;
+        }
+
     public function actionChangepassword(){
         if (isset($_POST["change"])){
             $UserID = Yii::$app->session['UserID'];
@@ -306,10 +332,16 @@ class SiteController extends Controller
             }
         } else {
             return $this->render('changepassword');
-        }
-        
-           
+        }    
     }
 
+    public function FindIfLoginTodayExist($id){
+        $query = new Query();
+        $connection = Yii::$app->getDb();
+        $qry = sprintf("SELECT COUNT(*) as flag FROM `dailyreport` WHERE `UserID` = '%d' AND `Day` = CURDATE()",$id);
+        $result = $connection->createCommand($qry) /*->getRawSql()*/;
+        $res = $result->queryOne();
+        return (($res['flag'] == 1) ? true : false);
+    }
 }
 

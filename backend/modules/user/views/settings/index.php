@@ -14,6 +14,11 @@
    
    $this->title = 'Settings';
    $this->params['breadcrumbs'][] = $this->title;
+
+   $html = "";
+foreach($LeaveType as $LT){
+    $html .= "<option value=".$LT['ListItemID'].">".$LT['Title']."</option>";
+}
    ?>
 
    <!-- Role Settings -->
@@ -29,6 +34,8 @@
  <?php } ?>
  <?php if (Yii::$app->session['Role']== 'admin' || Yii::$app->session['Role']== 'Supervisor') { ?>
    <?= Html::a('Payroll Setting', ['salaryamendment'], ['class'=>'comm btn btn-info']) ?>
+   <?= Html::a('Leave Accrue ',['leaveaccrue'], ['class' => 'btn btn-primary']) ?>
+   <?= Html::a('Leave Initilize ',['leaveinit'], ['class' => 'btn btn-default']) ?>
  <?php } ?>
 
 
@@ -66,6 +73,10 @@
          </li>
          <li>
             <span data-toggle="tab" class="item-tab hand" data-id="containerPayroll">Payroll Tracker
+            </span>
+         </li>
+         <li>
+            <span data-toggle="tab" class="item-tab hand" data-id="containerAccrue">Leave Accrue Tracker
             </span>
          </li>
       </ul>
@@ -262,9 +273,13 @@
                 
                <div class="well">
                   <?php $form = ActiveForm::begin(); ?>
-                  <?= $form->field($model, 'Title')->textInput(['maxlength' => true, 'style'=>'width:300px', 'id'=>'Year'])->label("Year") ?>
+                  <label for="Year">Year
+        </label>
+        <?php echo years(); ?>
 
-                  <?= $form->field($model, 'Value')->textInput(['maxlength' => true, 'style'=>'width:300px', 'id'=>'month'])->label("Month") ?>
+                  <label for="month">Month
+        </label>
+        <?php echo months(); ?>
 
                   <?= Html::button('Save', ['class' => 'btn btn-primary payroll-save', 'value'=>'save','data-id'=>'0']) ?>
                </div>
@@ -273,6 +288,39 @@
               </div>
               <div class="col-lg-8 data-payroll">
                 <table class="table table-bordered "><thead><th>S.N</th><th>Year</th><th>Month</th></thead><tbody></tbody></table>
+              </div>
+            </div> 
+         </div>
+
+         <div id="containerAccrue" class="tab-pane fade" data-active="accrue">
+            <h3>Leave Accrue Tracker</h3>
+            <div class="col-lg-12">
+              <div class="col-lg-4">
+                
+               <div class="well">
+                  <?php $form = ActiveForm::begin(); ?>
+                  <div class="form-group">
+            <label for="leaveType">Leave Type</label>
+            <select class="employeeID form-control select-leave-type"  name="leavetype" id="leaveType" >
+               <option value="0" disabled="true" selected="true">--Select Leave Type--</option>
+               <?= $html ?>
+            </select>
+         </div>
+                  <label for="Year">Year
+        </label>
+        <?php echo years(); ?>
+
+                  <label for="month">Month
+        </label>
+        <?php echo months(); ?>
+
+                  <?= Html::button('Save', ['class' => 'btn btn-primary leave-accrue-save', 'value'=>'save','data-id'=>'0']) ?>
+               </div>
+               <?php ActiveForm::end(); ?>
+            
+              </div>
+              <div class="col-lg-8 data-leave-accrue">
+                <table class="table table-bordered "><thead><th>S.N</th><th>Year</th><th>Month</th><th>Leave Type</th></thead><tbody></tbody></table>
               </div>
             </div> 
          </div>
@@ -451,11 +499,26 @@ $(document).ready(function() {
     $("div#containerPayroll").find('button.payroll-save').click(function() 
     {
         var identity = $('.stockcategory-save').attr('data-id');
-        var title =  $("div#containerPayroll").find('input[name="Listitems[Title]"]').val();
-        var value =  $("div#containerPayroll").find('input[name="Listitems[Value]"]').val();
-        SaveRecord("payrolltrack", title, identity, value, "options", function(res){
+        var title =  $("div#containerPayroll").find('select[name="Listitems[Title]"]').val();
+        var value =  $("div#containerPayroll").find('select[name="Listitems[Value]"]').val();
+        SaveRecord("payroll", title, identity, value, "options", function(res){
           if(res.result != undefined && res.result === true){
             GetPayroll();
+          }else{
+
+          }
+        });
+    });
+
+    $("div#containerAccrue").find('button.leave-accrue-save').click(function() 
+    {
+        var identity = $('.stockcategory-save').attr('data-id');
+        var title =  $("div#containerAccrue").find('select[name="Listitems[Title]"]').val();
+        var value =  $("div#containerAccrue").find('select[name="Listitems[Value]"]').val();
+        var options =  $("div#containerAccrue").find('select[name="leavetype"] option:selected').val();
+        SaveRecord("accrue", title, identity, value, options, function(res){
+          if(res.result != undefined && res.result === true){
+            GetAccrue();
           }else{
 
           }
@@ -470,6 +533,7 @@ $(document).ready(function() {
     GetStockunit();
     GetStockCategory();
     GetPayroll();
+    GetAccrue();
 
     function GetDepartment()
     {
@@ -584,15 +648,30 @@ $(document).ready(function() {
 
     function GetPayroll()
     {
-      GetRecord('payroll',function(dat){
+      GetPayrollRecord('payroll',function(dat){
         tr='';
           for(i=0;i<dat.length;i++)
           {
             tr+='<tr><td>'+(i+1)+'</td>';
-            tr+='<td>'+dat[i].Title+'</td>';
-            tr+='<td>'+dat[i].Value+'</td>';
+            tr+='<td>'+dat[i].Year+'</td>';
+            tr+='<td>'+dat[i].Month+'</td>';
           }
           $('div#containerPayroll').find('table tbody').html(tr);
+      })
+    }
+
+    function GetAccrue()
+    {
+      GetAccrueRecord('accrue',function(dat){
+        tr='';
+          for(i=0;i<dat.length;i++)
+          {
+            tr+='<tr><td>'+(i+1)+'</td>';
+            tr+='<td>'+dat[i].Year+'</td>';
+            tr+='<td>'+dat[i].Month+'</td>';
+            tr+='<td>'+dat[i].LeaveType+'</td>';
+          }
+          $('div#containerAccrue').find('table tbody').html(tr);
       })
     }
 
@@ -640,6 +719,44 @@ $(document).ready(function() {
           },
           error:function(){
            showError("Record Fetch Failed. Server Error.");
+          }
+        });
+  } 
+
+  function GetAccrueRecord(type, callMe)
+  {
+    $.ajax({
+          type: "POST",
+          url: "settings/retriveaccrue",
+          data:{
+            type:type,
+          },
+          dataType:'json',
+          cache: false,
+          success: function(data) {
+            callMe(data);
+          },
+          error:function(){
+           showError("Server Error.");
+          }
+        });
+  }        
+
+  function GetPayrollRecord(type, callMe)
+  {
+    $.ajax({
+          type: "POST",
+          url: "settings/retrivepayrolltrack",
+          data:{
+            type:type,
+          },
+          dataType:'json',
+          cache: false,
+          success: function(data) {
+            callMe(data);
+          },
+          error:function(){
+           showError("Server Error.");
           }
         });
   }        
@@ -714,13 +831,12 @@ function ClearField(type){
   $(ele).find('input:radio').prop('checked', false);
   $(ele).find("input:radio[value='all']").attr('checked', true);;
 
-  $(ele).find('select').val('');
+  $(ele).find('select').val('0');
 }
 
 function CapitalizeFirstLetter(string) 
 {
     return string.charAt(0).toUpperCase() + string.slice(1);
-    alert(this);
 }
 
 JS;
@@ -728,3 +844,112 @@ JS;
 $this->registerJS($js);
 
 ?>
+<?php
+
+function months($selctedMonth = 'january')
+{
+  $months = '<div class="select"><select name="Listitems[Value]" class="form-select custom-control month" id="month" size="1">';
+  $months.= '<option value="0" disabled>--Select Month--</option>';
+  for ($i = 12; $i > 0; $i--)
+  {
+    $time = strtotime(sprintf('-%d months', $i));
+    $label = date('F', $time);
+    $selctedM = strtolower($selctedMonth) == strtolower($i) ? 'selected' : '';
+    $months.= "<option value='" . date("n", strtotime($label)) . "'  $selctedM >$label</option>";
+  }
+
+  $months.= '</select><div class="select_arrow"></div></div>';
+  return $months;
+}
+
+function years()
+{
+  $starting_year = date('Y', strtotime('-3 year'));
+  $ending_year = date('Y', strtotime('+5 year'));
+  $years = '<div class="select"><select class="form-select custom-control id="Year" name="Listitems[Title]" size="1">';
+  $years.= '<option value="0" disabled>--Select Year--</option>';
+  for ($starting_year; $starting_year <= $ending_year; $starting_year++)
+  {
+    if (date('Y') == $starting_year)
+    {
+      $selected = 'selected';
+    }
+    else
+    {
+      $selected = '';
+    }
+
+    $years.= '<option ' . $selected . ' value="' . $starting_year . '">' . $starting_year . '</option>';
+  }
+
+  $years.= '</select><div class="select_arrow"></div></div>';
+  return $years;
+}
+  
+$this->registerCSS("
+
+.select {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.select select.custom-control {
+  font-family: 'Arial';
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+  padding: 6px 12px;
+  outline: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  color: #555;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.select select.custom-control::-ms-expand {
+  display: none;
+}
+
+.select select.custom-control:hover,
+.select select:focus {
+  color: #555;
+  background: #fff;
+}
+
+.select select.custom-control:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.select_arrow {
+  position: absolute;
+  top: 11px;
+  right: 12px;
+  pointer-events: none;
+  border-style: solid;
+  border-width: 8px 5px 0px 5px;
+  border-color: #555 transparent transparent transparent;
+}
+
+.select select.custom-control:hover~.select_arrow,
+.select select.custom-control:focus~.select_arrow {
+  border-top-color: #555;
+}
+
+.select select.custom-control:disabled~.select_arrow {
+  border-top-color: #555;
+}
+
+
+    ");
+ ?>
