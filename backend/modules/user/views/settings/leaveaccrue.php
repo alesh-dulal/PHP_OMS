@@ -5,7 +5,7 @@ $this->registerJsFile("@web/backend/web/js/select2.min.js",['depends' => [\yii\w
 $this->title="Leave Accrue";
 $html = "";
 foreach($LeaveType as $LT){
-    $html .= "<option value=".$LT['ListItemID'].">".$LT['Title']."</option>";
+    $html .= "<option days=".$LT['Value']." value=".$LT['ListItemID'].">".$LT['Title']."</option>";
 }
 ?>
 
@@ -36,7 +36,7 @@ foreach($LeaveType as $LT){
          <div class="form-group">
             <label for="accruDays">Accrue Days</label>
             <div class="input-group">
-               <input type="text" id="accrueDays" class="form-control accrue-days" name="accruedays" placeholder="Insert Accrue Days.." aria-describedby="basic-addon2">
+               <input type="text" readonly="true" id="accrueDays" class="form-control accrue-days" name="accruedays" placeholder="Insert Accrue Days.." aria-describedby="basic-addon2">
                <span class="input-group-addon" id="basic-addon2">Days</span>
             </div>
          </div>
@@ -80,6 +80,13 @@ $js = <<< JS
 $(".select-leave-type").select2();
 
 var ele = $('div#containerLeaveAccrue');
+
+ele.find('select.select-leave-type').on('change', function(){
+  var days = ele.find('select.select-leave-type option:selected').attr('days');
+  ele.find('input[name="accruedays"]').val(days);
+});
+
+
 ele.find('div.well').on('click', 'button.save-accrue', function() {
 var LeaveTypeID = ele.find('select[name="leavetype"] option:selected').val();
 var AccrueDays = ele.find('input[name="accruedays"]').val();

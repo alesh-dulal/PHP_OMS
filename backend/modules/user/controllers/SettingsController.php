@@ -308,7 +308,7 @@ class SettingsController extends \yii\web\Controller
                         if($res == TRUE){
                             $query = new Query();
                             $connection = Yii::$app->getDb();
-                            $qry = sprintf("UPDATE `leave` SET `Earned` = Earned + ".$Days.", `Balance` = Balance + ".$Days." WHERE `LeaveTypeID` ='".$LeaveTypeID."' AND `EmployeeID` IN(SELECT `EmployeeID` FROM `employee` WHERE IsActive = '1')");
+                            $qry = sprintf("UPDATE `leave` SET `UpdatedDate`= CURDATE(), `UpdatedBy` = ".$loggedInUserID.", `Earned` = Earned + ".$Days.", `Balance` = Balance + ".$Days." WHERE `LeaveTypeID` ='".$LeaveTypeID."' AND `EmployeeID` IN(SELECT `EmployeeID` FROM `employee` WHERE IsActive = '1')");
                             $resultacc = $connection->createCommand($qry);
                             $resacc = $resultacc->execute();
                             if($resacc == TRUE){

@@ -113,7 +113,11 @@ class DefaultController extends Controller
         $URL = '/dailyreport/dailyreport/reportsubmit?day='.$json['date'];
             Yii::$app->session->setFlash('ForgotReportSubmission', "<Strong>You Have Not Submitted Report Of ".date('F j, Y',strtotime($json['date']))."</strong>.".Html::a('<span>SubmitNow</span>',[$URL],['class'=>'btn btn-danger btn-xs pull-right']).".");
         }
-
+        $BirthdayFlag = self::CheckIfBirthday($ID);
+        $jsonBirthday = json_decode($BirthdayFlag, true);
+        if($jsonBirthday['result'] == TRUE){
+            Yii::$app->session->setFlash('BirthdayFlash', "<strong>Happy Birthday ".$jsonBirthday['name'].".</strong>");
+        }
 
         return $this->render('index',[
             'Employee' => $Employee,
@@ -169,4 +173,15 @@ class DefaultController extends Controller
             return '{"results":false}';
         }
      }
+
+     public function CheckIfBirthday($id){
+        $query = new Query();
+        $connection = Yii::$app->getDb();
+        $result = $connection->createCommand('SELECT FullName, STRCMP(DATE_FORMAT(`DOB`,"%Y-%m-%d"), CURDATE()) AS `IsBirthday` FROM `employee` WHERE `EmployeeID` ='.$id.';') /*->getRawSql()*/;
+        $res = $result->queryOne();
+        $return = ($res['IsBirthday'] == 0)?'{"result":true, "name":"'.$res['FullName'].'"}':'{"result":false, "name":"'.$res['FullName'].'"}';
+        return $return;
+     }
+
+
 }

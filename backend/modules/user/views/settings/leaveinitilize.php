@@ -7,7 +7,7 @@ $html = "";
 $htmlemp = "";
 
 foreach($LeaveType as $LT){
-    $html .= "<option value=".$LT['ListItemID'].">".$LT['Title']."</option>";
+    $html .= "<option days=".$LT['Value']." value=".$LT['ListItemID'].">".$LT['Title']."</option>";
 }
 ?>
 <?php 
@@ -21,14 +21,14 @@ foreach ($resultEmp as $key => $emp) {
       <div class="well col-md-4">
          <div class="form-group">
             <label for="leaveType">Employee Name</label>
-            <select class="employeeID form-control select-employee-name"  name="employeename" id="employeeName" >
+            <select class="employeeID  form-control select-employee-name"  name="employeename" id="employeeName" >
                <option value="0" disabled="true" selected="true">--Select Employee Name--</option>
                <?= $htmlemp ?>
             </select>
          </div>         
          <div class="form-group">
             <label for="leaveType">Leave Type</label>
-            <select class="employeeID form-control select-leave-type"  name="leavetype" id="leaveType" >
+            <select class="form-control select-leave-type"  name="leavetype" id="leaveType" >
                <option value="0" disabled="true" selected="true">--Select Leave Type--</option>
                <?= $html ?>
             </select>
@@ -46,7 +46,7 @@ foreach ($resultEmp as $key => $emp) {
          <div class="form-group">
             <label for="accruDays">Accrue Days</label>
             <div class="input-group">
-               <input type="text" id="initDays" class="form-control init-days" name="initdays" placeholder="Insert Initializing Leave Days.." aria-describedby="basic-addon2">
+               <input readonly="true" type="text" id="initDays" class="form-control init-days" name="initdays" placeholder="Insert Initializing Leave Days.." aria-describedby="basic-addon2">
                <span class="input-group-addon" id="basic-addon2">Days</span>
             </div>
          </div>
@@ -56,6 +56,7 @@ foreach ($resultEmp as $key => $emp) {
 </div>
 <?php 
 $js = <<< JS
+
 $(document).on({
     ajaxStart: function() { nowLoading(); $("body").addClass("loading");    },
      ajaxStop: function() { $("body").removeClass("loading"); }    
@@ -66,6 +67,11 @@ $(".month").select2();
 $(".year").select2();
 
 var ele = $('div#containerLeaveInit');
+
+ele.find('select.select-leave-type').on('change', function(){
+  var days = ele.find('select.select-leave-type option:selected').attr('days');
+  ele.find('input[name="initdays"]').val(days);
+});
 
 ele.find('button.save-init').on('click', function(){
 	var EmployeeID = ele.find('select[name="employeename"] option:selected').val();
@@ -116,7 +122,7 @@ $this->registerJS($js);
 ?>
 <?php 
 $this->registerCSS("
-	button.save-accrue{
+	button.save-init{
 		float:right;
 	}
 	.select {

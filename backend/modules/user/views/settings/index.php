@@ -79,6 +79,10 @@ foreach($LeaveType as $LT){
             <span data-toggle="tab" class="item-tab hand" data-id="containerAccrue">Leave Accrue Tracker
             </span>
          </li>
+         <li>
+            <span data-toggle="tab" class="item-tab hand" data-id="containerReference">Reference Type
+            </span>
+         </li>
       </ul>
 
       <div id="tabContainer" class="tab-content">
@@ -324,7 +328,26 @@ foreach($LeaveType as $LT){
               </div>
             </div> 
          </div>
+<div id="containerReference" class="tab-pane fade" data-active="reference">
 
+            <h3>References</h3>
+            <div class="col-lg-12">
+              <div class="col-lg-4">
+                
+               <div class="well">
+                  <?php $form = ActiveForm::begin(); ?>
+                  <?= $form->field($model, 'Title')->textInput(['maxlength' => true, 'style'=>'width:300px', 'id'=>'title']) ?>
+
+                  <?= Html::button('Save', ['class' => 'btn btn-primary reference-save', 'value'=>'save','data-id'=>'0']) ?>
+               </div>
+               <?php ActiveForm::end(); ?>
+            
+              </div>
+              <div class="col-lg-8 data-references">
+                <table class="table table-bordered"><thead><th>S.N</th><th>Name</th><th>Action</th></thead><tbody></tbody></table>
+              </div>
+            </div> 
+         </div>
 
       </div>
    </div>
@@ -400,6 +423,19 @@ $(document).ready(function() {
         SaveRecord("department", title, identity, "value", "options", function(res){
           if(res.result != undefined && res.result === true){
             GetDepartment();
+          }else{
+
+          }
+        });
+    }); 
+
+    $("div#containerReference").find('button.reference-save').click(function() {
+
+        var identity = $('.reference-save').attr('data-id');
+        var title =  $("div#containerReference").find('input[name="Listitems[Title]"]').val();
+        SaveRecord("reference", title, identity, "value", "options", function(res){
+          if(res.result != undefined && res.result === true){
+            GetReference();
           }else{
 
           }
@@ -534,6 +570,7 @@ $(document).ready(function() {
     GetStockCategory();
     GetPayroll();
     GetAccrue();
+    GetReference();
 
     function GetDepartment()
     {
@@ -547,6 +584,21 @@ $(document).ready(function() {
   
           }
           $('div#containerDepartment').find('table tbody').html(tr);
+      })
+    } 
+
+    function GetReference()
+    {
+      GetRecord('reference',function(dat){
+        tr='';
+          for(i=0;i<dat.length;i++)
+          {
+            tr+='<tr><td>'+(i+1)+'</td>';
+            tr+='<td>'+dat[i].Title+'</td>';
+            tr+='<td><span class="hand edit" data-id="'+dat[i].ListItemID+'">edit</span></td>';
+  
+          }
+          $('div#containerReference').find('table tbody').html(tr);
       })
     }
 
@@ -818,6 +870,12 @@ function GetSingleRecord(identity,type,edit)
 
     case "stockcategory":
     var ele=$('div#containerStockCategory');
+    ele.find('button').attr('data-id',edit.attr('data-id'));
+    ele.find('input[name="Listitems[Title]"]').val(edit.parents('tr').find('td:eq(1)').text());
+    break;
+
+    case "reference":
+    var ele=$('div#containerReference');
     ele.find('button').attr('data-id',edit.attr('data-id'));
     ele.find('input[name="Listitems[Title]"]').val(edit.parents('tr').find('td:eq(1)').text());
     break;

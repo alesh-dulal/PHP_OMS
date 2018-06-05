@@ -39,9 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 <?php if (Yii::$app->session['Role']== 'admin' || Yii::$app->session['Role']== 'Supervisor') { ?>
         <?= Html::a('Create Employee', ['create'], ['class' => 'btn btn-success']) ?>
-         <?php if (Yii::$app->session['Role']== 'admin' || Yii::$app->session['Role']== 'Supervisor') { ?>
+
    <?= Html::a('Terminated Employees', ['terminatedemp'], ['class'=>'comm btn btn-info']) ?>
- <?php } ?>
 
  
    <span class="dropdown">
@@ -59,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <input type="file" name="ExcelFile" id="ExcelFile"/>
         <button id="upload" name="uploadfile" class="btn btn-primary" value="Upload">Export</button>
     </div> -->
-    <?php } ?>
+    <?= Html::a('Reference', ['reference'], ['class'=>'reference-btn btn btn-info', 'id' => 'referenceBtn', 'name' => 'referencebtn']) ?>
      <?php
      $gridColumns = [
                            
@@ -134,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
              'filename' => 'Employee-export-list_' . date('Y-m-d_H-i-s'), 
         ]);
     ?>
-        
+ <?php } ?>   
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -192,48 +191,35 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 
-
-
             'Email:email',
             'CellPhone',
-           
-            // 'PermanantAddress',
-            // 'TemporaryAddress',
-            // 'HireDate',
-            // 'JoinDate',
-            // 'PromotedDate',
-            // 'Salary',
-            // 'MaritalStatus',
-            // 'SpouseName',
-            // 'EmergencyContact1Name',
-            // 'EmergencyContact1Relation',
-            // 'EmergencyContact1Cell',
-            // 'EmergencyContact2Name',
-            // 'EmergencyContact2Relation',
-            // 'EmergencyContact2Cell',
-            // 'Ethnicity',
-            // 'Religion',
-            // 'CitizenNumber',
-            // 'CitizenFile',
-            // 'Insurance',
-            // 'CITNumber',
-            // 'CITFile',
-            // 'PANNumber',
-            // 'PANFile',
-            // 'CreatedDate',
-            // 'CreatedBy',
-            // 'UpdatedDate',
-            // 'UpdatedBy',
-            // 'IsActive',
-            // 'IsDeleted',
             [
                     'class' => 'yii\grid\ActionColumn',
-                    'template' => '{view} {update} {link}',
+                    'template' => '{view}  {update}  {link}  {ref}',
                     'buttons' => [
                     'link' => function ($url,$model,$key) {
-
-                            return Html::button('', ['email'=>$model->Email, 'employeeid'=>$key, 'title'=>'Send Email', 'name'=>'emailSender','class' => 'glyphicon glyphicon-envelope']);
+                        return Html::a(
+                        '<span class="glyphicon glyphicon-envelope"></span>',
+                        ['employee/sendmail', 'id' => $model->EmployeeID, 'email' => $model->Email ], 
+                        [
+                        'title' => 'Send E-Mail',
+                        'aria-label'=>"Email",
+                        'data-pjax' => '0',
+                        ]
+                        );
+                            
                         },
+                      'ref' => function($url, $model, $key){
+                        return Html::a(
+                        '<span class="glyphicon glyphicon-file"></span>',
+                        ['employee/refpage', 'id' => $model->EmployeeID], 
+                        [
+                        'title' => 'References',
+                        'aria-label'=>"References",
+                        'data-pjax' => '0',
+                        ]
+                        );
+                      }
                     ],
                 ],
             ]
@@ -272,31 +258,30 @@ $("div.excelimport").find('button[name="uploadfile"]').on("click", function(){
        });
 });
 
-$('div#w4').find('table button[name="emailSender"]').on('click',function(){
-  console.log("in");
-    var employeeid = $('div#w4').find('table button[name="emailSender"]').attr('employeeid');
-    var employeeemail = $('div#w4').find('table button[name="emailSender"]').attr('email');
+// $('div#w4').find('table button[name="emailSender"]').on('click',function(){
+//     var employeeid = $('div#w4').find('table button[name="emailSender"]').attr('employeeid');
+//     var employeeemail = $('div#w4').find('table button[name="emailSender"]').attr('email');
 
-    $.ajax({
-              type: "POST",
-              data:{
-                "employeeid": employeeid,
-                "employeeemail": employeeemail
-              },
-              dataType:'json',
-              cache: false,
-              success: function(data) {
-                    if(data == 1){
-                            // $("#successMsg").show();
-                            // setTimeout(function() { $("#successMsg").hide(); }, 5000); 
-                      showMessage("Email Sent Successfully.");
-                    }
-              },
-              error:function(){
-                 showError("Email not sent. Server Error.");
-        }
-    });
-});
+//     $.ajax({
+//               type: "POST",
+//               data:{
+//                 "employeeid": employeeid,
+//                 "employeeemail": employeeemail
+//               },
+//               dataType:'json',
+//               cache: false,
+//               success: function(data) {
+//                     if(data == 1){
+//                             // $("#successMsg").show();
+//                             // setTimeout(function() { $("#successMsg").hide(); }, 5000); 
+//                       showMessage("Email Sent Successfully.");
+//                     }
+//               },
+//               error:function(){
+//                  showError("Email not sent. Server Error.");
+//         }
+//     });
+// });
 
 JS;
 

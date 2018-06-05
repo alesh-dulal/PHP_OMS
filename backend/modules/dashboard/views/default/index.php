@@ -23,6 +23,13 @@ use yii\helpers\Html;
   </div>
 <?php endif; ?>
 
+<?php if (Yii::$app->session->hasFlash('BirthdayFlash')): ?>
+  <div class="alert alert-info alert-dismissable">
+  <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+    <?= Yii::$app->session->getFlash('BirthdayFlash') ?>
+  </div>
+<?php endif; ?>
+
 <?php if (Yii::$app->session->hasFlash('ForgotReportSubmission')): ?>
   <div class="alert alert-danger alert-dismissable">
   <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>

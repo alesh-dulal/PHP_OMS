@@ -5,6 +5,7 @@ namespace backend\modules\user\controllers;
 use Yii;
 use backend\modules\user\models\Employee;
 use backend\modules\user\models\Listitems;
+use backend\modules\user\models\Reference;
 use backend\modules\user\models\ListitemsSearch;
 use backend\modules\user\models\EmployeeSearch;
 
@@ -20,6 +21,8 @@ use backend\modules\user\models\RoleSearch;
 
 use yii\web\UploadedFile;
 use yii\db\Query;
+
+use backend\controllers\SiteController;
 
 use yii\filters\AccessControl;
 
@@ -463,6 +466,12 @@ class EmployeeController extends Controller
     }
 }
 
+public function actionSendmail($id, $email){
+    $EmailFlag= SiteController::actionResetpwd($id, $email);
+    if($EmailFlag == TRUE){
+        return $this->redirect('index');
+    }
+}
     public function actionAllcommunication($id)
     {
         $model = new \backend\modules\user\models\Employeecommunication();
@@ -563,6 +572,123 @@ class EmployeeController extends Controller
         return $this->redirect(['terminatedemp']);
         }        
         
+    }
+
+    public function actionReference(){
+        $query = new Query();
+        $connection = Yii::$app->getDb();
+        $qry = sprintf("SELECT EmployeeID , FullName FROM `employee` WHERE IsActive = '1';");
+        $result = $connection->createCommand($qry) /*->getRawSql()*/;
+        $resultEmp = $result->queryAll();
+
+        $qry = sprintf("SELECT R.`ReferenceID`,R.`EmployeeID`, R.`ReferenceNumber`, R.`Title` AS ReferenceTitle, R.`Details` AS ReferenceDetails, R.`File`, E.`FullName` AS EmployeeName, LI.`Title` AS ReferenceType FROM `reference` R LEFT JOIN employee E ON R.`EmployeeID` = E.`EmployeeID` LEFT JOIN listitems LI ON R.`TypeID` = LI.`ListItemID` WHERE R.`IsActive` = '1';");
+        $resultRef = $connection->createCommand($qry) /*->getRawSql()*/;
+        $References = $resultRef->queryAll();
+
+        $ReferenceType = Listitems::find()->select('ListItemID, Title, Value')->where(['Type' => 'reference', 'IsActive' => 1])->all();
+
+        return $this->render('reference',[
+            'resultEmp' => $resultEmp,
+            'ReferenceType' => $ReferenceType,
+            'References' => $References
+        ]);
+    }
+    public function actionSavereference(){
+        $Role = UserController::CheckRole("employee");
+        if ($Role == true)
+        {
+            $EmployeeID = $_POST['EmpID'];
+            $ReferenceType = $_POST['RefTypeID'];
+            $ReferenceNumber = $_POST['RefNumber'];
+            $ReferenceTitle = $_POST['RefTitle'];
+            $ReferenceDetails = $_POST['RefDetails'];
+            $FileData = $_FILES["file"]["name"];
+            if($FileData != ''){
+                $RandomNumber = mt_rand();
+                $test = explode('.', $FileData);
+                $ext = end($test);
+                $filename = str_replace(" ","_",$this->findEmployeeName($EmployeeID))."_".Date('Y-m-d')."_".$RandomNumber.".".$ext;
+                $path = Yii::$app->basePath."/../uploads/references/";                
+                if(move_uploaded_file($_FILES["file"]["tmp_name"], $path."/".$filename)){
+                $query = new Query();
+                $connection = Yii::$app->getDb();
+                $qry = sprintf("INSERT INTO `reference` (`EmployeeID`, `TypeID`, `ReferenceNumber`, `Title`, `Details`, `File`, `CreatedBy`, `CreatedDate`) VALUES ('%d', '%d', '%d', '%s', '%s', '%s', '%d', '%s')",$EmployeeID, $ReferenceType, $ReferenceNumber, $ReferenceTitle, $ReferenceDetails, $filename, Yii::$app->session['UserID'], Date('Y-m-d'));
+                $result = $connection->createCommand($qry)/*->getRawSql()*/;
+                $res = $result->execute();
+                $return = ($res == TRUE)?'{"result":true,"message":"Saved Successfully."}':'{"result":false,"message":"Error: Not Saved."}';
+                return $return;
+                }
+            }
+        }
+    }
+
+    public function findEmployeeName($id){
+        $query = new Query();
+                $connection = Yii::$app->getDb();
+                $qry = sprintf("Select FullName from employee where EmployeeID = '%d';", $id);
+                $result = $connection->createCommand($qry) /*->getRawSql()*/;
+                $res = $result->queryOne();
+                if($res == TRUE && $res['FullName'] != ' '){
+                    return $res['FullName'];
+                }else{
+                    return 'NO NAME';
+                }
+    }
+
+    public function actionDownload($filename){
+       $filepath = Yii::$app->basePath."/../uploads/references";
+       $findFileIn = $filepath."/".$filename;
+       if (file_exists($findFileIn)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.basename($findFileIn).'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: '.filesize($findFileIn));
+            readfile($findFileIn);
+            exit;
+        }
+    }
+    public function actionDeletefile($id, $name){
+        $query = new Query();
+        $connection = Yii::$app->getDb();
+        $qry = sprintf("UPDATE `reference` SET `IsActive` = '0', `IsDeleted` = '1' WHERE `reference`.`ReferenceID` = '%d';",$id);
+        $result = $connection->createCommand($qry)/*->getRawSql()*/;
+        $res = $result->execute();
+        if($res == TRUE){
+        $Ignore = array(".","..","Thumbs.db");
+            $OriginalFileRoot = Yii::$app->basePath."/../uploads/references";
+            $OriginalFile = $name;
+            $DestinationRoot = Yii::$app->basePath."/../uploads/references/trash";
+                if(!is_dir($DestinationRoot)){
+                mkdir($DestinationRoot,0777,true);
+                }
+            $Date = date('Y-m-d');
+            $FileExt = pathinfo($OriginalFile, PATHINFO_EXTENSION); 
+            $Filename = basename($OriginalFile, ".".$FileExt); 
+            $DestinationFile = $DestinationRoot."/".$Filename.".".$FileExt;
+            if(rename($OriginalFileRoot."/".$Filename.".".$FileExt, $DestinationFile)){
+                return $this->redirect('reference');
+            }           
+        }  
+    }
+
+    public function actionRefpage($id){
+        $query = new Query();
+        $model=$query
+            ->select(['E.FullName as EmployeeName', 'R.ReferenceNumber','R.Title','R.Details','R.File', 'R.CreatedDate', 'LI.Title as Type'])
+            ->from('reference R')
+            ->leftJoin('employee E', 'R.EmployeeID = E.EmployeeID')
+            ->leftJoin('listitems LI', 'R.TypeID = LI.ListItemID')
+            ->orderBy(['R.CreatedDate'=>SORT_DESC])
+            ->where(['R.EmployeeID' => $id])
+            ->all();
+        $Name = self::findEmployeeName($id);
+        return $this->render('referenceview',[
+            'model' => $model,
+            'Name' => $Name
+        ]);
     }
 }
 
