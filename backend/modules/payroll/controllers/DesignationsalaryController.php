@@ -1,5 +1,4 @@
 <?php
-
 namespace backend\modules\payroll\controllers;
 
 use Yii;
@@ -13,39 +12,40 @@ use backend\modules\payroll\models\Designationsalary;
 
 class DesignationsalaryController extends \yii\web\Controller
 {
-	public function __construct($id, $module, $config = [])
-	 {
-	     $menus=Yii::$app->session['Menus'];
-	     $menusarray=(explode(",",$menus)); 
-	     parent::__construct($id, $module, $config);
-	     $flag= in_array( "payroll" ,$menusarray )?TRUE:FALSE;
-	    if($flag==FALSE)
-	    {
-	        $this->redirect(Yii::$app->urlManager->baseUrl.'/dashboard');
-	         return false;
-	    }
-	 }
-	public function behaviors()
-	   {
-	        return [
-	            'access' => [
-	                'class' => \yii\filters\AccessControl::className(),
-	                'only' => ['index'],
-	                'rules' => [
-	                    [
-	                        'allow' => true,
-	                        'roles' => ['@'],
-	                    ],
-	                ],
-	            ],
-	            'verbs' => [
-	                'class' => VerbFilter::className(),
-	                'actions' => [
-	                    'delete' => ['POST'],
-	                ],
-	            ],
-	        ];
-	    }
+    public function __construct($id, $module, $config = [])
+    {
+        $menus=Yii::$app->session['Menus'];
+        $menusarray=(explode(",",$menus)); 
+        parent::__construct($id, $module, $config);
+        $flag= in_array( "payroll" ,$menusarray )?TRUE:FALSE;
+        if($flag==FALSE)
+        {
+            $this->redirect(Yii::$app->urlManager->baseUrl.'/dashboard');
+            return false;
+        }
+    }
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
+    }
 
     public function actionIndex()
     {
@@ -54,10 +54,9 @@ class DesignationsalaryController extends \yii\web\Controller
         $query = new Query();
         $designationSalaries = $query->select(['DesignationSalaryID','LI.Title', 'DesignationID', 'SalaryAmount'])->from('designationsalary DS')->leftjoin('listitems LI', 'LI.ListItemID=DS.DesignationID')->all();
         //end of query part
-
         return $this->render('index',[
-        	'model' => $model,
-        	'designationSalaries' => $designationSalaries,
+            'model' => $model,
+            'designationSalaries' => $designationSalaries,
         ]);
     }
 
@@ -74,15 +73,12 @@ class DesignationsalaryController extends \yii\web\Controller
                 $model->UpdatedDate = date('Y-m-d');
                 $model->UpdatedBy =Yii::$app->session['UserID'];
             }
-
             $designationName = $_POST["designationName"];
             $salaryAmount = $_POST["salaryAmount"];
-
             $model->DesignationID = $designationName;
             $model->SalaryAmount = $salaryAmount;
             $model->save();
             return '{"result":true,"message":"saved successfully"}';
         } 
     }
-
-}
+}/*End Of Class*/

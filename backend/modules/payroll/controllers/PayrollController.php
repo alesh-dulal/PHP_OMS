@@ -9,7 +9,6 @@ use yii\web\NotFoundHttpException;
 use backend\modules\payroll\models\Payroll;
 use backend\modules\payroll\models\Payrollsetting;
 use backend\modules\user\controllers\UserController;
-
 class PayrollController extends \yii\web\Controller
 {
     public function __construct($id, $module, $config = [])
@@ -68,8 +67,8 @@ class PayrollController extends \yii\web\Controller
         {
             $date = date('Y-m-d');
             $newdate = strtotime('-1 month', strtotime($date));
-           $firstDateOfPrevMonth = date('Y-m-d', strtotime('-1 day', strtotime('first day of last month')));
-        $lastDateOfPrevMonth = date('Y-m-d', strtotime('last day of last month'));
+            $firstDateOfPrevMonth = date('Y-m-d', strtotime('-1 day', strtotime('first day of last month')));
+            $lastDateOfPrevMonth = date('Y-m-d', strtotime('last day of last month'));
             $sentYear = date('Y', $newdate);
             $sentMonth = date('m', $newdate);
             if ($this->checkForMonthPayrollIfExist($sentYear, $sentMonth) == true)
@@ -362,7 +361,6 @@ SELECT `EmployeeID`, `FullName`,`BankAccountNumber`,`Email`, `Salary` from `empl
         $TD = date_diff(date_create($firstDateOfPrevMonth) , date_create($lastDateOfPrevMonth));
         $TotalDays = intval($TD->format("%a"));
         $Saturdays = $this->getSaturdays($firstDateOfPrevMonth, $lastDateOfPrevMonth);
-
         // $connection = Yii::$app->getDb();
         // $Employee = $connection->createCommand("
         // SELECT `EmployeeID`, `FullName`,`BankAccountNumber`,`Email`, `Salary` from `employee` WHERE EmployeeID NOT IN (SELECT MIN(EmployeeID) FROM employee) AND IsActive = 1");
@@ -376,13 +374,11 @@ SELECT `EmployeeID`, `FullName`,`BankAccountNumber`,`Email`, `Salary` from `empl
         // $listSetting = $Setting->queryAll();
         // $AttendanceSetting = $connection->createCommand("SELECT * FROM `payrollattendance` WHERE `IsActive` = 1");
         // $listAttendanceSetting = $AttendanceSetting->queryAll();
-
         global $listAttendanceSetting;
         global $listAttendance;
         global $Holidays;
         global $listSetting;
         global $listAttendanceSetting;
-
         foreach ($listSetting as $key => $LS) {
             $TotalWorkingHourPerDay = $LS["TotalWorkingHourPerDay"];
             $MaximumOTHoursPerDay = $LS["MaximumOTHoursPerDay"];
@@ -503,7 +499,6 @@ SELECT `EmployeeID`, `FullName`,`BankAccountNumber`,`Email`, `Salary` from `empl
             }
         }
     }
-
     public function setUnsetAdvancePaidFlag($employeeID, $action, $month, $year)
     {
         if ($action != NULL && $employeeID != NULL && $month != NULL) {
@@ -521,7 +516,6 @@ SELECT `EmployeeID`, `FullName`,`BankAccountNumber`,`Email`, `Salary` from `empl
             }
         }                
     }
-
     public function actionSavepayroll()
     {
         $Role = UserController::CheckRole("payroll");
@@ -744,7 +738,8 @@ SELECT `EmployeeID`, `FullName`,`BankAccountNumber`,`Email`, `Salary` from `empl
     {
         $employeeEmail = $payroll['Email'];
         $Subject = "About The Salary of ".date("F", mktime(0, 0, 0, $month, 10))."-".$year;
-        $EmailBody = '<div style="margin:25px auto;padding:0 25px;max-width: 100%;width: 600px">
+        $EmailBody = '
+            <div style="margin:25px auto;padding:0 25px;max-width: 100%;width: 600px">
             <strong>Dear, <em>'.$payroll['Employee Name'].'</em></strong>
             <p style="text-align:center"><strong>Subject :<em> About The Salary of '.date("F", mktime(0, 0, 0, $month, 10)).'-'.$year.'.</em></strong></p>
             <p style="text-align: justify;"><span style="width:30px;display: inline-block;"></span>We hereby notify you that your salary sheet has been processed today. Please find your salary slip of '.date("F", mktime(0, 0, 0, $month, 10)).'.</p>

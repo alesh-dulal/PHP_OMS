@@ -1,60 +1,56 @@
 <?php
-
 namespace backend\modules\report\controllers;
-use yii\db\Query;
+
 use Yii;
+use yii\db\Query;
 use backend\modules\report\models\Customreport;
 use backend\modules\user\controllers\UserController;
 
 class ReportController extends \yii\web\Controller
 {
-     public function __construct($id, $module, $config = [])
-         {
-             $menus=Yii::$app->session['Menus'];
-             $menusarray=(explode(",",$menus)); 
-             parent::__construct($id, $module, $config);
-             $flag= in_array( "report" ,$menusarray )?true:false;
-            if($flag==FALSE)
-            {
-                $this->redirect(Yii::$app->urlManager->baseUrl.'/dashboard');
-                 return false;
-            }
-         }
-    
-    
-    
+    public function __construct($id, $module, $config = [])
+    {
+        $menus=Yii::$app->session['Menus'];
+        $menusarray=(explode(",",$menus)); 
+        parent::__construct($id, $module, $config);
+        $flag= in_array( "report" ,$menusarray )?true:false;
+        if($flag==FALSE)
+        {
+            $this->redirect(Yii::$app->urlManager->baseUrl.'/dashboard');
+            return false;
+        }
+    }
+
     public function actionIndex()
     {
-         return $this->render('index');
-     
+        return $this->render('index');
     }
-    
+
     public function actionView(){
-        
         $model= Customreport::find()->all();
         return $this->render('view', [
-                'model' => $model]);
+            'model' => $model]);
     }
-    
+
     public function actionGetreport(){
-         $Role= UserController::CheckRole("report");
+        $Role= UserController::CheckRole("report");
         if ($Role==TRUE){
-         $date=$_POST['daterange'];
-         $daterange=explode("to",$date);
-         $name=$_POST['name'];
-         $connection = Yii::$app->getDb();
-         $command = $connection->createCommand($name);
-                     $Result = $command->queryall();
-                    $ColumnsArray= (count($Result)>0?array_keys($Result[0]):''); 
-                    $Columns=json_encode($ColumnsArray);
-                    $Record = json_encode($Result);
-                    $res='{"record":'.$Record.',"columns":'.$Columns.'}';
-          return $res;
-       } 
+            $date=$_POST['daterange'];
+            $daterange=explode("to",$date);
+            $name=$_POST['name'];
+            $connection = Yii::$app->getDb();
+            $command = $connection->createCommand($name);
+            $Result = $command->queryall();
+            $ColumnsArray= (count($Result)>0?array_keys($Result[0]):''); 
+            $Columns=json_encode($ColumnsArray);
+            $Record = json_encode($Result);
+            $res='{"record":'.$Record.',"columns":'.$Columns.'}';
+            return $res;
+        } 
     }
 
     public function actionSave(){
-         $Role= UserController::CheckRole("report");
+        $Role= UserController::CheckRole("report");
         if ($Role==TRUE){
             $daterange=$_POST['daterange'];
             $select=$_POST['query'];
@@ -69,62 +65,56 @@ class ReportController extends \yii\web\Controller
                 $model->DateRangeEnabled = 1;
             }else{
                 $model->DateRangeEnabled = 0;
-                         }
+            }
             $model->save(); 
             return $this->redirect('index');            
-             }
+        }
     }
-    public function actionRetrieve(){
-         $Role= UserController::CheckRole("report");
-        if ($Role==TRUE){
-        if(isset($_POST)){
-            if($_POST['query'])
-            $Getdata=$_POST['query'];
-            $query = new Query();
-            $connection = Yii::$app->getDb();
-             // Check if SELECT is in the query
-            if (preg_match('/SELECT/', strtoupper($Getdata)) != 0) {
-                // Array with forbidden query parts
-                $disAllow = array(
-                    'INSERT',
-                    'UPDATE',
-                    'DELETE',
-                    'RENAME',
-                    'DROP',
-                    'CREATE',
-                    'TRUNCATE',
-                    'ALTER',
-                    'COMMIT',
-                    'ROLLBACK',
-                    'MERGE',
-                    'CALL',
-                    'EXPLAIN',
-                    'LOCK',
-                    'GRANT',
-                    'REVOKE',
-                    'SAVEPOINT',
-                    'TRANSACTION',
-                    'SET',
-                );
-                // Convert array to pipe-seperated string
-                $disAllow = implode('|', $disAllow);
-                // Check if no other harmfull statements exist
-                if (preg_match('/('.$disAllow.')/', strtoupper($Getdata)) == 0) {
-                    $command = $connection->createCommand($Getdata);
-                    $Result = $command->queryall();
-                    $ColumnsArray= (count($Result)>0?array_keys($Result[0]):''); 
-                    $Columns=json_encode($ColumnsArray);
-                    $Record = json_encode($Result);
-                    $res='{"record":'.$Record.',"columns":'.$Columns.'}';
-                }
-            }
-                   
-            return $res;
-             }
-                 
-
     
+    public function actionRetrieve(){
+        $Role= UserController::CheckRole("report");
+        if ($Role==TRUE){
+            if(isset($_POST)){
+                if($_POST['query'])
+                    $Getdata=$_POST['query'];
+                $query = new Query();
+                $connection = Yii::$app->getDb();
+                // Check if SELECT is in the query
+                if (preg_match('/SELECT/', strtoupper($Getdata)) != 0) {
+                    // Array with forbidden query parts
+                    $disAllow = array(
+                        'INSERT',
+                        'UPDATE',
+                        'DELETE',
+                        'RENAME',
+                        'DROP',
+                        'CREATE',
+                        'TRUNCATE',
+                        'ALTER',
+                        'COMMIT',
+                        'ROLLBACK',
+                        'MERGE',
+                        'CALL',
+                        'EXPLAIN',
+                        'LOCK',
+                        'GRANT',
+                        'REVOKE',
+                        'SAVEPOINT',
+                        'TRANSACTION',
+                        'SET',
+                    );
+                    $disAllow = implode('|', $disAllow);
+                    if (preg_match('/('.$disAllow.')/', strtoupper($Getdata)) == 0) {
+                        $command = $connection->createCommand($Getdata);
+                        $Result = $command->queryall();
+                        $ColumnsArray= (count($Result)>0?array_keys($Result[0]):''); 
+                        $Columns=json_encode($ColumnsArray);
+                        $Record = json_encode($Result);
+                        $res='{"record":'.$Record.',"columns":'.$Columns.'}';
+                    }
+                }
+                return $res;
             }
+        }
     }
-
 }

@@ -59,12 +59,10 @@ class DailyreportController extends \yii\web\Controller
             ->leftJoin('employee V','D.VerifiedBy = V.EmployeeID')
             ->orderBy(['D.Day'=>SORT_DESC])
             ->all();
-
         $model = new Dailyreport();
         $loggedInEmp = Yii::$app->session['UserID'];
         $stayTime = $this->stayTime($loggedInEmp);
         $flags = $this->checkLoginLateAndExitFast($loggedInEmp, $date=NULL);
-        
         $query = new Query();
         $connection = Yii::$app->getDb();
         $command = $connection->createCommand("select E.EmployeeID, E.FullName from employee E LEFT JOIN role R on E.RoleID = R.RoleID where R.Name = 'employee';");
@@ -319,8 +317,8 @@ class DailyreportController extends \yii\web\Controller
                     foreach ($res as $key => $R) {
                         $html .= '<tr>';
                         $html .= '<td>'.$R['Day']."<br/>".date("l",strtotime($R['Day'])).'</td>';
-/*
-    *check if login late and exit fast and indicate login late and exit fast of employee
+                        /*
+*check if login late and exit fast and indicate login late and exit fast of employee
 */
                         $flag_L_E = $this->checkLoginLateAndExitFast($EmployeeID, $R['Day']);
                         $jsonFlag = json_decode($flag_L_E, true);
@@ -341,8 +339,8 @@ class DailyreportController extends \yii\web\Controller
             }
         }
     }
-/*
-    *For Employee Attendance And Daily report Reporting
+    /*
+*For Employee Attendance And Daily report Reporting
 */
     public function actionReport(){
         $model = new Dailyreport();
@@ -398,9 +396,11 @@ class DailyreportController extends \yii\web\Controller
             return $e;
         }
     }
-    public function actionGetsinglereport(){
+    public function actionGetsinglereport()
+    {
         $Role= UserController::CheckRole("dailyreport");
-        if ($Role==TRUE){
+        if ($Role==TRUE)
+        {
             $EmployeeID = $_POST['EmployeeID'];
             $Range = $_POST['Range'];
             $Explode = explode('to',$Range);
@@ -411,13 +411,15 @@ class DailyreportController extends \yii\web\Controller
                 $qry1 = sprintf("SELECT E.`FullName`, D.* FROM `dailyreport` D LEFT JOIN employee E ON D.`UserID` = E.`UserID` WHERE D.`UserID` = '%d' and D.`Day` BETWEEN '%s' AND '%s';",$EmployeeID, $From, $To);
                 $result1 = $connection->createCommand($qry1) /*->getRawSql()*/;
                 $res1 = $result1->queryAll();
-                if (!empty($res1)) {
+                if (!empty($res1)) 
+                {
                     $html = "";
                     $sumWorkingHours = 0;
                     $sumTotalTask = 0;
                     $TotalWorkingDays = 0;
                     $TargetTask = 0;
-                    foreach ($res1 as $key => $dat) {
+                    foreach ($res1 as $key => $dat) 
+                    {
                         $UserID = $dat['UserID'];
                         $Name = $dat['FullName'];
                         $sumWorkingHours += $dat['StayTime'];
@@ -437,24 +439,30 @@ class DailyreportController extends \yii\web\Controller
                         'result' => 'TRUE',
                         'message' => 'Data Loaded Successfully'
                     ];
-                }else{
+                }
+                else
+                {
                     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                     return [
                         'result' => 'FALSE',
                         'message' => 'Data Not Found.'
                     ];
                 }
-            } catch (Exception $e) {
+            } 
+            catch (Exception $e) 
+            {
                 return 'Caught Exception: '.$e;
             }
         }
     }
-    public function actionSinglepageinformation($id, $from, $to){
+    public function actionSinglepageinformation($id, $from, $to)
+    {
         $quer = new Query();
         $query = $quer->select(['D.*', 'E.FullName'])->where(['D.UserID'=> $id, 'D.IsSubmitted' => 1,'D.IsAccepted' => 1,])->andFilterWhere(['BETWEEN', 'Day',$from, $to])->from('dailyreport D')->leftJoin('employee E','D.UserID = E.UserID')->orderBy(['D.Day'=>SORT_DESC]);
         $command = $query->createCommand()/*->getRawSql()*/;
         $model = $command->queryAll();
-        if(empty($model)){
+        if(empty($model))
+        {
             return $this->render("employeereport",[
                 'LoginIPCount' => 0,
                 'ExitIPCount' => 0,
@@ -468,7 +476,9 @@ class DailyreportController extends \yii\web\Controller
                 'TotalTaskDone' => 0,
                 'TotalDaysOfThisMonth' => 0
             ]); 
-        }else{            
+        }
+        else
+        {            
             $date1 = date_create( date("Y-m-d", strtotime('-1 day', strtotime($from))));
             $date2=date_create(date("Y-m-d", strtotime($to)));
             $diff=date_diff($date1,$date2);
@@ -478,21 +488,22 @@ class DailyreportController extends \yii\web\Controller
             $TotalTaskDone = 0;
             $LoginLate = 0;
             $ExitFast = 0;
-            foreach ($model as $key => $mo) {
+            foreach ($model as $key => $mo) 
+            {
                 $Name = $mo['FullName'];
                 $WorkingHour += $mo['StayTime'];
                 $TotalTaskDone += $mo['TotalTask'];
                 $Attendance ++;
-/*
-    *Getting login Late and Exit fast Days
+                /*
+*Getting login Late and Exit fast Days
 */
                 $Dat = $this->checkLoginLateAndExitFast($id, $mo['Day']);
                 $jsonFlag = json_decode($Dat, true);
                 ($jsonFlag['LoginFlag'] == 1)?$LoginLate++:$LoginLate;       
                 ($jsonFlag['ExitFlag'] == 1)?$ExitFast++:$ExitFast; 
             }
-/*
-    *Finding the Login IP count and Exit IP count
+            /*
+*Finding the Login IP count and Exit IP count
 */
             $IPS = $this->getLoginIpCount($id, date('Y-m-01'), date('Y-m-d'));
             $jsonIP = json_decode($IPS, true);
@@ -514,7 +525,8 @@ class DailyreportController extends \yii\web\Controller
             ]); 
         }
     }
-    public function getLoginIpCount($id, $from, $to){
+    public function getLoginIpCount($id, $from, $to)
+    {
         try {
             $connection = Yii::$app->getDb();
             $qry1 = sprintf("SELECT COUNT(DISTINCT(`LoginIP`)) as IPCountLogin, COUNT(DISTINCT(`ExitIP`)) as IPCountExit FROM `dailyreport` WHERE `UserID` = '%d' AND Day BETWEEN '%s' AND '%s';",$id, $from, $to);
@@ -525,12 +537,12 @@ class DailyreportController extends \yii\web\Controller
             return $e;
         }
     }
-
-    public function getEmployeeName($id){
+    public function getEmployeeName($id)
+    {
         $connection = Yii::$app->getDb();
-            $qry1 = sprintf("SELECT FullName FROM `employee` WHERE EmployeeID = '%d' AND IsActive = 1 AND IsTerminated = 0;",$id);
-            $result1 = $connection->createCommand($qry1) /*->getRawSql()*/;
-            $res1 = $result1->queryOne();
-            return $res1['FullName'];
+        $qry1 = sprintf("SELECT FullName FROM `employee` WHERE EmployeeID = '%d' AND IsActive = 1 AND IsTerminated = 0;",$id);
+        $result1 = $connection->createCommand($qry1) /*->getRawSql()*/;
+        $res1 = $result1->queryOne();
+        return $res1['FullName'];
     }
 }

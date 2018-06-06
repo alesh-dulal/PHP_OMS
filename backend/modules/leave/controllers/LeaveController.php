@@ -1,5 +1,4 @@
 <?php
-?><?php
 namespace backend\modules\leave\controllers;
 use Yii;
 use yii\db\Query;
@@ -106,8 +105,7 @@ class LeaveController extends \yii\web\Controller
     public function actionApprove()
     {
         $query3 = new Query();
-        $ApproveLeave = $query3->select(['E.LeaveID', 'EM.EmployeeID', 'EM.FullName','E.EmployeeLeaveID','E.RejectedNote', 'E.IsApproved','E.IsRejected','concat(E.From," to ",E.To) DateRange', 'E.Reason','L.Title as LeaveType', 'E.NoOfDays'])->from('employeeleave E')/*->where(['IsApproved'=> '0', 'IsRejected' => '0'])*/->leftJoin('listitems L','E.LeaveTypeID = L.ListItemID')->leftjoin('employee EM', 'E.EmployeeID = EM.EmployeeID')->all();
-        // print_r($ApproveLeave); die();
+        $ApproveLeave = $query3->select(['E.LeaveID', 'EM.EmployeeID', 'EM.FullName','E.EmployeeLeaveID','E.RejectedNote', 'E.IsApproved','E.IsRejected','concat(E.From," to ",E.To) DateRange', 'E.Reason','L.Title as LeaveType', 'E.NoOfDays'])->from('employeeleave E')->leftJoin('listitems L','E.LeaveTypeID = L.ListItemID')->leftjoin('employee EM', 'E.EmployeeID = EM.EmployeeID')->all();
         return $this->render('approve',[
             'ApproveLeave'=>$ApproveLeave,
         ]);
@@ -123,7 +121,9 @@ class LeaveController extends \yii\web\Controller
             $Days = $_POST["leaveDays"];
             $model = Employeeleave::findOne($Identity);
             if($Status == 'true'){
-                //deduct the leave balance from 'leave' table after appvoval of the particular leave 
+                /*
+                    *deduct the leave balance from 'leave' table after appvoval of the particular *leave
+                */ 
                 $query = new Query();
                 $connection = Yii::$app->getDb();
                 $qry= sprintf("UPDATE `leave` SET Balance = Balance - '%d' WHERE LeaveID = '%d' AND EmployeeID = '%d'",$Days, $LeaveID, $EmployeeID);

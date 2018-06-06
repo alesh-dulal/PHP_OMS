@@ -12,58 +12,55 @@ use backend\modules\user\controllers\UserController;
 
 class PayrollsettingController extends \yii\web\Controller
 {
-	public function __construct($id, $module, $config = [])
-	 {
-	     $menus=Yii::$app->session['Menus'];
-	     $menusarray=(explode(",",$menus)); 
-	     parent::__construct($id, $module, $config);
-	     $flag= in_array( "payroll" ,$menusarray )?TRUE:FALSE;
-	    if($flag==FALSE)
-	    {
-	        $this->redirect(Yii::$app->urlManager->baseUrl.'/dashboard');
-	         return false;
-	    }
-	 }
-	public function behaviors()
-	   {
-	        return [
-	            'access' => [
-	                'class' => \yii\filters\AccessControl::className(),
-	                'only' => ['index'],
-	                'rules' => [
-	                    [
-	                        'allow' => true,
-	                        'roles' => ['@'],
-	                    ],
-	                ],
-	            ],
-	            'verbs' => [
-	                'class' => VerbFilter::className(),
-	                'actions' => [
-	                    'delete' => ['POST'],
-	                ],
-	            ],
-	        ];
-	    }
-
+    public function __construct($id, $module, $config = [])
+    {
+        $menus=Yii::$app->session['Menus'];
+        $menusarray=(explode(",",$menus)); 
+        parent::__construct($id, $module, $config);
+        $flag= in_array( "payroll" ,$menusarray )?TRUE:FALSE;
+        if($flag==FALSE)
+        {
+            $this->redirect(Yii::$app->urlManager->baseUrl.'/dashboard');
+            return false;
+        }
+    }
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
+    }
     public function actionIndex()
     {
         $model = new Payrollsetting();
         $query = new Query();
         $allowances = $query->select(['OrderNo','PayrollSettingID','IsAllowance', 'Title', 'Amount', 'Formula', '(
-			    CASE
-			    WHEN IsAllowance = 0 then "Allowance"
-			    ELSE "Deduction"
-			    END
+			CASE
+			WHEN IsAllowance = 0 then "Allowance"
+			ELSE "Deduction"
+			END
 			) as SettingType'])->from('payrollsetting')->where(['IsActive'=>1])->all();
-
         return $this->render('index',[
-        	'model' => $model,
-        	'allowances' => $allowances,
-
+            'model' => $model,
+            'allowances' => $allowances,
         ]);
     }
-
+    
     public function actionSavedata(){
         $Role = UserController::CheckRole("payroll");
         if($Role == true){
@@ -77,13 +74,11 @@ class PayrollsettingController extends \yii\web\Controller
                 $model->UpdatedDate = date('Y-m-d');
                 $model->UpdatedBy =Yii::$app->session['UserID'];
             }
-
             $type = $_POST["isAllowance"];
             $title = $_POST["title"];
             $amount = $_POST["amount"];
             $formula = $_POST["formula"];
             $orderNo = $_POST["orderNo"];
-
             $model->IsAllowance = $type;
             $model->Title = $title;
             $model->Amount = $amount;
@@ -93,5 +88,4 @@ class PayrollsettingController extends \yii\web\Controller
             return '{"result":true,"message":"saved successfully"}';
         } 
     }
-
 }
